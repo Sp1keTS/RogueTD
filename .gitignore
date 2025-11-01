@@ -73,3 +73,33 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+Library/
+UserSettings/
+Temp/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][MmV]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# ============ #
+# JetBrains    #
+# ============ #
+
+## Get latest from https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+
+# Rider
+.idea/
+*.sln.iml
