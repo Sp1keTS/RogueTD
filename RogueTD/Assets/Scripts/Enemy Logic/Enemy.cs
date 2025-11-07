@@ -5,15 +5,19 @@ public class Enemy : MonoBehaviour
     private int healthPoints;
     [SerializeField] int maxHealthPoints;
 
-    void Awake()
+    void Start()
     {
         healthPoints = maxHealthPoints;
         EnemyManager.Enemies.Add(this);
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(ProjectileTower projectileTower)
     {
-        healthPoints -= damage;
+        foreach (StatusEffect statusEffect in projectileTower.statusEffects)
+        {
+            StartCoroutine(statusEffect.ApplyEffect(this));            
+        }
+        healthPoints -= projectileTower.ProjectileDamage;
         if (healthPoints <= 0)
         {
             Destroy(gameObject);

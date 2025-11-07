@@ -1,0 +1,28 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "TowerBlueprint", menuName = "Tower Defense/TowerBlueprint")]
+public class TowerBlueprint : Blueprint
+{
+    [Header("Tower Settings")]
+    [SerializeField] protected GameObject towerPrefab;
+    [SerializeField] protected float rotatingSpeed = 10f;
+    [SerializeField] protected float targetingRange = 5f;
+    [SerializeField] protected float damageMult = 1f;
+    [SerializeField] protected float attackSpeed = 1f;
+    [SerializeField] protected int damage = 1;
+    [SerializeField] protected int projectileCount;
+    [SerializeField] protected int maxAmmo;
+    [SerializeField] protected float currentAmmo;
+    [SerializeField] protected float ammoRegeneration;
+    [SerializeField] protected StatusEffect[]  _statusEffects;
+    
+    public GameObject TowerPrefab => towerPrefab;
+    public float RotatingSpeed { get => rotatingSpeed; set => rotatingSpeed = value; }
+    public float TargetingRange {get => targetingRange; set => targetingRange = value; }
+    public float DamageMult { get => damageMult; set => damageMult = value; }  
+    public float AttackSpeed {get => attackSpeed; set => attackSpeed =  value; }
+    public int Damage {get => damage; set => damage = value; }
+    public StatusEffect[] StatusEffects { get => _statusEffects; set => _statusEffects = value; }
+    
+    
+}

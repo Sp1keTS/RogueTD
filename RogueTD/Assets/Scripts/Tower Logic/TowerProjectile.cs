@@ -2,51 +2,58 @@ using UnityEngine;
 
 public class TowerProjectile : MonoBehaviour
 {
-    [SerializeField] int damage = 1;
-    [SerializeField] float velocity = 10;
-    [SerializeField] float lifeTime = 1f;
-    [SerializeField] bool fragile = true;
-
     [SerializeField] public Rigidbody2D rb;
+    [SerializeField] ProjectileTower projectileTower;
 
-    //то какие эффекты есть у пули при прикосновении и уничтожении по времени
-    [SerializeField] ProjectileProfile profile;    
-    //кастомный файл движения пули, задавать через файл башни
-    public ProjectileMovement Movement {get; set; } 
+    
+    private float lifeTime;
+    private GameObject enemy;
+    private Enemy enemyBase;
 
-    public void Initialize(int newDamage, float newVelocity, 
-        float newLifeTime = 10f, bool newFragile = true)
+    public void Initialize(ProjectileTower tower)
     {
-        this.damage = newDamage;
-        this.velocity = newVelocity;
-        this.lifeTime = newLifeTime;
-        this.fragile = newFragile;
+        Debug.Log(tower);
+        projectileTower = tower;
+        lifeTime = tower.ProjectileLifetime;
     }
     
     void Update()
     {
-        Movement?.Move(rb,velocity);
+        foreach (ProjectileBehavior movement in projectileTower.movements)
+        {
+            movement.Move(this, projectileTower);
+        }
+        
         lifeTime -= Time.deltaTime;                        
         if (lifeTime <= 0)                                 
-        {                                                  
-            profile?.OnLifeSpan();
+        {
+            Debug.Log(projectileTower);
+            foreach (ProjectileEffect effect in projectileTower.effects)
+            {
+                effect.OnLifeSpanEnd(this, projectileTower);
+            }
             Destroy(gameObject);
         }
     }
     
     void OnTriggerEnter2D(Collider2D collision)
     {
-        var enemy = collision.gameObject;
-        var enemyBase = enemy.GetComponent<Enemy>();
+        enemy = collision.gameObject;
+        enemyBase = enemy.GetComponent<Enemy>();
         if (enemy.CompareTag("Enemy"))
         {
             if (enemyBase != null)
             {
-                profile?.OnCollisionEffect(enemy);
-                enemyBase.TakeDamage(damage);
-                if(fragile){Destroy(gameObject);}
+                foreach (ProjectileEffect effect in projectileTower.effects)
+                {
+                    effect.OnCollision(enemyBase,this, projectileTower);
+                }
+                enemyBase.TakeDamage(projectileTower);
+                if(projectileTower.ProjectileFragile)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
     }
 }
-    

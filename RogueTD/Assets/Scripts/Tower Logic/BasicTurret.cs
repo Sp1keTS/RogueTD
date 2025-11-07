@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class BasicTurret : ProjectileTower
 {
+    
+    
     private Coroutine shootCoroutine;
     
     void Awake()
@@ -13,35 +15,35 @@ public class BasicTurret : ProjectileTower
     IEnumerator ShootCoroutine()
     {
         float attackDelay = 1f / attackSpeed;
-        
+    
         while (true)
         {
             GetTarget();
-            if (target != null)
+            if (target != null && currentAmmo >= 1)
             {
-                TowerProjectile projectile = CreateProjectile();
-                if (projectile != null)
-                {
-                    projectile.Initialize(
-                        newDamage: Mathf.RoundToInt(damageMult), 
-                        newVelocity: projectileSpeed,
-                        newLifeTime: projectileLifetime,
-                        newFragile: projectileFragile
-                    );
-                    
-                    float randomAngle = Random.Range(-spread, spread);
-                    Vector2 direction = Quaternion.Euler(0, 0, randomAngle) * (target.transform.position - transform.position).normalized;
-                    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-                    Rigidbody2D rb = projectile.rb;
-                    rb.AddForce(direction * projectileSpeed, ForceMode2D.Impulse);
-                    projectile.transform.rotation = Quaternion.AngleAxis(angle, Vector3.right);
-                }
+                var shotData = GetShotData(); 
+                towerBehavior?.Shoot(this, shotData);
                 yield return new WaitForSeconds(attackDelay);
+                currentAmmo -= 1;
             }
             else
             {
                 yield return new WaitForSeconds(0.3f);
             }
+        }
+    }
+
+    private void Update()
+    {
+        RestoreAmmo();
+        RotateTowardsTarget();
+    }
+
+    private void RestoreAmmo()
+    {
+        if (currentAmmo < maxAmmo)
+        {
+            currentAmmo += Time.deltaTime * ammoRegeneration;   
         }
     }
 

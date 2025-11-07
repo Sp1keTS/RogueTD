@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class StraightMovement : ProjectileMovement
+public class StraightMovement : ProjectileBehavior
 {
-    public override void Move(Rigidbody2D rb, float Velocity)
+    public override void Move(TowerProjectile projectile, ProjectileTower tower)
     {
-        rb.linearVelocity = transform.right * Velocity;
+        projectile.rb.linearVelocity = projectile.transform.right * tower.ProjectileSpeed;
     }
 }
