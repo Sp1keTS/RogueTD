@@ -1,20 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class TowerProjectile : MonoBehaviour
 {
     [SerializeField] public Rigidbody2D rb;
-    [SerializeField] ProjectileTower projectileTower;
+    [FormerlySerializedAs("buildings")] [SerializeField] ProjectileTower projectileTower;
 
-    
+    private Queue<ProjectileEffect> effectsToProcess; 
     private float lifeTime;
     private GameObject enemy;
     private Enemy enemyBase;
 
+    public Queue<ProjectileEffect> EffectsToProcess  {get => effectsToProcess; set => effectsToProcess = value;}
     public void Initialize(ProjectileTower tower)
     {
-        Debug.Log(tower);
         projectileTower = tower;
         lifeTime = tower.ProjectileLifetime;
+        effectsToProcess = new Queue<ProjectileEffect>();
+        if (tower.effects != null)
+        {
+            foreach (var effect in tower.effects)
+            {
+                if (effect != null)
+                    effectsToProcess.Enqueue(effect);
+            }
+        }
     }
     
     void Update()
@@ -27,11 +38,17 @@ public class TowerProjectile : MonoBehaviour
         lifeTime -= Time.deltaTime;                        
         if (lifeTime <= 0)                                 
         {
-            Debug.Log(projectileTower);
-            foreach (ProjectileEffect effect in projectileTower.effects)
+            while (effectsToProcess.Count > 0)
             {
-                effect.OnLifeSpanEnd(this, projectileTower);
+                if (effectsToProcess.Dequeue().OnLifeSpanEnd(this, projectileTower))
+                {
+                    break;
+                }
             }
+            //foreach (ProjectileEffect effect in projectileTower.effects)
+            //{
+            //    effect.OnLifeSpanEnd(this, projectileTower);
+            //}
             Destroy(gameObject);
         }
     }
@@ -44,11 +61,18 @@ public class TowerProjectile : MonoBehaviour
         {
             if (enemyBase != null)
             {
-                foreach (ProjectileEffect effect in projectileTower.effects)
+                while (effectsToProcess.Count > 0)
                 {
-                    effect.OnCollision(enemyBase,this, projectileTower);
+                    if (effectsToProcess.Dequeue().OnCollision(enemyBase,this, projectileTower))
+                    {
+                        break;
+                    }
                 }
-                enemyBase.TakeDamage(projectileTower);
+                //foreach (ProjectileEffect effect in projectileTower.effects)
+                //{
+                //    effect.OnCollision(enemyBase,this, projectileTower);
+                //}
+                enemyBase.TakeDamage(projectileTower.Damage, projectileTower.statusEffects);
                 if(projectileTower.ProjectileFragile)
                 {
                     Destroy(gameObject);

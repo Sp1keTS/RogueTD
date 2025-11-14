@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a92ca9f20abef054393068671407517f, type: 3}
+  m_Name: TestTowerBlueprint
+  m_EditorClassIdentifier: 
+  buildingName: TestTower
+  buildingPrefab: {fileID: 5530865084426095652, guid: 96b1f99cf60c38540b8514d44dc04a69, type: 3}
+  maxHealthPoints: 50
+  cost: 5
+  size: {x: 1, y: 1}
+  towerPrefab: {fileID: 3147691095370652506, guid: 65d918beaf6764343a0d470908d345cf, type: 3}
+  rotatingSpeed: 40
+  targetingRange: 10
+  damageMult: 1
+  attackSpeed: 1
+  damage: 2
+  projectileCount: 1
+  maxAmmo: 20
+  currentAmmo: 20
+  ammoRegeneration: 0.1
+  _statusEffects: []
+  projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
+  projectileSpeed: 10
+  spread: 4
+  projectileLifetime: 3
+  projectileFragile: 1
+  projectileBehaviors: []
+  projectileEffects: []
+  shotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
+  secondaryShots: []

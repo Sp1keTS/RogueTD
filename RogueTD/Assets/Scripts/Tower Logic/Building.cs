@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
+    public string buildingName;
     private int healthPoints;
     [SerializeField] int maxHealthPoints;
 
@@ -17,5 +18,17 @@ public class Building : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    
+    public void Initialize(int maxHP)
+    {
+        maxHealthPoints = maxHP;
+        healthPoints = maxHealthPoints;
+    }
+
+    public void InitializeFromBlueprint(BuildingBlueprint buildingBlueprint)
+    {
+        maxHealthPoints = buildingBlueprint.MaxHealthPoints;
+        
     }
 }

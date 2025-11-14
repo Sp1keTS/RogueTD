@@ -4,20 +4,26 @@ public class Enemy : MonoBehaviour
 {
     private int healthPoints;
     [SerializeField] int maxHealthPoints;
-
+    [SerializeField] float moveSpeed;
+    [SerializeField] Renderer enemyRenderer;
+    public Renderer EnemyRenderer { get { return enemyRenderer; } }
+    public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
     void Start()
     {
         healthPoints = maxHealthPoints;
         EnemyManager.Enemies.Add(this);
     }
 
-    public void TakeDamage(ProjectileTower projectileTower)
+    public void TakeDamage(int damage, StatusEffect[] statusEffects)
     {
-        foreach (StatusEffect statusEffect in projectileTower.statusEffects)
-        {
-            StartCoroutine(statusEffect.ApplyEffect(this));            
+        if(statusEffects != null){
+            foreach (StatusEffect statusEffect in statusEffects)
+            {
+                StartCoroutine(statusEffect.ApplyEffect(this));            
+            }
         }
-        healthPoints -= projectileTower.ProjectileDamage;
+        
+        healthPoints -= damage;
         if (healthPoints <= 0)
         {
             Destroy(gameObject);

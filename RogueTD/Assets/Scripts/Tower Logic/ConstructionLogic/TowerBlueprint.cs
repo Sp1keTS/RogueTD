@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TowerBlueprint", menuName = "Tower Defense/TowerBlueprint")]
-public class TowerBlueprint : Blueprint
+public class TowerBuildingBlueprint : BuildingBlueprint
 {
     [Header("Tower Settings")]
     [SerializeField] protected GameObject towerPrefab;
@@ -23,6 +23,9 @@ public class TowerBlueprint : Blueprint
     public float AttackSpeed {get => attackSpeed; set => attackSpeed =  value; }
     public int Damage {get => damage; set => damage = value; }
     public StatusEffect[] StatusEffects { get => _statusEffects; set => _statusEffects = value; }
-    
+    public int ProjectileCount { get => projectileCount; set => projectileCount = value; }
+    public int MaxAmmo { get => maxAmmo; set => maxAmmo = value; }
+    public float CurrentAmmo { get => currentAmmo; set => currentAmmo = value; }
+    public float AmmoRegeneration { get => ammoRegeneration; set => ammoRegeneration = value; }
     
 }

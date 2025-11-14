@@ -22,7 +22,7 @@ public class BasicTurret : ProjectileTower
             if (target != null && currentAmmo >= 1)
             {
                 var shotData = GetShotData(); 
-                towerBehavior?.Shoot(this, shotData);
+                ExecuteShootChain();
                 yield return new WaitForSeconds(attackDelay);
                 currentAmmo -= 1;
             }
