@@ -1467,50 +1467,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1026097924}
   m_CullTransparentMesh: 1
---- !u!1 &1077191424
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1077191426}
-  - component: {fileID: 1077191425}
-  m_Layer: 0
-  m_Name: EnemyManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1077191425
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1077191424}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc350e306a8e36242986cb290cb4888b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1077191426
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1077191424}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.70982, y: 1.25337, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1118403930
 GameObject:
   m_ObjectHideFlags: 0
@@ -2369,7 +2325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   constructionGrid: {fileID: 598903010}
   mainBuildingBlueprint: {fileID: 11400000, guid: 490ad5472c7032945936e50e40e0bcb8, type: 2}
-  testTowerBlueprint: {fileID: 11400000, guid: be192f09a89b68740845d1f98b2f57e2, type: 2}
+  testTowerTemplate: {fileID: 11400000, guid: e1afd3469eea15b41bb5de183590384a, type: 2}
 --- !u!1 &1871200899
 GameObject:
   m_ObjectHideFlags: 0
@@ -2964,7 +2920,6 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 619394802}
   - {fileID: 598903011}
-  - {fileID: 1077191426}
   - {fileID: 1118403934}
   - {fileID: 636397872}
   - {fileID: 1747437074}

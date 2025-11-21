@@ -26,7 +26,7 @@ public class ExplosionEffect : ProjectileEffect
         Collider2D[] colliders = Physics2D.OverlapCircleAll(projectile.transform.position, explosionRadius);
         foreach (var collider in colliders)
         {
-            Enemy enemy = collider.GetComponent<Enemy>();
+            Enemy enemy = EnemyManager.Enemies[collider.name];
             if (enemy && enemy != target)
             {
                 enemy.TakeDamage(tower.Damage/2, tower.statusEffects);

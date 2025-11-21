@@ -1,20 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public static class EnemyManager
 {
-    public static List<Enemy> Enemies { get; private set; }
-    
-    void Awake()
+    private static Dictionary<string, Enemy> _enemies;
+    public static Dictionary<string,Enemy> Enemies { get => _enemies;  set => _enemies = value; }
+    static EnemyManager()
     {
-        Enemies = new List<Enemy>();
+        _enemies = new Dictionary<string, Enemy>();
     }
-    
-    public static void RemoveEnemy(Enemy enemy)
-    {
-        if (Enemies != null && enemy != null)
-        {
-            Enemies.Remove(enemy);
-        }
-    }
+
 }

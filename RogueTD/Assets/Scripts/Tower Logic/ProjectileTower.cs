@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ProjectileTower : MonoBehaviour
@@ -37,31 +39,29 @@ public class ProjectileTower : MonoBehaviour
     protected float currentAngle;
     protected Enemy target;
     protected TowerProjectile projectile;
+    private List<Enemy> enemies;
     
     public struct ShotData
     {
         public int ProjectileCount;
         public float Spread;
         public float ProjectileSpeed;
-        //public Vector3 Position;
         public Quaternion Rotation;
         public Func<Vector2, TowerProjectile> CreateProjectileFunc;
-    
+
         public ShotData(ProjectileTower tower)
         {
             ProjectileCount = tower.projectileCount;
             Spread = tower.spread;
             ProjectileSpeed = tower.projectileSpeed;
-            //Position = barrel.transform.position;
             Rotation = tower.transform.rotation;
-            CreateProjectileFunc = tower.CreateProjectile; // Присваиваем метод как делегат
+            CreateProjectileFunc = tower.CreateProjectile;
         }
     }
     
     void Start()
     {
         BuildShootChain();
-        
     }
     
     public ShotData GetShotData()
@@ -85,10 +85,63 @@ public class ProjectileTower : MonoBehaviour
         ammoRegeneration = blueprint.AmmoRegeneration;
         projectileFragile = blueprint.ProjectileFragile;
         projectilePrefab = blueprint.ProjectilePrefab;
-        effects = blueprint.ProjectileEffects;
-        movements = blueprint.ProjectileBehaviors;
-        towerBehavior = blueprint.ShotBehavior;
-        secondaryShots = blueprint.SecondaryShots;
+        
+        // ИСПРАВЛЕННЫЕ СТРОКИ - преобразуем ResourceReference в реальные значения
+        effects = ConvertResourceReferencesToValues(blueprint.ProjectileEffects);
+        movements = ConvertResourceReferencesToValues(blueprint.ProjectileBehaviors);
+        towerBehavior = blueprint.ShotBehavior?.Value; // Получаем значение из ссылки
+        secondaryShots = ConvertResourceReferencesToValues(blueprint.SecondaryShots);
+        
+        BuildShootChain();
+    }
+    
+    // Вспомогательные методы для преобразования ResourceReference[] в T[]
+    private T[] ConvertResourceReferencesToValues<T>(ResourceReference<T>[] references) where T : Resource
+    {
+        if (references == null || references.Length == 0)
+            return Array.Empty<T>();
+            
+        List<T> result = new List<T>();
+        foreach (var reference in references)
+        {
+            if (reference?.Value != null)
+            {
+                result.Add(reference.Value);
+            }
+        }
+        return result.ToArray();
+    }
+    
+    // Альтернативный вариант - если нужно сохранить ссылки для последующих изменений
+    public void InitializeFromBlueprintWithReferences(ProjectileTowerBlueprint blueprint)
+    {
+        // Базовые настройки
+        targetingRange = blueprint.TargetingRange;
+        damageMult = blueprint.DamageMult;
+        attackSpeed = blueprint.AttackSpeed;
+        projectileSpeed = blueprint.ProjectileSpeed;
+        spread = blueprint.Spread;
+        projectileLifetime = blueprint.ProjectileLifetime;
+        rotatingSpeed = blueprint.RotatingSpeed;
+        damage = blueprint.Damage;
+        projectileCount = blueprint.ProjectileCount;
+        maxAmmo = blueprint.MaxAmmo;
+        currentAmmo = blueprint.CurrentAmmo;
+        ammoRegeneration = blueprint.AmmoRegeneration;
+        projectileFragile = blueprint.ProjectileFragile;
+        projectilePrefab = blueprint.ProjectilePrefab;
+        
+        // Сохраняем ссылки для возможности обновления
+        UpdateFromBlueprint(blueprint);
+    }
+    
+    // Метод для обновления поведения/эффектов без изменения базовых параметров
+    public void UpdateFromBlueprint(ProjectileTowerBlueprint blueprint)
+    {
+        effects = ConvertResourceReferencesToValues(blueprint.ProjectileEffects);
+        movements = ConvertResourceReferencesToValues(blueprint.ProjectileBehaviors);
+        towerBehavior = blueprint.ShotBehavior?.Value;
+        secondaryShots = ConvertResourceReferencesToValues(blueprint.SecondaryShots);
         
         BuildShootChain();
     }
@@ -128,7 +181,8 @@ public class ProjectileTower : MonoBehaviour
     
     protected void GetTarget()
     {
-        var enemies = EnemyManager.Enemies;
+        enemies = EnemyManager.Enemies.Values.ToList();
+        
         if (enemies == null || enemies.Count == 0)
         {
             target = null;
@@ -141,7 +195,7 @@ public class ProjectileTower : MonoBehaviour
         
         foreach (var enemy in enemies)
         {
-            if (enemy == null) continue;
+            if (!enemy) continue;
             
             float distance = (enemy.transform.position - myPosition).sqrMagnitude;
             float rangeSqr = targetingRange * targetingRange;

@@ -7,38 +7,47 @@ public class GameHandler : MonoBehaviour
 {
     private static GameHandler instance;
     
-    string folderPath = "Assets/Resources/BehaviorsAndEffects";
-    [SerializeField] Grid constructionGrid;
+    [SerializeField] private Grid constructionGrid;
     [SerializeField] private BuildingBlueprint mainBuildingBlueprint;
-    [SerializeField] private ProjectileTowerBlueprint testTowerBlueprint;
+    [SerializeField] private ProjectileTowerBlueprint testTowerTemplate;
     
     void Start()
     {
         instance = this;
-        BlueprintManager.blueprints = new Dictionary<string, BuildingBlueprint>(){};
         ConstructionGridManager.constructionGrid = constructionGrid;
+        
+        
+        ResourceManager.LoadAllResources();
         CreateMainBuilding();
         CreateTestTowers();
-        CreateAvailableBehaviorsAndEffects();
     }
     
+   
     private void CreateTestTowers()   
     {
-        if (testTowerBlueprint == null)
+        if (testTowerTemplate == null)
         {
-            Debug.LogError("TestTower blueprint is not assigned!");
+            Debug.LogError("TestTower template is not assigned!");
             return;
         }
+
+        BlueprintManager.InsertProjectileTowerBlueprint(testTowerTemplate);
+        
+        var blueprint = BlueprintManager.GetBlueprint(testTowerTemplate.buildingName) as ProjectileTowerBlueprint;
+        if (blueprint == null)
+        {
+            Debug.LogError("Failed to create blueprint from template");
+            return;
+        }
+
         ConstructionManager.projectileTowers = new List<Building>();
         Vector2 gridPosition = MapManager.Size/2 + Vector2.left * 2;
-        var tower = BuildingFactory.CreateProjectileTower(gridPosition, testTowerBlueprint);
-        Debug.Log(tower);
+        var tower = BuildingFactory.CreateProjectileTower(gridPosition, blueprint);
         ConstructionManager.projectileTowers.Add(tower);
-        gridPosition = MapManager.Size/2 + Vector2.right * 4;
-        var tower2 = BuildingFactory.CreateProjectileTower(gridPosition, testTowerBlueprint);
         
+        gridPosition = MapManager.Size/2 + Vector2.right * 4;
+        var tower2 = BuildingFactory.CreateProjectileTower(gridPosition, blueprint);
         ConstructionManager.projectileTowers.Add(tower2);
-        BlueprintManager.InsertBlueprint(testTowerBlueprint);
     }
     
     private void CreateMainBuilding()
@@ -61,212 +70,197 @@ public class GameHandler : MonoBehaviour
             Debug.LogError("Failed to create main building");
         }
     }
-    
-    private void CreateAvailableBehaviorsAndEffects()
-    {
-        // Создаем папку если ее не существует
-        CreateFolderIfNeeded(folderPath);
-        
-        ConstructionManager.AvailableProjectileBehaviors = new Dictionary<string, ProjectileBehavior>
-        {
-            ["homing"] = CreateAsset<HomingMovement>($"{folderPath}/HomingMovement.asset"),
-        };
 
-        ConstructionManager.AvailableProjectileEffects = new Dictionary<string, ProjectileEffect>
-        {
-            ["split"] = CreateAsset<SplitEffect>($"{folderPath}/SplitEffect.asset"),
-            ["explosion"] = CreateAsset<ExplosionEffect>($"{folderPath}/ExplosionEffect.asset")
-        };
-
-        ConstructionManager.AvailableStatusEffects = new Dictionary<string, StatusEffect>
-        {
-            ["slow"] = CreateAsset<SlowStatusEffect>($"{folderPath}/SlowStatusEffect.asset"),
-            ["bleed"] = CreateAsset<BleedEffect>($"{folderPath}/BleedEffect.asset")
-        };
-
-        ConstructionManager.AvailableSecondaryProjectileTowerBehaviors = new Dictionary<string, SecondaryProjectileTowerBehavior>
-        {
-            ["burst"] = CreateAsset<BurstShotBehavior>($"{folderPath}/BurstShotBehavior.asset"),
-            ["cross"] = CreateAsset<CrossShotBehavior>($"{folderPath}/CrossShotBehavior.asset")
-        };
-        
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-    }
-    
-    private T CreateAsset<T>(string path) where T : ScriptableObject
-    {
-        T asset = ScriptableObject.CreateInstance<T>();
-        AssetDatabase.CreateAsset(asset, path);
-        return asset;
-    }
-    
-    private void CreateFolderIfNeeded(string path)
-    {
-        if (!AssetDatabase.IsValidFolder(path))
-        {
-            string[] folders = path.Split('/');
-            string currentPath = "";
-            
-            foreach (string folder in folders)
-            {
-                if (string.IsNullOrEmpty(currentPath))
-                {
-                    currentPath = folder;
-                }
-                else
-                {
-                    string newPath = currentPath + "/" + folder;
-                    if (!AssetDatabase.IsValidFolder(newPath))
-                    {
-                        AssetDatabase.CreateFolder(currentPath, folder);
-                    }
-                    currentPath = newPath;
-                }
-            }
-        }
-    }
-    
-    // Статические методы, которые вызывают нестатические через instance
+    // Статические методы для добавления поведений и эффектов
     public static void AddHoming()
     {
-        if (instance != null)
+        if (instance != null && instance.testTowerTemplate != null)
             instance.ToggleProjectileBehavior("homing");
     }
 
     public static void AddSplit()
     {
-        if (instance != null)
+        if (instance != null && instance.testTowerTemplate != null)
             instance.ToggleProjectileEffect("split");
     }
     
     public static void AddExplosion()
     {
-        if (instance != null)
+        if (instance != null && instance.testTowerTemplate != null)
             instance.ToggleProjectileEffect("explosion");
     }
 
     public static void AddSlow()
     {
-        if (instance != null)
+        if (instance != null && instance.testTowerTemplate != null)
             instance.ToggleStatusEffect("slow");
     }
     
     public static void AddBleed()
     {
-        if (instance != null)
+        if (instance != null && instance.testTowerTemplate != null)
             instance.ToggleStatusEffect("bleed");
     }
 
     public static void AddBurst()
     {
-        if (instance != null)
+        if (instance != null && instance.testTowerTemplate != null)
             instance.ToggleSecondaryBehavior("burst");
     }
 
     public static void AddCross()
     {
-        if (instance != null)
+        if (instance != null && instance.testTowerTemplate != null)
             instance.ToggleSecondaryBehavior("cross");
     }
 
-    // Эти методы остаются нестатическими
     private void ToggleProjectileBehavior(string behaviorKey)
     {
-        if (testTowerBlueprint == null || !ConstructionManager.AvailableProjectileBehaviors.ContainsKey(behaviorKey))
-            return;
-
-        var behavior = ConstructionManager.AvailableProjectileBehaviors[behaviorKey];
-        var currentBehaviors = testTowerBlueprint.ProjectileBehaviors?.ToList() ?? new List<ProjectileBehavior>();
-
-        if (currentBehaviors.Contains(behavior))
+        var behavior = ResourceManager.GetProjectileBehavior(behaviorKey);
+        if (behavior == null)
         {
-            currentBehaviors.Remove(behavior);
+            Debug.LogError($"Projectile behavior '{behaviorKey}' not found in ResourceManager");
+            return;
+        }
+
+        var blueprint = BlueprintManager.GetBlueprint(testTowerTemplate.buildingName) as ProjectileTowerBlueprint;
+        if (blueprint == null) return;
+
+        List<ResourceReference<ProjectileBehavior>> currentBehaviors = 
+            blueprint.ProjectileBehaviors?.ToList() ?? new List<ResourceReference<ProjectileBehavior>>();
+
+        var existingRef = currentBehaviors.FirstOrDefault<ResourceReference<ProjectileBehavior>>(r => r?.Value?.name == behaviorKey);
+        
+        if (existingRef != null)
+        {
+            currentBehaviors.Remove(existingRef);
             Debug.Log($"Removed {behaviorKey} from blueprint");
         }
         else
         {
-            currentBehaviors.Add(behavior);
+            var newReference = new ResourceReference<ProjectileBehavior> { Value = behavior };
+            currentBehaviors.Add(newReference);
             Debug.Log($"Added {behaviorKey} to blueprint");
         }
 
-        testTowerBlueprint.ProjectileBehaviors = currentBehaviors.ToArray();
-        SaveBlueprintChanges();
+        blueprint.ProjectileBehaviors = currentBehaviors.ToArray();
+        SaveBlueprintChanges(blueprint);
     }
 
     private void ToggleProjectileEffect(string effectKey)
     {
-        if (testTowerBlueprint == null || !ConstructionManager.AvailableProjectileEffects.ContainsKey(effectKey))
-            return;
-
-        var effect = ConstructionManager.AvailableProjectileEffects[effectKey];
-        var currentEffects = testTowerBlueprint.ProjectileEffects?.ToList() ?? new List<ProjectileEffect>();
-
-        if (currentEffects.Contains(effect))
+        var effect = ResourceManager.GetProjectileEffect(effectKey);
+        if (effect == null)
         {
-            currentEffects.Remove(effect);
+            Debug.LogError($"Projectile effect '{effectKey}' not found in ResourceManager");
+            return;
+        }
+
+        var blueprint = BlueprintManager.GetBlueprint(testTowerTemplate.buildingName) as ProjectileTowerBlueprint;
+        if (blueprint == null) return;
+
+        List<ResourceReference<ProjectileEffect>> currentEffects = 
+            blueprint.ProjectileEffects?.ToList() ?? new List<ResourceReference<ProjectileEffect>>();
+
+        var existingRef = currentEffects.FirstOrDefault<ResourceReference<ProjectileEffect>>(r => r?.Value?.name == effectKey);
+        
+        if (existingRef != null)
+        {
+            currentEffects.Remove(existingRef);
             Debug.Log($"Removed {effectKey} from blueprint");
         }
         else
         {
-            currentEffects.Add(effect);
+            var newReference = new ResourceReference<ProjectileEffect> { Value = effect };
+            currentEffects.Add(newReference);
             Debug.Log($"Added {effectKey} to blueprint");
         }
 
-        testTowerBlueprint.ProjectileEffects = currentEffects.ToArray();
-        SaveBlueprintChanges();
+        blueprint.ProjectileEffects = currentEffects.ToArray();
+        SaveBlueprintChanges(blueprint);
     }
 
     private void ToggleStatusEffect(string effectKey)
     {
-        if (testTowerBlueprint == null || !ConstructionManager.AvailableStatusEffects.ContainsKey(effectKey))
-            return;
-
-        var effect = ConstructionManager.AvailableStatusEffects[effectKey];
-        var currentEffects = testTowerBlueprint.StatusEffects?.ToList() ?? new List<StatusEffect>();
-
-        if (currentEffects.Contains(effect))
+        var effect = ResourceManager.GetStatusEffect(effectKey);
+        if (effect == null)
         {
-            currentEffects.Remove(effect);
+            Debug.LogError($"Status effect '{effectKey}' not found in ResourceManager");
+            return;
+        }
+
+        var blueprint = BlueprintManager.GetBlueprint(testTowerTemplate.buildingName) as ProjectileTowerBlueprint;
+        if (blueprint == null) return;
+
+        List<ResourceReference<StatusEffect>> currentEffects = 
+            blueprint.StatusEffects?.ToList() ?? new List<ResourceReference<StatusEffect>>();
+
+        var existingRef = currentEffects.FirstOrDefault<ResourceReference<StatusEffect>>(r => r?.Value?.name == effectKey);
+        
+        if (existingRef != null)
+        {
+            currentEffects.Remove(existingRef);
             Debug.Log($"Removed {effectKey} from blueprint");
         }
         else
         {
-            currentEffects.Add(effect);
+            var newReference = new ResourceReference<StatusEffect> { Value = effect };
+            currentEffects.Add(newReference);
             Debug.Log($"Added {effectKey} to blueprint");
         }
 
-        testTowerBlueprint.StatusEffects = currentEffects.ToArray();
-        SaveBlueprintChanges();
+        blueprint.StatusEffects = currentEffects.ToArray();
+        SaveBlueprintChanges(blueprint);
     }
 
     private void ToggleSecondaryBehavior(string behaviorKey)
     {
-        if (testTowerBlueprint == null || !ConstructionManager.AvailableSecondaryProjectileTowerBehaviors.ContainsKey(behaviorKey))
-            return;
-
-        var behavior = ConstructionManager.AvailableSecondaryProjectileTowerBehaviors[behaviorKey];
-        var currentBehaviors = testTowerBlueprint.SecondaryShots?.ToList() ?? new List<SecondaryProjectileTowerBehavior>();
-
-        if (currentBehaviors.Contains(behavior))
+        var behavior = ResourceManager.GetSecondaryBehavior(behaviorKey);
+        if (behavior == null)
         {
-            currentBehaviors.Remove(behavior);
+            Debug.LogError($"Secondary behavior '{behaviorKey}' not found in ResourceManager");
+            return;
+        }
+
+        var blueprint = BlueprintManager.GetBlueprint(testTowerTemplate.buildingName) as ProjectileTowerBlueprint;
+        if (blueprint == null) return;
+
+        List<ResourceReference<SecondaryProjectileTowerBehavior>> currentBehaviors = 
+            blueprint.SecondaryShots?.ToList() ?? new List<ResourceReference<SecondaryProjectileTowerBehavior>>();
+
+        var existingRef = currentBehaviors.FirstOrDefault<ResourceReference<SecondaryProjectileTowerBehavior>>(r => r?.Value?.name == behaviorKey);
+        
+        if (existingRef != null)
+        {
+            currentBehaviors.Remove(existingRef);
             Debug.Log($"Removed {behaviorKey} from blueprint");
         }
         else
         {
-            currentBehaviors.Add(behavior);
+            var newReference = new ResourceReference<SecondaryProjectileTowerBehavior> { Value = behavior };
+            currentBehaviors.Add(newReference);
             Debug.Log($"Added {behaviorKey} to blueprint");
         }
 
-        testTowerBlueprint.SecondaryShots = currentBehaviors.ToArray();
-        SaveBlueprintChanges();
+        blueprint.SecondaryShots = currentBehaviors.ToArray();
+        SaveBlueprintChanges(blueprint);
     }
-    
-    private void SaveBlueprintChanges()
+
+    private void SaveBlueprintChanges(ProjectileTowerBlueprint blueprint)
     {
-        EditorUtility.SetDirty(testTowerBlueprint);
-        AssetDatabase.SaveAssets(); 
-        BlueprintManager.InsertBlueprint(testTowerBlueprint);
+        #if UNITY_EDITOR
+        EditorUtility.SetDirty(blueprint);
+        AssetDatabase.SaveAssets();
+        #endif
+        
+        BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
+    }
+
+    void OnDestroy()
+    {
+        if (instance == this)
+        {
+            instance = null;
+        }
     }
 }

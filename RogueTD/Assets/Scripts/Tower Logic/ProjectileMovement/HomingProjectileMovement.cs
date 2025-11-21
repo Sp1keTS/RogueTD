@@ -11,7 +11,7 @@ public class HomingMovement : ProjectileBehavior
     {
         Enemy findTarget = FindTarget(projectile.transform.position);
         
-        if (findTarget != null)
+        if (findTarget)
         {
             Vector2 directionToTarget = (findTarget.transform.position - projectile.transform.position).normalized;
             float rotateAmount = Vector3.Cross(directionToTarget, projectile.transform.right).z;
@@ -31,7 +31,7 @@ public class HomingMovement : ProjectileBehavior
         {
             if (collider.CompareTag("Enemy"))
             {
-                Enemy enemy = collider.GetComponent<Enemy>();
+                Enemy enemy = EnemyManager.Enemies[collider.name];
                 if (enemy)
                 {
                     float distance = Vector3.Distance(position, enemy.transform.position);

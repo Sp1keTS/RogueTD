@@ -32,7 +32,6 @@ public class BuildingFactory : MonoBehaviour
         
         // Обновление сетки с ссылкой на созданное здание
         UpdateGridWithBuilding(gridPos, building, blueprint);
-        Debug.Log(tower);
         return building;
     }
 

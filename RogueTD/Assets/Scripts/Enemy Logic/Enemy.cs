@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     void Start()
     {
         healthPoints = maxHealthPoints;
-        EnemyManager.Enemies.Add(this);
+        EnemyManager.Enemies.Add(this.name, this);
     }
 
     public void TakeDamage(int damage, StatusEffect[] statusEffects)

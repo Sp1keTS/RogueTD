@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class TestUI : MonoBehaviour
 {
-    [SerializeField] private ConstructionManager constructionManager;
 
     [Header("UI Elements")] 
     [SerializeField] private Button homingButton;
