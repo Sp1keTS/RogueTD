@@ -50,6 +50,16 @@ public class BuildingFactory : MonoBehaviour
         UpdateGridWithBuilding(gridPos, building, buildingBlueprint);
         return building;
     }
+    
+    public static void DestroyBuilding(Building buildingToDestroy)
+    {
+        if (buildingToDestroy != null)
+        {
+            ConstructionGridManager.RemoveBuilding(buildingToDestroy);
+            Destroy(buildingToDestroy.gameObject);
+        }
+    }
+    
     private static bool  CanPlaceBuilding(Vector2 gridPos, BuildingBlueprint buildingBlueprint)
     {
         for (int x = 0; x < buildingBlueprint.Size.x; x++)

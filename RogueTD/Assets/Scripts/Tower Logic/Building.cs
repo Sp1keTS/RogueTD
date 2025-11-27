@@ -16,7 +16,7 @@ public class Building : MonoBehaviour
         healthPoints -= damage;
         if (healthPoints <= 0)
         {
-            Destroy(gameObject);
+            BuildingFactory.DestroyBuilding(this);
         }
     }
     
