@@ -3,40 +3,74 @@ using UnityEngine.UI;
 
 public class UITreeNode : MonoBehaviour
 {
-    private Button button;
+    [SerializeField] private Button button;
+    [SerializeField] private Image background;
+    [SerializeField] private Text titleText;
+    [SerializeField] private Color activeColor = new Color(220,220,220);
+    [SerializeField] private Color availableColor = new Color(169,169,169);
+    [SerializeField] private Color unavailableColor = new Color(100,100,100);
+    [SerializeField] private TreeSolver treeSolver;
     private TreeNode selectedNode;
     
     private void Awake()
     {
-        button = GetComponent<Button>();
+        if (button == null) button = GetComponent<Button>();
+        
         button.onClick.AddListener(OnButtonClick);
     }
 
     private void OnButtonClick()
     {
-        if (selectedNode.IsActive)
-            return;
+        if (selectedNode == null || selectedNode.IsActive) return;
+        
+        if (treeSolver != null || !treeSolver.CanActivateNode(selectedNode)) return;
             
         selectedNode.OnActivate();
-        UpdateButtonState();
+        selectedNode.IsActive = true; 
+        
+        
+        UpdateVisualState();
     }
 
     public void SetNode(TreeNode node)
     {
         selectedNode = node;
-        UpdateButtonState();
+        if (titleText != null) titleText.text = node.name;
+        UpdateVisualState();
     }
 
-    private void UpdateButtonState()
+    public void UpdateButtonState(bool interactable)
     {
-        if (selectedNode != null)
+        if (button != null)
         {
-            button.interactable = !selectedNode.IsActive;
+            button.interactable = interactable;
+        }
+        UpdateVisualState();
+    }
+
+    private void UpdateVisualState()
+    {
+        if (selectedNode == null || background == null) return;
+
+        if (selectedNode.IsActive)
+        {
+            background.color = activeColor;
+            if (button != null) button.interactable = false;
+        }
+        else if (treeSolver != null && treeSolver.CanActivateNode(selectedNode))
+        {
+            background.color = availableColor;
+            if (button != null) button.interactable = true;
+        }
+        else
+        {
+            background.color = unavailableColor;
+            if (button != null) button.interactable = false;
         }
     }
 
     private void OnEnable()
     {
-        UpdateButtonState();
+        UpdateVisualState();
     }
 }

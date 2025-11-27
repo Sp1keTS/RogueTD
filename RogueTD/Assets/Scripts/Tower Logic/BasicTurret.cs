@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class BasicTurret : ProjectileTower
 {
-    
-    
     private Coroutine shootCoroutine;
     
     void Awake()
@@ -32,21 +30,7 @@ public class BasicTurret : ProjectileTower
             }
         }
     }
-
-    private void Update()
-    {
-        RestoreAmmo();
-        RotateTowardsTarget();
-    }
-
-    private void RestoreAmmo()
-    {
-        if (currentAmmo < maxAmmo)
-        {
-            currentAmmo += Time.deltaTime * ammoRegeneration;   
-        }
-    }
-
+    
     void OnDestroy()
     {
         if (shootCoroutine != null)

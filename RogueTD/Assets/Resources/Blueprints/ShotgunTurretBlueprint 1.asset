@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a92ca9f20abef054393068671407517f, type: 3}
+  m_Name: ShotgunTurretBlueprint 1
+  m_EditorClassIdentifier: 
+  buildingName: TestTurret
+  buildingPrefab: {fileID: 1747688676340181099, guid: 18e277a5e113425449ea0f0a4b70a283, type: 3}
+  maxHealthPoints: 50
+  cost: 50
+  size: {x: 1, y: 1}
+  towerPrefab: {fileID: 6033480094796136511, guid: 675ffe85576d0234ca02c11bdad5053e, type: 3}
+  rotatingSpeed: 10
+  targetingRange: 5
+  damageMult: 1
+  attackSpeed: 1
+  damage: 1
+  projectileCount: 1
+  maxAmmo: 20
+  currentAmmo: 20
+  ammoRegeneration: 2
+  statusEffects: []
+  towerBehaviours: []
+  projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
+  projectileSpeed: 10
+  spread: 10
+  projectileLifetime: 3
+  projectileFragile: 1
+  projectileBehaviors: []
+  projectileEffects:
+  - resourceName: split
+    directReference: {fileID: 11400000, guid: f5c6660ab5668f54ab218a6f9cbb04ff, type: 2}
+  shotBehavior:
+    resourceName: BasicShot
+    directReference: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
+  secondaryShots: []

@@ -10,14 +10,12 @@ public class ResearchTree : MonoBehaviour
         [System.Serializable]
         public class TreeSaveNode
         {
-            public string nodeId;
-            public int number;
-            public bool isActive;
-            public List<string> nextNodeIds = new List<string>(); // Следующие ноды
+            public TreeNode currentNode;
+            public List<TreeNode> nextNodes = new List<TreeNode>();
         }
 
         public List<TreeSaveNode> allNodes = new List<TreeSaveNode>();
-        public List<string> rootNodeIds = new List<string>();
+        public List<TreeNode> rootNodes = new List<TreeNode>();
     }
 
     private List<TreeNode> roots = new List<TreeNode>();
@@ -28,35 +26,29 @@ public class ResearchTree : MonoBehaviour
     private int _maxRank = 9;
     [SerializeField] private int rootCount = 4;
 
-    // Словарь для хранения связей между нодами (родитель -> дети)
-    private Dictionary<TreeNode, List<TreeNode>> nodeChildren = new Dictionary<TreeNode, List<TreeNode>>();
-
     public void GenerateATree()
     {
-        // Инициализируем сохранение и временные структуры
         gameState.TreeSaveData = new TreeSaveData();
         
         LoadAllNodes();
         ClearDependencies();
         CreateRoots();
         CreateBranches();
-        SaveFinalTreeStructure();
         UnloadAllNodes();
+        
+        Debug.Log($"Tree generated: {gameState.TreeSaveData.rootNodes.Count} roots, {gameState.TreeSaveData.allNodes.Count} total nodes");
     }
 
     private void LoadAllNodes()
     {
         TreeNode[] nodes = Resources.LoadAll<TreeNode>("Nodes");
         allAvailableNodes.AddRange(nodes);
-        
     }
 
     private void ClearDependencies()
     {
-        nodeChildren.Clear();
         foreach (TreeNode node in allAvailableNodes)
         {
-            node.Number = -1;
             node.IsActive = false;
             node.PreviousNodes = null;
         }
@@ -83,7 +75,11 @@ public class ResearchTree : MonoBehaviour
             {
                 root.Initialize(0);
                 roots.Add(root);
-                nodeChildren[root] = new List<TreeNode>(); // Инициализируем список детей
+                
+                // Сразу добавляем корневую ноду в сохранение
+                gameState.TreeSaveData.rootNodes.Add(root);
+                AddOrGetSaveNode(root);
+                
                 _weightedNodes.Remove(root);
             }
         }
@@ -100,7 +96,6 @@ public class ResearchTree : MonoBehaviour
             foreach (var currentNode in currentRankNodes)
             {
                 int branchCount = Random.Range(1, 4); // 1-3 ветки от текущей ноды
-                var children = new List<TreeNode>();
                 
                 for (int i = 0; i < branchCount; i++)
                 {
@@ -109,28 +104,23 @@ public class ResearchTree : MonoBehaviour
                     
                     if (selectedNode != null)
                     {
-                        // Создаем связи с предыдущими нодами (для внутренней логики ноды)
+                        // Создаем связи с предыдущими нодами
                         var previousNodesList = new List<TreeNode>();
                         if (currentNode.PreviousNodes != null)
                             previousNodesList.AddRange(currentNode.PreviousNodes);
                         previousNodesList.Add(currentNode);
                         selectedNode.PreviousNodes = previousNodesList.ToArray();
                         
-                        // Добавляем в детей текущей ноды
-                        children.Add(selectedNode);
-                        nextRankNodes.Add(selectedNode);
+                        // Сохраняем связь в TreeSaveData
+                        AddNodeConnection(currentNode, selectedNode);
                         
-                        // Инициализируем список детей для новой ноды
-                        nodeChildren[selectedNode] = new List<TreeNode>();
+                        nextRankNodes.Add(selectedNode);
                         
                         // Убираем уникальные ноды из доступных
                         if (selectedNode.Tags.Contains("Unique"))
                             allAvailableNodes.Remove(selectedNode);
                     }
                 }
-                
-                // Сохраняем детей для текущей ноды
-                nodeChildren[currentNode] = children;
             }
             
             currentRankNodes = nextRankNodes;
@@ -138,36 +128,71 @@ public class ResearchTree : MonoBehaviour
         }
     }
 
-    private void SaveFinalTreeStructure()
+    private void AddNodeConnection(TreeNode parent, TreeNode child)
     {
-        // Сохраняем все ноды с их детьми
-        foreach (var kvp in nodeChildren)
+        // Получаем или создаем запись для родителя
+        var parentSaveNode = AddOrGetSaveNode(parent);
+        
+        // Добавляем ребенка в список детей родителя
+        parentSaveNode.nextNodes.Add(child);
+        
+        // Создаем запись для ребенка (если ее нет)
+        AddOrGetSaveNode(child);
+    }
+
+    private TreeSaveData.TreeSaveNode AddOrGetSaveNode(TreeNode node)
+    {
+        var saveNode = gameState.TreeSaveData.allNodes
+            .FirstOrDefault(n => n.currentNode == node);
+        
+        if (saveNode == null)
         {
-            var node = kvp.Key;
-            var children = kvp.Value;
-            
-            var saveNode = new TreeSaveData.TreeSaveNode
-            {
-                nodeId = node.name,
-                number = node.Number,
-                isActive = node.IsActive
-            };
-
-            // Сохраняем ссылки на детей
-            foreach (var child in children)
-            {
-                saveNode.nextNodeIds.Add(child.name);
-            }
-
+            saveNode = new TreeSaveData.TreeSaveNode { currentNode = node };
             gameState.TreeSaveData.allNodes.Add(saveNode);
         }
-
-        // Сохраняем корневые ноды
-        foreach (var root in roots)
-        {
-            gameState.TreeSaveData.rootNodeIds.Add(root.name);
-        }
+        
+        return saveNode;
     }
+
+    
+
+    // Получить все дочерние ноды для конкретной ноды
+    public List<TreeNode> GetChildren(TreeNode node)
+    {
+        if (gameState.TreeSaveData == null) return new List<TreeNode>();
+        
+        var saveNode = gameState.TreeSaveData.allNodes
+            .FirstOrDefault(n => n.currentNode == node);
+        return saveNode?.nextNodes ?? new List<TreeNode>();
+    }
+
+    // Получить родительские ноды для конкретной ноды
+    public List<TreeNode> GetParents(TreeNode node)
+    {
+        if (gameState.TreeSaveData == null) return new List<TreeNode>();
+        
+        return gameState.TreeSaveData.allNodes
+            .Where(saveNode => saveNode.nextNodes.Contains(node))
+            .Select(saveNode => saveNode.currentNode)
+            .ToList();
+    }
+
+    
+    
+
+    public bool CanActivateNode(TreeNode node)
+    {
+        if (node.IsActive) return false; // Уже активирована
+        
+        var parents = GetParents(node);
+        if (parents.Count == 0) return true; // Корневая нода
+
+        // Проверяем, что все родительские ноды активированы
+        return parents.All(parent => parent.IsActive);
+    }
+
+    
+
 
     private TreeNode SelectNode(TreeNode currentNode, Dictionary<TreeNode, float> possibleNodes, int currentRank)
     {
@@ -176,26 +201,26 @@ public class ResearchTree : MonoBehaviour
         TreeNode node = GetRandomNode(possibleNodes);
         if (node == null) return null;
 
-        // Обработка UpgradeTreeNode
-        if (node is UpgradeTreeNode upgradeNode)
+
+        if (node is ProjectileTowerUpgradeTreeNode projectileTowerUpgradeNode)
         {
-            var weightedTowerNodes = new Dictionary<TreeNode, float>();
+            var weightedProjectileTowerNodes = new Dictionary<TreeNode, float>();
             
             if (currentNode.PreviousNodes != null)
             {
                 foreach (var prevNode in currentNode.PreviousNodes)
                 {
-                    if (prevNode.Tags.Contains("Tower"))
+                    if (prevNode is ProjectileTowerNode towerNode)
                     {
-                        weightedTowerNodes[prevNode] = 1;
+                        weightedProjectileTowerNodes[prevNode] = 1;
                     }
                 }
             }
             
-            
-            if (weightedTowerNodes.Count > 0)
+            TreeNode randomTowerNode = GetRandomNode(weightedProjectileTowerNodes);
+            if (randomTowerNode is ProjectileTowerNode projectileTowerNode)
             {
-                upgradeNode.ToUpgrade = GetRandomNode(weightedTowerNodes);
+                projectileTowerUpgradeNode.TowerToUpgrade = projectileTowerNode;
             }
         }
         
@@ -223,13 +248,13 @@ public class ResearchTree : MonoBehaviour
     {
         float weight = 1;
         
-        //  прямое улучшение
+        // Прямое улучшение
         if (node.DirectUpgradeOf == currentNode) 
         { 
             weight += availableNodes.Count / 2; 
         }
 
-        // совпадение тегов
+        // Совпадение тегов
         foreach (var tag in node.Tags)
         {
             if (currentNode.Tags.Contains(tag)) 
@@ -278,8 +303,5 @@ public class ResearchTree : MonoBehaviour
         allAvailableNodes.Clear();
         roots.Clear();
         _weightedNodes.Clear();
-        nodeChildren.Clear();
     }
-
-    
 }

@@ -14,7 +14,7 @@ public class TowerBlueprint : BuildingBlueprint
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected float currentAmmo;
     [SerializeField] protected float ammoRegeneration;
-    [SerializeField] protected ResourceReference<StatusEffect>[] statusEffects; // Изменено на ResourceReference
+    [SerializeField] protected ResourceReference<StatusEffect>[] statusEffects; 
     [SerializeField] protected TowerBehaviour[] towerBehaviours;
     
     public GameObject TowerPrefab { get => towerPrefab; set => towerPrefab = value; }
@@ -28,5 +28,5 @@ public class TowerBlueprint : BuildingBlueprint
     public int MaxAmmo { get => maxAmmo; set => maxAmmo = value; }
     public float CurrentAmmo { get => currentAmmo; set => currentAmmo = value; }
     public float AmmoRegeneration { get => ammoRegeneration; set => ammoRegeneration = value; }
-    public TowerBehaviour[] TowerBehaviours => towerBehaviours;
+    public TowerBehaviour[] TowerBehaviours { get => towerBehaviours; set => towerBehaviours = value; }
 }
