@@ -45,7 +45,7 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             towerBlueprint.StatusEffects = null;
             towerBlueprint.TowerBehaviours = null;
             
-            Debug.Log($"Rapid Fire Turret Rank {rank}: {towerBlueprint.AttackSpeed:F1} attack speed, {towerBlueprint.MaxAmmo} ammo");
+            
         }
     }
 }

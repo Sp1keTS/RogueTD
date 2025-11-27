@@ -38,15 +38,12 @@ public class NodeBasicTurret : ProjectileTowerNode
                 
                 ResourceManager.RegisterTowerBehavior(basicShotBehavior.name, basicShotBehavior);
             }
-            
-            // Очищаем остальные поведения
             towerBlueprint.ProjectileBehaviors = null;
             towerBlueprint.ProjectileEffects = null;
             towerBlueprint.SecondaryShots = null;
             towerBlueprint.StatusEffects = null;
             towerBlueprint.TowerBehaviours = null;
             
-            Debug.Log($"Basic Turret initialized - Rank {rank}, Damage: {towerBlueprint.Damage}");
         }
     }
 }

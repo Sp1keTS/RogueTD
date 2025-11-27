@@ -11,9 +11,12 @@ public class TreeSolver : MonoBehaviour
     [SerializeField] private float verticalSpacing = 150f;
     [SerializeField] private float horizontalSpacing = 120f;
 
-    private Dictionary<TreeNode, UITreeNode> nodeUIElements = new Dictionary<TreeNode, UITreeNode>();
-    private Dictionary<int, List<TreeNode>> nodesByRank = new Dictionary<int, List<TreeNode>>();
-    private Dictionary<TreeNode, Vector2> nodePositions = new Dictionary<TreeNode, Vector2>();
+    private Dictionary<string, UITreeNode> nodeUIElements = new Dictionary<string, UITreeNode>();
+    private Dictionary<int, List<ResearchTree.TreeSaveData.TreeSaveNode>> nodesByRank = new Dictionary<int, List<ResearchTree.TreeSaveData.TreeSaveNode>>();
+    private Dictionary<string, Vector2> nodePositions = new Dictionary<string, Vector2>();
+    
+    // Кэш для загруженных TreeNode ассетов
+    private Dictionary<string, TreeNode> _nodeAssetCache = new Dictionary<string, TreeNode>();
 
     public void SolveAndDisplayTree()
     {
@@ -23,7 +26,10 @@ public class TreeSolver : MonoBehaviour
             return;
         }
 
+        Debug.Log($"TreeSolver: {gameState.TreeSaveData.allNodes.Count} nodes in save data, {gameState.TreeSaveData.rootNodeIds.Count} roots");
+
         ClearTreeUI();
+        LoadNodeAssets();
         OrganizeNodesByRank();
         CalculateNodePositions();
         CreateUIElements();
@@ -42,48 +48,63 @@ public class TreeSolver : MonoBehaviour
         }
     }
 
+    private void LoadNodeAssets()
+    {
+        _nodeAssetCache.Clear();
+        TreeNode[] nodes = Resources.LoadAll<TreeNode>("Nodes");
+        foreach (var node in nodes)
+        {
+            _nodeAssetCache[node.name] = node;
+        }
+        Debug.Log($"Loaded {_nodeAssetCache.Count} node assets");
+    }
+
     private void OrganizeNodesByRank()
     {
         foreach (var saveNode in gameState.TreeSaveData.allNodes)
         {
-            TreeNode node = saveNode.currentNode;
-            int rank = node.CurrentRank;
+            int rank = saveNode.rank;
 
             if (!nodesByRank.ContainsKey(rank))
             {
-                nodesByRank[rank] = new List<TreeNode>();
+                nodesByRank[rank] = new List<ResearchTree.TreeSaveData.TreeSaveNode>();
             }
-            nodesByRank[rank].Add(node);
+            nodesByRank[rank].Add(saveNode);
         }
 
+        // Сортируем ранги
         var sortedRanks = nodesByRank.Keys.OrderBy(rank => rank).ToList();
-        var sortedNodesByRank = new Dictionary<int, List<TreeNode>>();
+        var sortedNodesByRank = new Dictionary<int, List<ResearchTree.TreeSaveData.TreeSaveNode>>();
         foreach (var rank in sortedRanks)
         {
             sortedNodesByRank[rank] = nodesByRank[rank];
         }
         nodesByRank = sortedNodesByRank;
+
+        Debug.Log($"Organized {nodesByRank.Sum(x => x.Value.Count)} nodes into {nodesByRank.Count} ranks");
     }
 
     private void CalculateNodePositions()
     {
-        if (gameState.TreeSaveData.rootNodes.Count == 0) return;
+        if (gameState.TreeSaveData.rootNodeIds.Count == 0) return;
 
-        float angleStep = 360f / gameState.TreeSaveData.rootNodes.Count;
-        for (int i = 0; i < gameState.TreeSaveData.rootNodes.Count; i++)
+        // Позиционируем корневые ноды по кругу
+        float angleStep = 360f / gameState.TreeSaveData.rootNodeIds.Count;
+        for (int i = 0; i < gameState.TreeSaveData.rootNodeIds.Count; i++)
         {
-            TreeNode rootNode = gameState.TreeSaveData.rootNodes[i];
+            string rootNodeId = gameState.TreeSaveData.rootNodeIds[i];
             float angle = i * angleStep * Mathf.Deg2Rad;
             Vector2 position = new Vector2(
                 Mathf.Cos(angle) * circleRadius,
                 Mathf.Sin(angle) * circleRadius
             );
-            nodePositions[rootNode] = position;
+            nodePositions[rootNodeId] = position;
         }
 
+        // Позиционируем остальные ноды по рангам
         foreach (var rank in nodesByRank.Keys)
         {
-            if (rank == 0) continue;
+            if (rank == 0) continue; // Корни уже размещены
 
             var rankNodes = nodesByRank[rank];
             float totalWidth = (rankNodes.Count - 1) * horizontalSpacing;
@@ -92,37 +113,50 @@ public class TreeSolver : MonoBehaviour
 
             for (int i = 0; i < rankNodes.Count; i++)
             {
-                TreeNode node = rankNodes[i];
+                var saveNode = rankNodes[i];
                 Vector2 position = new Vector2(startX + i * horizontalSpacing, yPosition);
-                nodePositions[node] = position;
+                nodePositions[saveNode.nodeId] = position;
             }
         }
     }
 
     private void CreateUIElements()
     {
+        // Создаем UI элементы для всех нод
         foreach (var saveNode in gameState.TreeSaveData.allNodes)
         {
-            TreeNode node = saveNode.currentNode;
-            CreateUITreeNode(node);
+            CreateUITreeNode(saveNode);
         }
 
         CreateNodeConnections();
     }
 
-    private void CreateUITreeNode(TreeNode node)
+    private void CreateUITreeNode(ResearchTree.TreeSaveData.TreeSaveNode saveNode)
     {
         if (uiTreeNodePrefab == null || treeContainer == null) return;
 
-        UITreeNode uiNode = Instantiate(uiTreeNodePrefab, treeContainer);
-        uiNode.SetNode(node);
+        // Получаем TreeNode ассет
+        if (!_nodeAssetCache.TryGetValue(saveNode.nodeAssetName, out var nodeAsset))
+        {
+            Debug.LogWarning($"Node asset not found: {saveNode.nodeAssetName}");
+            return;
+        }
 
-        if (nodePositions.TryGetValue(node, out Vector2 position))
+        // Создаем UI элемент
+        UITreeNode uiNode = Instantiate(uiTreeNodePrefab, treeContainer);
+        
+        // Восстанавливаем состояние ноды из save data
+        nodeAsset.IsActive = saveNode.isActive;
+        nodeAsset.CurrentRank = saveNode.rank;
+        
+        uiNode.SetNode(nodeAsset, saveNode.nodeId);
+
+        if (nodePositions.TryGetValue(saveNode.nodeId, out Vector2 position))
         {
             uiNode.transform.localPosition = position;
         }
 
-        nodeUIElements[node] = uiNode;
+        nodeUIElements[saveNode.nodeId] = uiNode;
     }
 
     private void CreateNodeConnections()
@@ -134,13 +168,12 @@ public class TreeSolver : MonoBehaviour
 
         foreach (var saveNode in gameState.TreeSaveData.allNodes)
         {
-            TreeNode parent = saveNode.currentNode;
-            foreach (TreeNode child in saveNode.nextNodes)
+            foreach (string childId in saveNode.nextNodeIds)
             {
-                if (nodePositions.ContainsKey(parent) && nodePositions.ContainsKey(child))
+                if (nodePositions.ContainsKey(saveNode.nodeId) && nodePositions.ContainsKey(childId))
                 {
-                    linePositions.Add(nodePositions[parent]);
-                    linePositions.Add(nodePositions[child]);
+                    linePositions.Add(nodePositions[saveNode.nodeId]);
+                    linePositions.Add(nodePositions[childId]);
                 }
             }
         }
@@ -155,34 +188,95 @@ public class TreeSolver : MonoBehaviour
     {
         foreach (var saveNode in gameState.TreeSaveData.allNodes)
         {
-            if (saveNode.currentNode.IsActive)
+            if (saveNode.isActive && _nodeAssetCache.TryGetValue(saveNode.nodeAssetName, out var nodeAsset))
             {
-                saveNode.currentNode.LoadDependencies();
+                nodeAsset.LoadDependencies();
             }
         }
     }
 
-    public bool CanActivateNode(TreeNode node)
+    public bool CanActivateNode(TreeNode node, string nodeId)
     {
         // Корневые ноды всегда доступны для активации
-        if (gameState.TreeSaveData.rootNodes.Contains(node))
+        if (gameState.TreeSaveData.rootNodeIds.Contains(nodeId))
             return true;
 
         // Для остальных нод проверяем, активированы ли все родители
-        var parents = GetParentNodes(node);
-        return parents.Count > 0 && parents.All(parent => parent.IsActive);
+        var parents = GetParentNodes(nodeId);
+        return parents.Count > 0 && parents.All(parent => parent.isActive);
     }
 
-    private List<TreeNode> GetParentNodes(TreeNode node)
+    private List<ResearchTree.TreeSaveData.TreeSaveNode> GetParentNodes(string nodeId)
     {
-        var parents = new List<TreeNode>();
+        var parents = new List<ResearchTree.TreeSaveData.TreeSaveNode>();
         foreach (var saveNode in gameState.TreeSaveData.allNodes)
         {
-            if (saveNode.nextNodes.Contains(node))
+            if (saveNode.nextNodeIds.Contains(nodeId))
             {
-                parents.Add(saveNode.currentNode);
+                parents.Add(saveNode);
             }
         }
         return parents;
+    }
+
+    // Метод для активации ноды
+    public void ActivateNode(string nodeId)
+    {
+        var saveNode = gameState.TreeSaveData.GetNodeById(nodeId);
+        if (saveNode != null && !saveNode.isActive)
+        {
+            saveNode.isActive = true;
+            
+            // Обновляем состояние TreeNode ассета
+            if (_nodeAssetCache.TryGetValue(saveNode.nodeAssetName, out var nodeAsset))
+            {
+                nodeAsset.IsActive = true;
+                nodeAsset.OnActivate();
+                nodeAsset.LoadDependencies();
+            }
+            
+            // Обновляем UI
+            if (nodeUIElements.TryGetValue(nodeId, out var uiNode))
+            {
+                uiNode.UpdateVisualState();
+            }
+        }
+    }
+
+    // Получить все дочерние ноды для конкретной ноды
+    public List<(TreeNode node, string nodeId)> GetChildren(string nodeId)
+    {
+        var result = new List<(TreeNode node, string nodeId)>();
+        var saveNode = gameState.TreeSaveData.GetNodeById(nodeId);
+        
+        if (saveNode != null)
+        {
+            foreach (var childId in saveNode.nextNodeIds)
+            {
+                var childSaveNode = gameState.TreeSaveData.GetNodeById(childId);
+                if (childSaveNode != null && _nodeAssetCache.TryGetValue(childSaveNode.nodeAssetName, out var childNode))
+                {
+                    // Восстанавливаем состояние ноды
+                    childNode.IsActive = childSaveNode.isActive;
+                    childNode.CurrentRank = childSaveNode.rank;
+                    result.Add((childNode, childId));
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    // Получить TreeNode по nodeId
+    public TreeNode GetTreeNodeById(string nodeId)
+    {
+        var saveNode = gameState.TreeSaveData.GetNodeById(nodeId);
+        if (saveNode != null && _nodeAssetCache.TryGetValue(saveNode.nodeAssetName, out var node))
+        {
+            node.IsActive = saveNode.isActive;
+            node.CurrentRank = saveNode.rank;
+            return node;
+        }
+        return null;
     }
 }

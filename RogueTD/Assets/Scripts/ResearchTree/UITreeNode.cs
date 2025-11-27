@@ -10,7 +10,9 @@ public class UITreeNode : MonoBehaviour
     [SerializeField] private Color availableColor = new Color(169,169,169);
     [SerializeField] private Color unavailableColor = new Color(100,100,100);
     [SerializeField] private TreeSolver treeSolver;
+    
     private TreeNode selectedNode;
+    private string nodeId;
     
     private void Awake()
     {
@@ -23,18 +25,16 @@ public class UITreeNode : MonoBehaviour
     {
         if (selectedNode == null || selectedNode.IsActive) return;
         
-        if (treeSolver != null || !treeSolver.CanActivateNode(selectedNode)) return;
+        if (treeSolver == null || !treeSolver.CanActivateNode(selectedNode, nodeId)) return;
             
-        selectedNode.OnActivate();
-        selectedNode.IsActive = true; 
-        
-        
+        treeSolver.ActivateNode(nodeId);
         UpdateVisualState();
     }
 
-    public void SetNode(TreeNode node)
+    public void SetNode(TreeNode node, string id)
     {
         selectedNode = node;
+        nodeId = id;
         if (titleText != null) titleText.text = node.name;
         UpdateVisualState();
     }
@@ -48,7 +48,7 @@ public class UITreeNode : MonoBehaviour
         UpdateVisualState();
     }
 
-    private void UpdateVisualState()
+    public void UpdateVisualState()
     {
         if (selectedNode == null || background == null) return;
 
@@ -57,7 +57,7 @@ public class UITreeNode : MonoBehaviour
             background.color = activeColor;
             if (button != null) button.interactable = false;
         }
-        else if (treeSolver != null && treeSolver.CanActivateNode(selectedNode))
+        else if (treeSolver != null && treeSolver.CanActivateNode(selectedNode, nodeId))
         {
             background.color = availableColor;
             if (button != null) button.interactable = true;

@@ -46,7 +46,6 @@ public class NodeShotgunTurret : ProjectileTowerNode
             towerBlueprint.StatusEffects = null;
             towerBlueprint.TowerBehaviours = null;
             
-            Debug.Log($"Shotgun Turret Rank {rank}: {towerBlueprint.ProjectileCount} projectiles, {towerBlueprint.Spread:F1} spread");
         }
     }
 }

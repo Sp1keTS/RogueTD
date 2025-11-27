@@ -44,7 +44,6 @@ public class NodeSniperTurret : ProjectileTowerNode
             towerBlueprint.StatusEffects = null;
             towerBlueprint.TowerBehaviours = null;
             
-            Debug.Log($"Sniper Turret Rank {rank}: {towerBlueprint.Damage} damage, {towerBlueprint.TargetingRange:F1} range");
         }
     }
 }

@@ -8,6 +8,8 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private Grid constructionGrid;
     [SerializeField] private BuildingBlueprint mainBuildingBlueprint;
     [SerializeField] private ResearchTree researchTree;
+    [SerializeField] private TreeSolver treeSolver;
+    
 
     void Start()
     {
@@ -29,6 +31,8 @@ public class GameHandler : MonoBehaviour
         {
             Debug.LogError("ResearchTree is not assigned!");
         }
+
+        treeSolver.SolveAndDisplayTree();
     }
     
     private void CreateMainBuilding()
@@ -52,26 +56,7 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    // Метод для активации ноды исследования (может вызываться из UI)
-    public static void ActivateResearchNode(TreeNode node)
-    {
-        if (instance != null && instance.researchTree != null)
-        {
-            // TreeSolver будет обрабатывать активацию через UITreeNode
-            Debug.Log($"Attempting to activate research node: {node.name}");
-        }
-    }
 
-    // Метод для получения доступных для активации нод (для UI)
-    public static List<TreeNode> GetAvailableResearchNodes()
-    {
-        if (instance != null && instance.researchTree != null)
-        {
-            // TreeSolver будет предоставлять этот список
-            return new List<TreeNode>();
-        }
-        return new List<TreeNode>();
-    }
 
     void OnDestroy()
     {
