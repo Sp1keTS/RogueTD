@@ -47,6 +47,7 @@ public class BuildingFactory : MonoBehaviour
         Building building = buildingObj.GetComponent<Building>();
         building.buildingName = buildingBlueprint.buildingName;
         building.Initialize(buildingBlueprint.MaxHealthPoints);
+        UpdateGridWithBuilding(gridPos, building, buildingBlueprint);
         return building;
     }
     private static bool  CanPlaceBuilding(Vector2 gridPos, BuildingBlueprint buildingBlueprint)
@@ -56,7 +57,7 @@ public class BuildingFactory : MonoBehaviour
             for (int y = 0; y < buildingBlueprint.Size.y; y++)
             {
                 Vector2 checkPos = gridPos + new Vector2(x, y);
-                if (ConstructionGridManager.buildings.ContainsKey(checkPos) && ConstructionGridManager.buildings[checkPos] != null)
+                if (ConstructionGridManager.buildingsSpace.ContainsKey(checkPos) && ConstructionGridManager.buildingsSpace[checkPos] != null)
                 {
                     return false; 
                 }
@@ -99,12 +100,14 @@ public class BuildingFactory : MonoBehaviour
     
     private static void UpdateGridWithBuilding(Vector2 gridPos, Building building, BuildingBlueprint buildingBlueprint)
     {
+        ConstructionGridManager.buildingsPos[gridPos] = building;
         for (int x = 0; x < buildingBlueprint.Size.x; x++)
         {
             for (int y = 0; y < buildingBlueprint.Size.y; y++)
             {
+                // Debug.Log(gridPos + new Vector2(x, y) + buildingBlueprint.buildingName);
                 Vector2 occupiedPos = gridPos + new Vector2(x, y);
-                ConstructionGridManager.buildings[occupiedPos] = building;
+                ConstructionGridManager.buildingsSpace[occupiedPos] = building;
             }
         }
     }
@@ -113,9 +116,10 @@ public class BuildingFactory : MonoBehaviour
     {
         Debug.Log($"Апдейт происходит");
         
-        Debug.Log(ConstructionManager.projectileTowers.Count);
-        foreach (var building in ConstructionManager.projectileTowers)
+        Debug.Log(ConstructionGridManager.buildingsSpace.Count);
+        foreach (var buildingPosition in ConstructionGridManager.buildingsSpace)
         {
+            var building = buildingPosition.Value;
             Debug.Log(building.GetType());
             Debug.Log(building.buildingName);
             if (building.buildingName == name)
