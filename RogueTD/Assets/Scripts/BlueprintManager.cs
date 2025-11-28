@@ -10,14 +10,14 @@ public static class BlueprintManager
     public static IReadOnlyDictionary<string, BuildingBlueprint> Blueprints => blueprints;
     
     
-    private const string TEMP_BLUEPRINTS_FOLDER = "TempBlueprints";
+    private const string TEMP_BLUEPRINTS_FOLDER = "Blueprints";
 
 
     public static void LoadTemporaryBlueprints()
     {
         ClearDictionaries();
         LoadResources<BuildingBlueprint>(TEMP_BLUEPRINTS_FOLDER, blueprints);
-        Debug.Log($"ResourceManager loaded: {blueprints.Count} blueprints");
+        Debug.Log($" loaded: {blueprints.Count} blueprints");
     }
     private static void LoadResources<T>(string folderPath, Dictionary<string, T> dictionary) where T : ScriptableObject
     {
