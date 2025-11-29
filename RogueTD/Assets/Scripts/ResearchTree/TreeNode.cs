@@ -10,13 +10,14 @@ public abstract class TreeNode : ScriptableObject
     [SerializeField] protected int minRank = 0;
     [SerializeField] protected TreeNode directUpgradeOf;
     [SerializeField] protected bool isActive;
+    [SerializeField] protected int cost;
     public int MaxRank => maxRank;
     public int MinRank => minRank;
     public TreeNode DirectUpgradeOf => directUpgradeOf;
     public string[] Tags => tags;
     public bool IsActive { get  => isActive; set  => isActive = value; }
-    public TreeNode[] PreviousNodes {get; set; }
     public int CurrentRank { get; set; } 
+    public int Cost => cost;
     abstract public void OnActivate();
     abstract public void Initialize(int rank);
     abstract public void LoadDependencies();

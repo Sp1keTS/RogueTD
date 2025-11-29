@@ -16,5 +16,6 @@ MonoBehaviour:
   maxRank: 9
   minRank: 0
   directUpgradeOf: {fileID: 0}
+  isActive: 0
   baseSpeedMultiplier: 1.25
   rankBonusPerLevel: 0.07

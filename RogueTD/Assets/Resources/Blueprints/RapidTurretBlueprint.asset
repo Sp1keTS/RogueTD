@@ -17,27 +17,25 @@ MonoBehaviour:
   maxHealthPoints: 50
   cost: 50
   size: {x: 1, y: 1}
-  towerPrefab: {fileID: 6033480094796136511, guid: 675ffe85576d0234ca02c11bdad5053e, type: 3}
-  rotatingSpeed: 10
-  targetingRange: 5
-  damageMult: 1
-  attackSpeed: 1
-  damage: 1
+  towerPrefab: {fileID: 5395733983055984843, guid: b5368084c0296e84d93bb7f068b0b8bc, type: 3}
+  rotatingSpeed: 269.26175
+  targetingRange: 9.842809
+  damageMult: 1.0759763
+  attackSpeed: 8.421848
+  damage: 10
   projectileCount: 1
-  maxAmmo: 20
-  currentAmmo: 20
-  ammoRegeneration: 2
+  maxAmmo: 102
+  currentAmmo: 102
+  ammoRegeneration: 4.773902
   statusEffects: []
   towerBehaviours: []
   projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
-  projectileSpeed: 10
-  spread: 10
-  projectileLifetime: 3
-  projectileFragile: 1
+  projectileSpeed: 32.350212
+  spread: 7.5445313
+  projectileLifetime: 3.0323565
+  projectileFragile: 0
   projectileBehaviors: []
-  projectileEffects:
-  - resourceName: split
-    directReference: {fileID: 11400000, guid: f5c6660ab5668f54ab218a6f9cbb04ff, type: 2}
+  projectileEffects: []
   shotBehavior:
     resourceName: BasicShot
     directReference: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}

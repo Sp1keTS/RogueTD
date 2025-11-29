@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d61251b392c5ac54a84ef38b5d23e972, type: 3}
   m_Name: NodeShotgunTurret
   m_EditorClassIdentifier: 
-  tags: []
+  tags:
+  - Tower
+  - Unique
   maxRank: 9
   minRank: 0
   directUpgradeOf: {fileID: 0}
-  towerBlueprint: {fileID: 0}
-  basicShotBehavior: {fileID: 0}
+  isActive: 0
+  cost: 0
+  towerBlueprint: {fileID: 11400000, guid: c8bc9ee49361af945a98b101a1f9e45d, type: 2}
+  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}

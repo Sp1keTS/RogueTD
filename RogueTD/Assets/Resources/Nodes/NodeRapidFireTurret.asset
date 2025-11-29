@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 638ec19588f048843a7e8bd328396866, type: 3}
   m_Name: NodeRapidFireTurret
   m_EditorClassIdentifier: 
-  tags: []
+  tags:
+  - Tower
+  - Unique
   maxRank: 9
   minRank: 0
   directUpgradeOf: {fileID: 0}
-  towerBlueprint: {fileID: 0}
-  basicShotBehavior: {fileID: 0}
+  isActive: 0
+  cost: 0
+  towerBlueprint: {fileID: 11400000, guid: e529cec005e868443b23bdb1fb5463cc, type: 2}
+  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
