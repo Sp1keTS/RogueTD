@@ -1,4 +1,3 @@
-
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +10,7 @@ public class ResearchTree : MonoBehaviour
     
     static List<TreeNode> allAvailableNodes = new List<TreeNode>();
     private Dictionary<TreeNode, float> _weightedNodes = new Dictionary<TreeNode, float>();
+    private HashSet<TreeNode> _usedUniqueNodes = new HashSet<TreeNode>(); // Трекер использованных уникальных нод
     
     public struct TreeSaveData 
     {
@@ -28,7 +28,6 @@ public class ResearchTree : MonoBehaviour
             public List<TreeSaveNode> nextSaveNodes;
             public List<TreeSaveNode> visitedNodes;
             public TreeNode currentNode;
-            public Vector2 Position { get; set; }
         }
 
         public static List<TreeSaveNode> rootSaveNodes = new List<TreeSaveNode>();
@@ -73,7 +72,10 @@ public class ResearchTree : MonoBehaviour
         
         foreach (TreeNode node in allAvailableNodes)
         {
-            if (node.Tags?.Contains("Tower") == true && node.MinRank == 0)
+            // Фильтруем уникальные ноды, которые уже использованы
+            if (node.Tags?.Contains("Tower") == true && 
+                node.MinRank == 0 &&
+                !IsUniqueNodeUsed(node))
             {
                 _weightedNodes[node] = 1;
             }
@@ -138,9 +140,13 @@ public class ResearchTree : MonoBehaviour
         _weightedNodes.Clear();
         foreach (var treeNode in allAvailableNodes)
         {
-            var tempNode = new TreeSaveData.TreeSaveNode(treeNode, new List<TreeSaveData.TreeSaveNode>(), visited);
-            float weight = CalculateRandomBranchWeight(tempNode, parentNode, allAvailableNodes);
-            _weightedNodes[treeNode] = weight;
+            // Фильтруем уникальные ноды, которые уже использованы
+            if (!IsUniqueNodeUsed(treeNode))
+            {
+                var tempNode = new TreeSaveData.TreeSaveNode(treeNode, new List<TreeSaveData.TreeSaveNode>(), visited);
+                float weight = CalculateRandomBranchWeight(tempNode, parentNode, allAvailableNodes);
+                _weightedNodes[treeNode] = weight;
+            }
         }
         
         var selectedNode = GetRandomNode(_weightedNodes);
@@ -264,6 +270,9 @@ public class ResearchTree : MonoBehaviour
     {
         TreeNode[] nodes = Resources.LoadAll<TreeNode>("Nodes");
         allAvailableNodes.AddRange(nodes);
+        
+        // Дополнительная защита: удаляем уже использованные уникальные ноды из загруженных
+        allAvailableNodes.RemoveAll(node => IsUniqueNodeUsed(node));
     }
 
     private void ClearDependencies()
@@ -273,8 +282,14 @@ public class ResearchTree : MonoBehaviour
             node.IsActive = false;
         }
     }
+    
+    // Метод для проверки, использована ли уникальная нода
+    private bool IsUniqueNodeUsed(TreeNode node)
+    {
+        return node.Tags?.Contains("Unique") == true && _usedUniqueNodes.Contains(node);
+    }
      
-    public static TreeNode GetRandomNode(Dictionary<TreeNode, float> weightedNodes)
+    public TreeNode GetRandomNode(Dictionary<TreeNode, float> weightedNodes)
     {
         if (weightedNodes == null || weightedNodes.Count == 0)
             return null;
@@ -292,17 +307,31 @@ public class ResearchTree : MonoBehaviour
             accumulatedWeight += kvp.Value;
             if (randomValue < accumulatedWeight)
             {
-                return kvp.Key;
+                var selectedNode = kvp.Key;
+                // Помечаем уникальную ноду как использованную
+                if (selectedNode.Tags?.Contains("Unique") == true)
+                {
+                    _usedUniqueNodes.Add(selectedNode);
+                    allAvailableNodes.Remove(selectedNode);
+                    Debug.Log($"Unique node marked as used: {selectedNode.name}");
+                }
+                return selectedNode;
             }
         }
 
         var nodeToReturn = weightedNodes.Keys.Last();
-        if (nodeToReturn.Tags?.Contains("Unique") == true) {allAvailableNodes.Remove(nodeToReturn);}
+        if (nodeToReturn.Tags?.Contains("Unique") == true)
+        {
+            _usedUniqueNodes.Add(nodeToReturn);
+            allAvailableNodes.Remove(nodeToReturn);
+            Debug.Log($"Unique node marked as used: {nodeToReturn.name}");
+        }
         return nodeToReturn;
     }
      
     private void UnloadAllNodes()
     {
         allAvailableNodes.Clear();
+        _usedUniqueNodes.Clear(); 
     }
 }

@@ -25,7 +25,8 @@ public class UITreeNode : MonoBehaviour
     
     private void OnButtonClick()
     {
-        if (!treeSaveNode.IsActive && treeSaveNode.visitedNodes[0].IsActive)
+        
+        if ((!treeSaveNode.IsActive && treeSaveNode.visitedNodes.Count <= 0) || (!treeSaveNode.IsActive && treeSaveNode.visitedNodes[0].IsActive))
         {
             treeSaveNode.currentNode.OnActivate();
         }
