@@ -3,8 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NodeRapidFireTurret", menuName = "Research Tree/Upgrades/Rapid Fire Turret Node")]
 public class NodeRapidFireTurret : ProjectileTowerNode
 {
-    [SerializeField] private BasicShotBehavior basicShotBehavior;
-    
     public override void Initialize(int rank)
     {
         if (towerBlueprint != null)
@@ -30,14 +28,7 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             
             towerBlueprint.DamageMult = Random.Range(0.6f, 0.8f) + (rank * 0.04f);
             
-            if (basicShotBehavior != null)
-            {
-                towerBlueprint.ShotBehavior = new ResourceReference<ProjectileTowerBehavior> 
-                { 
-                    Value = basicShotBehavior 
-                };
-                ResourceManager.RegisterTowerBehavior(basicShotBehavior.name, basicShotBehavior);
-            }
+            LoadBasicShot();
             
             towerBlueprint.ProjectileBehaviors = null;
             towerBlueprint.ProjectileEffects = null;
@@ -46,6 +37,14 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             towerBlueprint.TowerBehaviours = null;
             
             
+        }
+    }
+    public override void LoadDependencies()
+    {
+        LoadBasicShot();
+        if (towerBlueprint != null)
+        {
+            BlueprintManager.InsertProjectileTowerBlueprint(towerBlueprint);
         }
     }
 }

@@ -8,6 +8,7 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private Grid constructionGrid;
     [SerializeField] private BuildingBlueprint mainBuildingBlueprint;
     [SerializeField] private ResearchTree researchTree;
+    [SerializeField] private TreeSolver treeSolver;
     
 
     void Start()
@@ -16,7 +17,14 @@ public class GameHandler : MonoBehaviour
         ConstructionGridManager.constructionGrid = constructionGrid;
         
         CreateMainBuilding();
+        LoadUITree();
         GenerateResearchTree();
+    }
+
+    private void LoadUITree()
+    {
+        
+        
     }
 
     private void GenerateResearchTree()
@@ -29,8 +37,10 @@ public class GameHandler : MonoBehaviour
         else
         {
             Debug.LogError("ResearchTree is not assigned!");
+            
         }
-
+        treeSolver.LoadAndSolveTree();
+        Debug.Log("Research tree Loaded successfully");
     }
     
     private void CreateMainBuilding()

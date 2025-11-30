@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class ProjectileTowerNode : TreeNode
 {
     [SerializeField] protected ProjectileTowerBlueprint towerBlueprint;
-    
+    [SerializeField] private BasicShotBehavior basicShotBehavior;
     public ProjectileTowerBlueprint TowerBlueprint => towerBlueprint;
 
     public override void OnActivate()
@@ -12,11 +12,16 @@ public abstract class ProjectileTowerNode : TreeNode
         LoadDependencies();
     }
 
-    public override void LoadDependencies()
+    protected void LoadBasicShot()
     {
-        if (towerBlueprint != null)
+        if (basicShotBehavior != null)
         {
-            BlueprintManager.InsertProjectileTowerBlueprint(towerBlueprint);
+            towerBlueprint.ShotBehavior = new ResourceReference<ProjectileTowerBehavior> 
+            { 
+                Value = basicShotBehavior 
+            };
+                
+            ResourceManager.RegisterTowerBehavior(basicShotBehavior.name, basicShotBehavior);
         }
     }
 }

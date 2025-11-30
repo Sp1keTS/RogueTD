@@ -2,8 +2,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NodeShotgunTurret", menuName = "Research Tree/Turrets/Shotgun Turret Node")]
 public class NodeShotgunTurret : ProjectileTowerNode
 {
-    [SerializeField] private BasicShotBehavior basicShotBehavior;
-    
     public override void Initialize(int rank)
     {
         if (towerBlueprint != null)
@@ -29,16 +27,7 @@ public class NodeShotgunTurret : ProjectileTowerNode
             towerBlueprint.AmmoRegeneration = Random.Range(1f, 2f) + (rank * 0.2f);
             
             towerBlueprint.DamageMult = Random.Range(0.7f, 0.9f) + (rank * 0.05f);
-            
-            if (basicShotBehavior != null)
-            {
-                towerBlueprint.ShotBehavior = new ResourceReference<ProjectileTowerBehavior> 
-                { 
-                    Value = basicShotBehavior 
-                };
-                ResourceManager.RegisterTowerBehavior(basicShotBehavior.name, basicShotBehavior);
-            }
-            
+            LoadBasicShot();
             // Очищаем остальные поведения
             towerBlueprint.ProjectileBehaviors = null;
             towerBlueprint.ProjectileEffects = null;
@@ -46,6 +35,14 @@ public class NodeShotgunTurret : ProjectileTowerNode
             towerBlueprint.StatusEffects = null;
             towerBlueprint.TowerBehaviours = null;
             
+        }
+    }
+    public override void LoadDependencies()
+    {
+        LoadBasicShot();
+        if (towerBlueprint != null)
+        {
+            BlueprintManager.InsertProjectileTowerBlueprint(towerBlueprint);
         }
     }
 }

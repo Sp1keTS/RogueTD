@@ -1,13 +1,11 @@
-using System;
+
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class ResearchTree : MonoBehaviour
 {
-    [SerializeField] private int _maxRank = 7;
+    [SerializeField] static public int _maxRank = 7;
     [SerializeField] private int rootCount = 4;
     [SerializeField] GameState gameState;
     
@@ -21,13 +19,16 @@ public class ResearchTree : MonoBehaviour
             public TreeSaveNode(TreeNode node, List<TreeSaveNode> nextNodes, List<TreeSaveNode> visited)
             {
                 currentNode = node;
+                
                 nextSaveNodes = nextNodes ?? new List<TreeSaveNode>();
                 visitedNodes = visited ?? new List<TreeSaveNode>();
             }
 
+            public bool IsActive;
             public List<TreeSaveNode> nextSaveNodes;
             public List<TreeSaveNode> visitedNodes;
             public TreeNode currentNode;
+            public Vector2 Position { get; set; }
         }
 
         public static List<TreeSaveNode> rootSaveNodes = new List<TreeSaveNode>();
