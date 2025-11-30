@@ -9,6 +9,7 @@ public class UITreeNode : MonoBehaviour
     [SerializeField] Image image;
     ResearchTree.TreeSaveData.TreeSaveNode treeSaveNode;
     public ResearchTree.TreeSaveData.TreeSaveNode  TreeSaveNode {get => treeSaveNode; set => treeSaveNode = value; }
+    public ProjectileTowerNode towerToUpgrade {get; set;}
     
     private void Awake()
     {
@@ -25,10 +26,22 @@ public class UITreeNode : MonoBehaviour
     
     private void OnButtonClick()
     {
+        bool isRootNode = treeSaveNode.visitedNodes == null || treeSaveNode.visitedNodes.Count == 0;
+        bool isChildNodeAvailable = !isRootNode && treeSaveNode.visitedNodes[0].IsActive;
         
-        if ((!treeSaveNode.IsActive && treeSaveNode.visitedNodes.Count <= 0) || (!treeSaveNode.IsActive && treeSaveNode.visitedNodes[0].IsActive))
+        if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable))
         {
+            if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
+            {
+                if (towerToUpgrade != null && towerToUpgrade.TowerBlueprint != null)
+                {
+                    upgradeNode.ApplyUpgrade(towerToUpgrade.TowerBlueprint, upgradeNode.CurrentRank);
+                }
+            }
+            
             treeSaveNode.currentNode.OnActivate();
+            treeSaveNode.IsActive = true;
+            button.interactable = false;
         }
     }
     

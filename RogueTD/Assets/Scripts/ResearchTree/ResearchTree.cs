@@ -10,7 +10,7 @@ public class ResearchTree : MonoBehaviour
     
     static List<TreeNode> allAvailableNodes = new List<TreeNode>();
     private Dictionary<TreeNode, float> _weightedNodes = new Dictionary<TreeNode, float>();
-    private HashSet<TreeNode> _usedUniqueNodes = new HashSet<TreeNode>(); // Трекер использованных уникальных нод
+    private HashSet<TreeNode> _usedUniqueNodes = new HashSet<TreeNode>();
     
     public struct TreeSaveData 
     {
@@ -19,11 +19,11 @@ public class ResearchTree : MonoBehaviour
             public TreeSaveNode(TreeNode node, List<TreeSaveNode> nextNodes, List<TreeSaveNode> visited)
             {
                 currentNode = node;
-                
                 nextSaveNodes = nextNodes ?? new List<TreeSaveNode>();
                 visitedNodes = visited ?? new List<TreeSaveNode>();
             }
 
+            public ProjectileTowerNode nodeToUpgrade; 
             public bool IsActive;
             public List<TreeSaveNode> nextSaveNodes;
             public List<TreeSaveNode> visitedNodes;
@@ -72,7 +72,6 @@ public class ResearchTree : MonoBehaviour
         
         foreach (TreeNode node in allAvailableNodes)
         {
-            // Фильтруем уникальные ноды, которые уже использованы
             if (node.Tags?.Contains("Tower") == true && 
                 node.MinRank == 0 &&
                 !IsUniqueNodeUsed(node))
@@ -92,6 +91,8 @@ public class ResearchTree : MonoBehaviour
                     new List<TreeSaveData.TreeSaveNode>(), 
                     new List<TreeSaveData.TreeSaveNode>()
                 );
+                
+                // Для корневых нод (башен) nodeToUpgrade остается null
                 TreeSaveData.rootSaveNodes.Add(rootSaveNode);
                 
                 _weightedNodes.Remove(rootNode);
@@ -110,10 +111,8 @@ public class ResearchTree : MonoBehaviour
             
             foreach (var node in currentRankCopy)
             {
-                // Основная линия - всегда продолжается
                 CreateBranchNode(node, nextRank, rank);
                 
-                // Дополнительные ветви - создаются с вероятностью
                 bool shouldCreateSideBranch = UnityEngine.Random.value < GetSideBranchProbability(rank);
                 if (shouldCreateSideBranch)
                 {
@@ -130,17 +129,16 @@ public class ResearchTree : MonoBehaviour
     {
         var visited = new List<TreeSaveData.TreeSaveNode>(parentNode.visitedNodes ?? new List<TreeSaveData.TreeSaveNode>());
         visited.Add(parentNode);
-        
+    
         var nextNode = new TreeSaveData.TreeSaveNode(null, new List<TreeSaveData.TreeSaveNode>(), visited);
-        
+    
         parentNode.nextSaveNodes = parentNode.nextSaveNodes ?? new List<TreeSaveData.TreeSaveNode>();
         parentNode.nextSaveNodes.Add(nextNode);
         nextRank.Add(nextNode);
-        
+    
         _weightedNodes.Clear();
         foreach (var treeNode in allAvailableNodes)
         {
-            // Фильтруем уникальные ноды, которые уже использованы
             if (!IsUniqueNodeUsed(treeNode))
             {
                 var tempNode = new TreeSaveData.TreeSaveNode(treeNode, new List<TreeSaveData.TreeSaveNode>(), visited);
@@ -148,7 +146,7 @@ public class ResearchTree : MonoBehaviour
                 _weightedNodes[treeNode] = weight;
             }
         }
-        
+    
         var selectedNode = GetRandomNode(_weightedNodes);
         if (selectedNode != null)
         {
@@ -158,12 +156,50 @@ public class ResearchTree : MonoBehaviour
                 selectedNode.Initialize(rank);
             }
             nextNode.currentNode = selectedNode;
-            
+
             if (selectedNode is ProjectileTowerUpgradeTreeNode projectileNode)
             {
-                ProcessUpgradeNode(projectileNode, visited);
+                var towerToUpgrade = GetTowerToUpgradeForNode(parentNode, visited);
+                nextNode.nodeToUpgrade = towerToUpgrade;
+            
+                projectileNode.TowersToUpgrade = projectileNode.TowersToUpgrade ?? new List<ProjectileTowerNode>();
+                if (towerToUpgrade != null && !projectileNode.TowersToUpgrade.Contains(towerToUpgrade))
+                {
+                    projectileNode.TowersToUpgrade.Add(towerToUpgrade);
+                }
             }
         }
+    }
+
+    private ProjectileTowerNode GetTowerToUpgradeForNode(TreeSaveData.TreeSaveNode parentNode, List<TreeSaveData.TreeSaveNode> visited)
+    {
+        var towerCandidates = new Dictionary<ProjectileTowerNode, float>();
+    
+        foreach (var saveNode in visited)
+        {
+            if (saveNode?.currentNode is ProjectileTowerNode towerNode)
+            {
+                if (!towerCandidates.ContainsKey(towerNode))
+                {
+                    towerCandidates[towerNode] = 1f; 
+                }
+            }
+        }
+    
+        if (parentNode?.currentNode is ProjectileTowerNode parentTower)
+        {
+            if (!towerCandidates.ContainsKey(parentTower))
+            {
+                towerCandidates[parentTower] = 1f;
+            }
+        }
+    
+        if (towerCandidates.Count > 0)
+        {
+            return GetRandomTowerNode(towerCandidates);
+        }
+    
+        return null;
     }
 
     private float GetSideBranchProbability(int rank)
@@ -180,32 +216,7 @@ public class ResearchTree : MonoBehaviour
         }
     }
 
-    private void ProcessUpgradeNode(ProjectileTowerUpgradeTreeNode projectileNode, List<TreeSaveData.TreeSaveNode> visited)
-    {
-        projectileNode.TowersToUpgrade = projectileNode.TowersToUpgrade ?? new List<ProjectileTowerNode>();
-        
-        var towerCandidates = new Dictionary<ProjectileTowerNode, float>();
-        foreach (var saveNode in visited)
-        {
-            if (saveNode?.currentNode is ProjectileTowerNode towerNode &&
-                towerNode.Tags?.Contains("Tower") == true &&
-                !projectileNode.TowersToUpgrade.Contains(towerNode))
-            {
-                towerCandidates[towerNode] = 1;
-            }
-        }
-        
-        // Добавляем одну случайную башню из доступных кандидатов
-        if (towerCandidates.Count > 0)
-        {
-            var randomTower = GetRandomTowerNode(towerCandidates);
-            if (randomTower != null)
-            {
-                projectileNode.TowersToUpgrade.Add(randomTower);
-            }
-        }
-    }
-
+    
     private ProjectileTowerNode GetRandomTowerNode(Dictionary<ProjectileTowerNode, float> weightedNodes)
     {
         if (weightedNodes == null || weightedNodes.Count == 0)
@@ -270,20 +281,18 @@ public class ResearchTree : MonoBehaviour
     {
         TreeNode[] nodes = Resources.LoadAll<TreeNode>("Nodes");
         allAvailableNodes.AddRange(nodes);
-        
-        // Дополнительная защита: удаляем уже использованные уникальные ноды из загруженных
         allAvailableNodes.RemoveAll(node => IsUniqueNodeUsed(node));
     }
 
     private void ClearDependencies()
     {
+        // Очищаем только состояние TreeNode
         foreach (TreeNode node in allAvailableNodes)
         {
-            node.IsActive = false;
+            // IsActive теперь управляется через TreeSaveNode
         }
     }
     
-    // Метод для проверки, использована ли уникальная нода
     private bool IsUniqueNodeUsed(TreeNode node)
     {
         return node.Tags?.Contains("Unique") == true && _usedUniqueNodes.Contains(node);
@@ -308,7 +317,6 @@ public class ResearchTree : MonoBehaviour
             if (randomValue < accumulatedWeight)
             {
                 var selectedNode = kvp.Key;
-                // Помечаем уникальную ноду как использованную
                 if (selectedNode.Tags?.Contains("Unique") == true)
                 {
                     _usedUniqueNodes.Add(selectedNode);

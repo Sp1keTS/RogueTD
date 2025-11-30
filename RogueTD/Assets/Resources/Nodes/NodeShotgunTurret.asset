@@ -20,5 +20,6 @@ MonoBehaviour:
   directUpgradeOf: {fileID: 0}
   isActive: 0
   cost: 0
+  icon: {fileID: 6615238464694397962, guid: 2dcf1decf6cb92b4fa5ec629deb06eeb, type: 3}
   towerBlueprint: {fileID: 11400000, guid: c8bc9ee49361af945a98b101a1f9e45d, type: 2}
   basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}

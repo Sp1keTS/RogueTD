@@ -82,7 +82,12 @@ public class TreeSolver : MonoBehaviour
 
             if (current.node.nextSaveNodes == null || current.node.nextSaveNodes.Count == 0)
                 continue;
+            if (current.node.IsActive && current.node.currentNode != null)
+            {
+                current.node.currentNode.LoadDependencies();
+            }
 
+            
             int childCount = current.node.nextSaveNodes.Count;
             float childAngleStep = (childCount > 1) ? branchAngle / (childCount - 1) : 0f;
             float startChildAngle = current.angle - (branchAngle / 2f);
@@ -110,6 +115,10 @@ public class TreeSolver : MonoBehaviour
                 uiNode.transform.localPosition = childPosition;
                 uiNode.TreeSaveNode = nextSaveNode;
                 uiNode.SetImage();
+                if (nextSaveNode.nodeToUpgrade != null)
+                {
+                    uiNode.towerToUpgrade = nextSaveNode.nodeToUpgrade;
+                }
                 nodeToUI[nextSaveNode] = uiNode;
 
                 // Добавляем дочернюю ноду в очередь для обработки

@@ -16,6 +16,9 @@ MonoBehaviour:
   maxRank: 9
   minRank: 0
   directUpgradeOf: {fileID: 0}
+  isActive: 0
+  cost: 10
+  icon: {fileID: 5853628214818741792, guid: 95a78ab4bd8aeb544ae717ed99ec2845, type: 3}
   baseAmmoMultiplier: 1.25
   rankBonusPerLevel: 0.08
   regenerationBonus: 0.1

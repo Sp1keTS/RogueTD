@@ -8,7 +8,6 @@ public abstract class ProjectileTowerNode : TreeNode
 
     public override void OnActivate()
     {
-        this.IsActive = true;
         LoadDependencies();
     }
 

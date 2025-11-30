@@ -16,6 +16,9 @@ MonoBehaviour:
   maxRank: 9
   minRank: 0
   directUpgradeOf: {fileID: 0}
+  isActive: 0
+  cost: 10
+  icon: {fileID: -2237252792072170878, guid: 5d3f801a4f034a74eb1bd635b9b89667, type: 3}
   baseRangeMultiplier: 1.2
   rankBonusPerLevel: 0.05
   projectileSpeedBonus: 0.08

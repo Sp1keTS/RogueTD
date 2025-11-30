@@ -11,7 +11,6 @@ public abstract class TreeNode : ScriptableObject
     [SerializeField] protected int maxRank = 9;
     [SerializeField] protected int minRank = 0;
     [SerializeField] protected TreeNode directUpgradeOf;
-    [SerializeField] protected bool isActive;
     [SerializeField] protected int cost;
     [SerializeField] protected Sprite icon;
     public int MaxRank => maxRank;
@@ -19,7 +18,6 @@ public abstract class TreeNode : ScriptableObject
     public Sprite Icon => icon;
     public TreeNode DirectUpgradeOf => directUpgradeOf;
     public string[] Tags => tags;
-    public bool IsActive { get  => isActive; set  => isActive = value; }
     public int CurrentRank { get; set; } 
     public int Cost => cost;
     abstract public void OnActivate();
