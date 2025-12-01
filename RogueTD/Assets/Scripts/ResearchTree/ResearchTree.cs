@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,9 +12,11 @@ public class ResearchTree : MonoBehaviour
     static List<TreeNode> allAvailableNodes = new List<TreeNode>();
     private Dictionary<TreeNode, float> _weightedNodes = new Dictionary<TreeNode, float>();
     private HashSet<TreeNode> _usedUniqueNodes = new HashSet<TreeNode>();
-    
-    public struct TreeSaveData 
+
+    [System.Serializable]
+    public class TreeSaveData
     {
+        [System.Serializable]
         public class TreeSaveNode
         {
             public TreeSaveNode(TreeNode node, List<TreeSaveNode> nextNodes, List<TreeSaveNode> visited)
@@ -30,14 +33,18 @@ public class ResearchTree : MonoBehaviour
             public TreeNode currentNode;
         }
 
-        public static List<TreeSaveNode> rootSaveNodes = new List<TreeSaveNode>();
+        public List<TreeSaveNode> rootSaveNodes;
     }
 
     public void GenerateATree()
     {
         try
         {
-            gameState.TreeSaveData = new ResearchTree.TreeSaveData();
+            gameState.TreeSaveData = new TreeSaveData
+            {
+                rootSaveNodes = new List<TreeSaveData.TreeSaveNode>()
+            };
+            
             ClearDependencies();
             LoadAllNodes();
             
@@ -49,7 +56,7 @@ public class ResearchTree : MonoBehaviour
             
             CreateRoots();
             
-            if (TreeSaveData.rootSaveNodes.Count == 0)
+            if (gameState.TreeSaveData.rootSaveNodes == null || gameState.TreeSaveData.rootSaveNodes.Count == 0)
             {
                 Debug.LogError("No root nodes created!");
                 return;
@@ -58,6 +65,8 @@ public class ResearchTree : MonoBehaviour
             CreateBranches();
             
             UnloadAllNodes();
+            
+            Debug.Log($"Tree generated successfully with {gameState.TreeSaveData.rootSaveNodes.Count} root nodes");
         }
         catch (System.Exception e)
         {
@@ -67,7 +76,7 @@ public class ResearchTree : MonoBehaviour
 
     private void CreateRoots()
     {
-        TreeSaveData.rootSaveNodes.Clear();
+        gameState.TreeSaveData.rootSaveNodes.Clear();
         _weightedNodes.Clear();
         
         foreach (TreeNode node in allAvailableNodes)
@@ -79,6 +88,8 @@ public class ResearchTree : MonoBehaviour
                 _weightedNodes[node] = 1;
             }
         }
+        
+        Debug.Log($"Found {_weightedNodes.Count} potential root nodes");
         
         for (int i = 0; i < rootCount && _weightedNodes.Count > 0; i++)
         {
@@ -92,17 +103,17 @@ public class ResearchTree : MonoBehaviour
                     new List<TreeSaveData.TreeSaveNode>()
                 );
                 
-                // Для корневых нод (башен) nodeToUpgrade остается null
-                TreeSaveData.rootSaveNodes.Add(rootSaveNode);
-                
+                gameState.TreeSaveData.rootSaveNodes.Add(rootSaveNode);
                 _weightedNodes.Remove(rootNode);
+                
+                Debug.Log($"Added root node: {rootNode.name}");
             }
         }
     }
 
     public void CreateBranches()
     {
-        var currentRank = TreeSaveData.rootSaveNodes;
+        var currentRank = gameState.TreeSaveData.rootSaveNodes;
         var nextRank = new List<TreeSaveData.TreeSaveNode>();
         
         for (int rank = 1; rank < _maxRank; rank++)
@@ -216,7 +227,6 @@ public class ResearchTree : MonoBehaviour
         }
     }
 
-    
     private ProjectileTowerNode GetRandomTowerNode(Dictionary<ProjectileTowerNode, float> weightedNodes)
     {
         if (weightedNodes == null || weightedNodes.Count == 0)
@@ -282,6 +292,7 @@ public class ResearchTree : MonoBehaviour
         TreeNode[] nodes = Resources.LoadAll<TreeNode>("Nodes");
         allAvailableNodes.AddRange(nodes);
         allAvailableNodes.RemoveAll(node => IsUniqueNodeUsed(node));
+        Debug.Log($"Loaded {allAvailableNodes.Count} nodes from Resources");
     }
 
     private void ClearDependencies()

@@ -8,6 +8,7 @@ public class TreeSolver : MonoBehaviour
     [SerializeField] private int startRadius = 200;
     [SerializeField] private float nodeDistance = 100f;
     [SerializeField] private float branchAngle = 45f;
+    [SerializeField] private GameState gameState;
     
     private Dictionary<ResearchTree.TreeSaveData.TreeSaveNode, UITreeNode> nodeToUI = 
         new Dictionary<ResearchTree.TreeSaveData.TreeSaveNode, UITreeNode>();
@@ -16,7 +17,7 @@ public class TreeSolver : MonoBehaviour
     {
         nodeToUI.Clear();
         
-        var roots = ResearchTree.TreeSaveData.rootSaveNodes;
+        var roots = gameState.TreeSaveData.rootSaveNodes;
         
         if (roots == null || roots.Count == 0)
         {
