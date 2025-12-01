@@ -54,6 +54,10 @@ public class TreeSolver : MonoBehaviour
             rootNode.transform.localPosition = position;
             rootNode.TreeSaveNode = root;
             rootNode.SetImage();
+            if (rootNode.TreeSaveNode.IsActive)
+            {
+                rootNode.Button.interactable = false;
+            }
             nodeToUI[root] = rootNode;
 
             ProcessNodeBranchBFS(root, position, currentAngle);
@@ -121,7 +125,10 @@ public class TreeSolver : MonoBehaviour
                     uiNode.towerToUpgrade = nextSaveNode.nodeToUpgrade;
                 }
                 nodeToUI[nextSaveNode] = uiNode;
-
+                if (nextSaveNode.IsActive)
+                {
+                    uiNode.Button.interactable = false;
+                }
                 // Добавляем дочернюю ноду в очередь для обработки
                 queue.Enqueue(new BranchNode 
                 { 

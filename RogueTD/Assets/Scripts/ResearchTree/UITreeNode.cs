@@ -10,7 +10,7 @@ public class UITreeNode : MonoBehaviour
     ResearchTree.TreeSaveData.TreeSaveNode treeSaveNode;
     public ResearchTree.TreeSaveData.TreeSaveNode  TreeSaveNode {get => treeSaveNode; set => treeSaveNode = value; }
     public ProjectileTowerNode towerToUpgrade {get; set;}
-    
+    public Button Button => button;
     private void Awake()
     {
         button = GetComponent<Button>();
