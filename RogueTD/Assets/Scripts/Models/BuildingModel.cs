@@ -12,7 +12,7 @@ namespace Models
         protected int maxHealthPoints;
         protected BuildingBlueprint buildingBlueprint;
         protected Vector2 position;
-        protected Tower[] towers;
+        protected Tower tower;
         
         
         public string BuildingName
@@ -36,11 +36,20 @@ namespace Models
         public Vector2 Position { get => position; set => position = value; }
         
         public Vector2 Size => buildingBlueprint.Size;
+        
+        public Tower Tower { get => tower; set => tower = value; }
 
+        public BuildingModel()
+        {
+            BuildingName = string.Empty;
+        }
+        
         public BuildingModel(BuildingBlueprint buildingBlueprint)
         {
-            Update(buildingBlueprint);
-            this.buildingName = buildingBlueprint.name;
+            this.buildingName = buildingBlueprint.buildingName;
+            this.buildingBlueprint = buildingBlueprint;
+            this.maxHealthPoints = buildingBlueprint.MaxHealthPoints;
+            healthPoints = maxHealthPoints;
         }
 
         public void Update(BuildingBlueprint buildingBlueprint)

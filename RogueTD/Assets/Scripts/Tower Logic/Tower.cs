@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Models;
 
 public class Tower : Building
 {
@@ -15,6 +16,7 @@ public class Tower : Building
     [SerializeField] protected float ammoRegeneration;
     [SerializeField] public StatusEffect[] statusEffects;
     [SerializeField] protected TowerBehaviour[] towerBehaviours;
+    [SerializeField] protected Building mainBuilding;
     
     protected float currentAngle;
     protected Enemy target;
@@ -24,11 +26,18 @@ public class Tower : Building
     public float DamageMult => damageMult;
     public float TargetingRange => targetingRange;
     public float AttackSpeed => attackSpeed;
+
+    public Building MainBuilding
+    {
+        get => mainBuilding;
+        set => mainBuilding = value;
+    }
+    public string Name => mainBuilding.BuildingName;
+    
     
     
     public virtual void InitializeFromBlueprint(TowerBlueprint blueprint)
     {
-        buildingName = blueprint.buildingName;
         targetingRange = blueprint.TargetingRange;
         damageMult = blueprint.DamageMult;
         attackSpeed = blueprint.AttackSpeed;

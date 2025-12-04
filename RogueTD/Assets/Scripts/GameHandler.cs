@@ -8,6 +8,7 @@ public class GameHandler : MonoBehaviour
     
     [SerializeField] private Grid constructionGrid;
     [SerializeField] private BuildingBlueprint mainBuildingBlueprint;
+    [SerializeField] private ProjectileTowerBlueprint testProjectileTowerBlueprint;
     [SerializeField] private ResearchTree researchTree;
     [SerializeField] private TreeSolver treeSolver;
     
@@ -18,6 +19,7 @@ public class GameHandler : MonoBehaviour
         ConstructionGridManager.constructionGrid = constructionGrid;
         
         CreateMainBuilding();
+        CreateTestTowers();
         LoadUITree();
         GenerateResearchTree();
     }
@@ -63,6 +65,12 @@ public class GameHandler : MonoBehaviour
         {
             Debug.LogError("Failed to create main building");
         }
+    }
+
+    private void CreateTestTowers()
+    {
+        Vector2 gridPosition = MapManager.Size/2 + Vector2.right * 5; 
+        BuildingFactory.CreateProjectileTower(gridPosition, testProjectileTowerBlueprint);
     }
 
 

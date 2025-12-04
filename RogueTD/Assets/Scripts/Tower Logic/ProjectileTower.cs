@@ -59,7 +59,6 @@ public class ProjectileTower : Tower
     public override void InitializeFromBlueprint(TowerBlueprint blueprint)
     {
         base.InitializeFromBlueprint(blueprint);
-        
         if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
         {
             InitializeFromProjectileBlueprint(projectileBlueprint);

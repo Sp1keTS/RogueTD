@@ -1,34 +1,37 @@
+using Models;
 using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    public string buildingName;
-    private int healthPoints;
-    [SerializeField] int maxHealthPoints;
+    private BuildingModel buildingModel;
+    [SerializeField] BuildingBlueprint buildingBlueprint;
 
     void Awake()
     {
-        healthPoints = maxHealthPoints;
+        this.buildingModel = new BuildingModel();
     }
 
     public void TakeDamage(int damage)
     {
-        healthPoints -= damage;
-        if (healthPoints <= 0)
+        buildingModel.HealthPoints -= damage;
+        if (buildingModel.HealthPoints <= 0)
         {
             BuildingFactory.DestroyBuilding(this);
         }
     }
-    
-    public void Initialize(int maxHP)
+
+    public virtual void InitializeFromBlueprint(BuildingBlueprint blueprint)
     {
-        maxHealthPoints = maxHP;
-        healthPoints = maxHealthPoints;
+        this.buildingModel = new BuildingModel(blueprint);
     }
 
-    public void InitializeFromBlueprint(BuildingBlueprint buildingBlueprint)
+    public string BuildingName {get => buildingModel.BuildingName; set => buildingModel.BuildingName =value; }//пока костыль
+    public int HealthPoints => buildingModel.HealthPoints;
+    public int MaxHealthPoints => buildingModel.MaxHealthPoints;
+    public Vector2 Position
     {
-        maxHealthPoints = buildingBlueprint.MaxHealthPoints;
-        
+        get => buildingModel.Position;
+        set => buildingModel.Position = value;
     }
+    public Tower Tower { get => buildingModel.Tower; set => buildingModel.Tower = value; }
 }
