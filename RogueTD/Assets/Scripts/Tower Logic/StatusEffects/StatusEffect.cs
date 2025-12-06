@@ -5,6 +5,16 @@ public abstract class StatusEffect : Resource
 {
     public string effectName;
     public float duration = 2;
-
+    
     public abstract IEnumerator ApplyEffect(Enemy enemy);
+    
+    public virtual void OnReapply(Enemy enemy, Coroutine existingCoroutine)
+    {
+        enemy.StopCoroutine(existingCoroutine);
+        Coroutine newCoroutine = enemy.StartCoroutine(ApplyEffect(enemy));
+        
+        // Заменяем корутину в словаре
+        System.Type effectType = GetType();
+        enemy.ReplaceEffectCoroutine(effectType, newCoroutine);
+    }
 }
