@@ -11,13 +11,14 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private ResearchTree researchTree;
     [SerializeField] private TreeSolver treeSolver;
     [SerializeField] private bool geneRateANewTree = false;
+    [SerializeField] private MapManager mapManager;
     
 
     void Start()
     {
         instance = this;
         ConstructionGridManager.constructionGrid = constructionGrid;
-        
+        mapManager.CreateMap();
         CreateMainBuilding();
         if (geneRateANewTree){GenerateResearchTree();}
         LoadUITree();
@@ -53,8 +54,8 @@ public class GameHandler : MonoBehaviour
             Debug.LogError("MainBuilding blueprint is not assigned!");
             return;
         }
-        
-        Vector2 gridPosition = MapManager.Size/2;
+
+        Vector2 gridPosition = Vector2.zero;
         Building mainBuilding = BuildingFactory.CreateBuilding(gridPosition, mainBuildingBlueprint);
         
         if (mainBuilding != null)

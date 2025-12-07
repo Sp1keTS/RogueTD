@@ -9,7 +9,6 @@ public class NodeRapidFireTurret : ProjectileTowerNode
         {
             float rankMultiplier = 1f + (rank * 0.12f);
             
-            // Случайные характеристики для скорострельной туррели
             towerBlueprint.Damage = Mathf.RoundToInt(Random.Range(1f, 2f) * rankMultiplier);
             towerBlueprint.AttackSpeed = Random.Range(10f, 20f) * (1f + (rank * 0.2f)); 
             towerBlueprint.TargetingRange = Random.Range(4f, 7f) * (1f + (rank * 0.1f));

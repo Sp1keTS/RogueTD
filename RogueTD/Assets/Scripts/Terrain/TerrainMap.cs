@@ -16,26 +16,26 @@ public class TerrainMap
 
     public TerrainMap(Tilemap tilemap) => _tilemap = tilemap;
 
-    public void CreateEmptyMap(int width, int height)
+    public void CreateEmptyMap(Vector2Int mapSize)
     {
-        for (int x = -width; x < width; x++)
+        for (int x = -mapSize.x; x < mapSize.x; x++)
         {
-            for (int y = -height; y < height; y++)
+            for (int y = -mapSize.y; y < mapSize.y; y++)
             {
                 _tilemap.SetTile(new Vector3Int(x, y, 0), Tiles["Base_tile"]);
             }
         }
     }
 
-    public void CreatePaths(int width, int height, int count)
+    public void CreatePaths(Vector2Int mapSize, int count)
     {
         for (int i = 0; i < count; i++)
         {
-            CreatePath(width, height);
+            CreatePath(mapSize);
         }
     }
 
-    private void CreatePath(int width, int height)
+    private void CreatePath(Vector2Int mapSize)
     {
         Vector2Int startDirection = PathDirections.Cardinal[Random.Range(0, PathDirections.Cardinal.Length)];
         Vector2Int currentPosition = Vector2Int.zero;
@@ -43,8 +43,7 @@ public class TerrainMap
 
         float mainDirectionChance = 0.85f; 
 
-        // Двигаемся пока не достигнем любого края карты
-        while (Mathf.Abs(currentPosition.x) < width && Mathf.Abs(currentPosition.y) < height)
+        while (Mathf.Abs(currentPosition.x) < mapSize.x && Mathf.Abs(currentPosition.y) < mapSize.y)
         {
             _tilemap.SetTile((Vector3Int)currentPosition, Tiles["Road_tile"]);
         
@@ -57,7 +56,6 @@ public class TerrainMap
             currentPosition += currentDirection;
         }
 
-        // последний тайл на краю
         _tilemap.SetTile((Vector3Int)currentPosition, Tiles["Road_tile"]);
     }
 
