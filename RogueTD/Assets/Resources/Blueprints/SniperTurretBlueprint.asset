@@ -12,27 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a92ca9f20abef054393068671407517f, type: 3}
   m_Name: SniperTurretBlueprint
   m_EditorClassIdentifier: 
-  buildingName: TestTurret
+  buildingName: SniperTurret
   buildingPrefab: {fileID: 1747688676340181099, guid: 18e277a5e113425449ea0f0a4b70a283, type: 3}
   maxHealthPoints: 50
   cost: 50
   size: {x: 1, y: 1}
   towerPrefab: {fileID: 429808651208165796, guid: e72c28af9cd5746429f54113901ad22c, type: 3}
-  rotatingSpeed: 136.23926
-  targetingRange: 18.835804
-  damageMult: 2.5467439
-  attackSpeed: 0.6059452
-  damage: 71
+  rotatingSpeed: 63.713463
+  targetingRange: 10.444496
+  damageMult: 1.7443527
+  attackSpeed: 0.3314628
+  damage: 24
   projectileCount: 1
-  maxAmmo: 32
-  currentAmmo: 32
-  ammoRegeneration: 1.4649165
+  maxAmmo: 12
+  currentAmmo: 12
+  ammoRegeneration: 0.586665
   statusEffects: []
   towerBehaviours: []
   projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
-  projectileSpeed: 44.181557
-  spread: 0.030090094
-  projectileLifetime: 5.2417374
+  projectileSpeed: 67.35747
+  spread: 0.60659057
+  projectileLifetime: 3.620006
   projectileFragile: 0
   projectileBehaviors: []
   projectileEffects: []

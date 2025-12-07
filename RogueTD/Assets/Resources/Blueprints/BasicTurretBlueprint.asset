@@ -12,32 +12,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a92ca9f20abef054393068671407517f, type: 3}
   m_Name: BasicTurretBlueprint
   m_EditorClassIdentifier: 
-  buildingName: TestTurret
+  buildingName: BasicTurret
   buildingPrefab: {fileID: 1747688676340181099, guid: 18e277a5e113425449ea0f0a4b70a283, type: 3}
   maxHealthPoints: 50
   cost: 50
   size: {x: 1, y: 1}
   towerPrefab: {fileID: 6033480094796136511, guid: 675ffe85576d0234ca02c11bdad5053e, type: 3}
-  rotatingSpeed: 10
+  rotatingSpeed: 100
   targetingRange: 5
   damageMult: 1
   attackSpeed: 1
-  damage: 1
+  damage: 5
   projectileCount: 1
-  maxAmmo: 20
-  currentAmmo: 20
-  ammoRegeneration: 2
+  maxAmmo: 30
+  currentAmmo: 30
+  ammoRegeneration: 1
   statusEffects: []
   towerBehaviours: []
   projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
-  projectileSpeed: 10
-  spread: 10
-  projectileLifetime: 3
+  projectileSpeed: 15
+  spread: 0.7473165
+  projectileLifetime: 2
   projectileFragile: 1
   projectileBehaviors: []
-  projectileEffects:
-  - resourceName: split
-    directReference: {fileID: 11400000, guid: f5c6660ab5668f54ab218a6f9cbb04ff, type: 2}
+  projectileEffects: []
   shotBehavior:
     resourceName: BasicShot
     directReference: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}

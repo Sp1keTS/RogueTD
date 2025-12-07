@@ -12,27 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a92ca9f20abef054393068671407517f, type: 3}
   m_Name: ShotgunTurretBlueprint 1
   m_EditorClassIdentifier: 
-  buildingName: TestTurret
+  buildingName: ShotgunTurret
   buildingPrefab: {fileID: 1747688676340181099, guid: 18e277a5e113425449ea0f0a4b70a283, type: 3}
   maxHealthPoints: 50
   cost: 50
   size: {x: 1, y: 1}
   towerPrefab: {fileID: 6742433356331778559, guid: 9c036e5e526d413499fcca0846d3ccbe, type: 3}
-  rotatingSpeed: 190.21811
-  targetingRange: 9.298252
-  damageMult: 1.3425653
-  attackSpeed: 1.5627156
-  damage: 21
-  projectileCount: 11
-  maxAmmo: 44
-  currentAmmo: 44
-  ammoRegeneration: 2.8952649
+  rotatingSpeed: 114.785736
+  targetingRange: 3.3915825
+  damageMult: 0.7550039
+  attackSpeed: 1.219082
+  damage: 9
+  projectileCount: 6
+  maxAmmo: 22
+  currentAmmo: 22
+  ammoRegeneration: 1.6793293
   statusEffects: []
   towerBehaviours: []
   projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
-  projectileSpeed: 19.47583
-  spread: 16.107775
-  projectileLifetime: 2.5798018
+  projectileSpeed: 35.01249
+  spread: 15.224581
+  projectileLifetime: 0.49079064
   projectileFragile: 0
   projectileBehaviors: []
   projectileEffects: []

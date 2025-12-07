@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28c08774f728c5a48a3009b3a9ba5cbd, type: 3}
   m_Name: LandTile
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 941521912, guid: 7409c4611593bbf44a1f61a41732fe90, type: 3}
+  m_Sprite: {fileID: -933465601, guid: 7409c4611593bbf44a1f61a41732fe90, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

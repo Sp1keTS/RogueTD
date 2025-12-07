@@ -4,6 +4,7 @@ public class Building : MonoBehaviour
 {
     public string buildingName;
     private int healthPoints;
+    public int CurrentHealthPoints => healthPoints;
     [SerializeField] int maxHealthPoints;
 
     void Awake()

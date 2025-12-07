@@ -12,27 +12,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a92ca9f20abef054393068671407517f, type: 3}
   m_Name: RapidTurretBlueprint
   m_EditorClassIdentifier: 
-  buildingName: TestTurret
+  buildingName: RapidTurret
   buildingPrefab: {fileID: 1747688676340181099, guid: 18e277a5e113425449ea0f0a4b70a283, type: 3}
   maxHealthPoints: 50
   cost: 50
   size: {x: 1, y: 1}
   towerPrefab: {fileID: 5395733983055984843, guid: b5368084c0296e84d93bb7f068b0b8bc, type: 3}
-  rotatingSpeed: 269.26175
-  targetingRange: 9.842809
-  damageMult: 1.0759763
-  attackSpeed: 8.421848
-  damage: 10
+  rotatingSpeed: 170.14795
+  targetingRange: 5.203475
+  damageMult: 0.7190192
+  attackSpeed: 12.556387
+  damage: 2
   projectileCount: 1
-  maxAmmo: 102
-  currentAmmo: 102
-  ammoRegeneration: 4.773902
+  maxAmmo: 48
+  currentAmmo: 48
+  ammoRegeneration: 2.7446344
   statusEffects: []
   towerBehaviours: []
   projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
-  projectileSpeed: 32.350212
-  spread: 7.5445313
-  projectileLifetime: 3.0323565
+  projectileSpeed: 22.029829
+  spread: 7.3785143
+  projectileLifetime: 1.9143314
   projectileFragile: 0
   projectileBehaviors: []
   projectileEffects: []

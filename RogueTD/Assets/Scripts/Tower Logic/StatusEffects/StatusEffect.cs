@@ -13,7 +13,6 @@ public abstract class StatusEffect : Resource
         enemy.StopCoroutine(existingCoroutine);
         Coroutine newCoroutine = enemy.StartCoroutine(ApplyEffect(enemy));
         
-        // Заменяем корутину в словаре
         System.Type effectType = GetType();
         enemy.ReplaceEffectCoroutine(effectType, newCoroutine);
     }
