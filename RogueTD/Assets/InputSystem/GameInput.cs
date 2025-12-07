@@ -109,6 +109,24 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftMouseClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""58736681-4185-4c4c-af43-f1a9de1fe494"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RightMouseClick"",
+                    ""type"": ""Button"",
+                    ""id"": ""00837312-a998-4c6d-8367-8a930e9d41ff"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -199,6 +217,28 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""94b96b04-37ee-4b9a-965b-45ef57165482"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftMouseClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a79c83f4-2241-444b-bfe2-e9d06287f9cf"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RightMouseClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -323,6 +363,8 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_Gameplay = asset.FindActionMap("Gameplay", throwIfNotFound: true);
         m_Gameplay_CameraMovement = m_Gameplay.FindAction("CameraMovement", throwIfNotFound: true);
         m_Gameplay_Zoom = m_Gameplay.FindAction("Zoom", throwIfNotFound: true);
+        m_Gameplay_LeftMouseClick = m_Gameplay.FindAction("LeftMouseClick", throwIfNotFound: true);
+        m_Gameplay_RightMouseClick = m_Gameplay.FindAction("RightMouseClick", throwIfNotFound: true);
         // TreeUI
         m_TreeUI = asset.FindActionMap("TreeUI", throwIfNotFound: true);
         m_TreeUI_Zoom = m_TreeUI.FindAction("Zoom", throwIfNotFound: true);
@@ -410,6 +452,8 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private List<IGameplayActions> m_GameplayActionsCallbackInterfaces = new List<IGameplayActions>();
     private readonly InputAction m_Gameplay_CameraMovement;
     private readonly InputAction m_Gameplay_Zoom;
+    private readonly InputAction m_Gameplay_LeftMouseClick;
+    private readonly InputAction m_Gameplay_RightMouseClick;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -429,6 +473,14 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay/Zoom".
         /// </summary>
         public InputAction @Zoom => m_Wrapper.m_Gameplay_Zoom;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/LeftMouseClick".
+        /// </summary>
+        public InputAction @LeftMouseClick => m_Wrapper.m_Gameplay_LeftMouseClick;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/RightMouseClick".
+        /// </summary>
+        public InputAction @RightMouseClick => m_Wrapper.m_Gameplay_RightMouseClick;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -461,6 +513,12 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Zoom.started += instance.OnZoom;
             @Zoom.performed += instance.OnZoom;
             @Zoom.canceled += instance.OnZoom;
+            @LeftMouseClick.started += instance.OnLeftMouseClick;
+            @LeftMouseClick.performed += instance.OnLeftMouseClick;
+            @LeftMouseClick.canceled += instance.OnLeftMouseClick;
+            @RightMouseClick.started += instance.OnRightMouseClick;
+            @RightMouseClick.performed += instance.OnRightMouseClick;
+            @RightMouseClick.canceled += instance.OnRightMouseClick;
         }
 
         /// <summary>
@@ -478,6 +536,12 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @Zoom.started -= instance.OnZoom;
             @Zoom.performed -= instance.OnZoom;
             @Zoom.canceled -= instance.OnZoom;
+            @LeftMouseClick.started -= instance.OnLeftMouseClick;
+            @LeftMouseClick.performed -= instance.OnLeftMouseClick;
+            @LeftMouseClick.canceled -= instance.OnLeftMouseClick;
+            @RightMouseClick.started -= instance.OnRightMouseClick;
+            @RightMouseClick.performed -= instance.OnRightMouseClick;
+            @RightMouseClick.canceled -= instance.OnRightMouseClick;
         }
 
         /// <summary>
@@ -639,6 +703,20 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnZoom(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LeftMouseClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftMouseClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RightMouseClick" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRightMouseClick(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "TreeUI" which allows adding and removing callbacks.

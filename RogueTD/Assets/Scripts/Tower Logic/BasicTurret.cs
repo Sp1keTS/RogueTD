@@ -5,15 +5,28 @@ public class BasicTurret : ProjectileTower
 {
     private Coroutine shootCoroutine;
     
-    void Awake()
+    public override void InitializeFromBlueprint(TowerBlueprint blueprint)
     {
+        base.InitializeFromBlueprint(blueprint);
+        
+        StartShooting();
+    }
+
+    void StartShooting()
+    {
+        if (shootCoroutine != null)
+        {
+            StopCoroutine(shootCoroutine);
+        }
+        
         shootCoroutine = StartCoroutine(ShootCoroutine());
     }
 
     IEnumerator ShootCoroutine()
     {
+        Debug.Log("BasicTurret attackSpeed: " + attackSpeed);
         float attackDelay = 1f / attackSpeed;
-    
+        
         while (true)
         {
             GetTarget();

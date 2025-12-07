@@ -7,7 +7,7 @@ public class Tower : Building
 {
     [SerializeField] protected float targetingRange = 5f;
     [SerializeField] protected float damageMult = 1f;
-    [SerializeField] protected float attackSpeed = 1f;
+    [SerializeField] protected float attackSpeed;
     [SerializeField] protected float rotatingSpeed = 10f;
     [SerializeField] protected int damage = 1;
     [SerializeField] protected int maxAmmo;
@@ -32,6 +32,7 @@ public class Tower : Building
         targetingRange = blueprint.TargetingRange;
         damageMult = blueprint.DamageMult;
         attackSpeed = blueprint.AttackSpeed;
+        Debug.Log(attackSpeed);
         rotatingSpeed = blueprint.RotatingSpeed;
         damage = blueprint.Damage;
         maxAmmo = blueprint.MaxAmmo;

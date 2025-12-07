@@ -59,7 +59,7 @@ public class ProjectileTower : Tower
     public override void InitializeFromBlueprint(TowerBlueprint blueprint)
     {
         base.InitializeFromBlueprint(blueprint);
-        
+        Debug.Log(attackSpeed);
         if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
         {
             InitializeFromProjectileBlueprint(projectileBlueprint);
@@ -68,6 +68,7 @@ public class ProjectileTower : Tower
     
     public void InitializeFromProjectileBlueprint(ProjectileTowerBlueprint blueprint)
     {
+        
         projectileSpeed = blueprint.ProjectileSpeed;
         spread = blueprint.Spread;
         projectileLifetime = blueprint.ProjectileLifetime;

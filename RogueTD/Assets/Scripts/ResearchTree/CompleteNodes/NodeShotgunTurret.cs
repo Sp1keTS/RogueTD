@@ -14,8 +14,8 @@ public class NodeShotgunTurret : ProjectileTowerNode
             towerBlueprint.TargetingRange = Random.Range(3f, 5f) * (1f + (rank * 0.1f));
             towerBlueprint.RotatingSpeed = Random.Range(100f, 150f) + (rank * 10f);
             
-            towerBlueprint.ProjectileSpeed = Random.Range(10f, 15f) + (rank * 1f);
-            towerBlueprint.ProjectileLifetime = Random.Range(1f, 2f) + (rank * 0.1f);
+            towerBlueprint.ProjectileSpeed = Random.Range(30f, 40f) + (rank * 1f);
+            towerBlueprint.ProjectileLifetime = Random.Range(0.25f, 0.5f) + (rank * 0.1f);
             towerBlueprint.Spread = Random.Range(10f, 20f); // Большой разброс
             towerBlueprint.ProjectileFragile = Random.value > 0.5f;
             

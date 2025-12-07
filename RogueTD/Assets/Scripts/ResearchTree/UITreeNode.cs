@@ -14,7 +14,6 @@ public class UITreeNode : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
-        if (button == null) button = GetComponent<Button>();
         
         button.onClick.AddListener(OnButtonClick);
     }

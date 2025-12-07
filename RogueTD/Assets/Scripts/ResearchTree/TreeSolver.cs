@@ -89,6 +89,7 @@ public class TreeSolver : MonoBehaviour
                 continue;
             if (current.node.IsActive && current.node.currentNode != null)
             {
+                Debug.Log(current.node.currentNode + " " +  current.node.IsActive);
                 current.node.currentNode.LoadDependencies();
             }
 

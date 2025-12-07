@@ -16,7 +16,6 @@ public class CameraController : MonoBehaviour
     {
         
         _gameInput = GameInputManager.Instance.GameInput;
-        
         if (cam == null)
             cam = GetComponent<Camera>();
             
