@@ -554,6 +554,7 @@ MonoBehaviour:
     texture: {fileID: 0}
     targetingBehavior: {fileID: 0}
     movementBehavior: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!61 &636397870
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -957,6 +958,7 @@ MonoBehaviour:
     texture: {fileID: 0}
     targetingBehavior: {fileID: 0}
     movementBehavior: {fileID: 0}
+  rb: {fileID: 0}
 --- !u!61 &1118403932
 BoxCollider2D:
   m_ObjectHideFlags: 0

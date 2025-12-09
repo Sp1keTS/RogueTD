@@ -127,6 +127,15 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MousePosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""03f37926-97a9-4ede-860d-b901b05a13e4"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -237,6 +246,17 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""RightMouseClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d79bbc4d-ed69-4d4c-a2fd-fd72aa091336"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MousePosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -365,6 +385,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         m_Gameplay_Zoom = m_Gameplay.FindAction("Zoom", throwIfNotFound: true);
         m_Gameplay_LeftMouseClick = m_Gameplay.FindAction("LeftMouseClick", throwIfNotFound: true);
         m_Gameplay_RightMouseClick = m_Gameplay.FindAction("RightMouseClick", throwIfNotFound: true);
+        m_Gameplay_MousePosition = m_Gameplay.FindAction("MousePosition", throwIfNotFound: true);
         // TreeUI
         m_TreeUI = asset.FindActionMap("TreeUI", throwIfNotFound: true);
         m_TreeUI_Zoom = m_TreeUI.FindAction("Zoom", throwIfNotFound: true);
@@ -454,6 +475,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Zoom;
     private readonly InputAction m_Gameplay_LeftMouseClick;
     private readonly InputAction m_Gameplay_RightMouseClick;
+    private readonly InputAction m_Gameplay_MousePosition;
     /// <summary>
     /// Provides access to input actions defined in input action map "Gameplay".
     /// </summary>
@@ -481,6 +503,10 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Gameplay/RightMouseClick".
         /// </summary>
         public InputAction @RightMouseClick => m_Wrapper.m_Gameplay_RightMouseClick;
+        /// <summary>
+        /// Provides access to the underlying input action "Gameplay/MousePosition".
+        /// </summary>
+        public InputAction @MousePosition => m_Wrapper.m_Gameplay_MousePosition;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -519,6 +545,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @RightMouseClick.started += instance.OnRightMouseClick;
             @RightMouseClick.performed += instance.OnRightMouseClick;
             @RightMouseClick.canceled += instance.OnRightMouseClick;
+            @MousePosition.started += instance.OnMousePosition;
+            @MousePosition.performed += instance.OnMousePosition;
+            @MousePosition.canceled += instance.OnMousePosition;
         }
 
         /// <summary>
@@ -542,6 +571,9 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
             @RightMouseClick.started -= instance.OnRightMouseClick;
             @RightMouseClick.performed -= instance.OnRightMouseClick;
             @RightMouseClick.canceled -= instance.OnRightMouseClick;
+            @MousePosition.started -= instance.OnMousePosition;
+            @MousePosition.performed -= instance.OnMousePosition;
+            @MousePosition.canceled -= instance.OnMousePosition;
         }
 
         /// <summary>
@@ -717,6 +749,13 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRightMouseClick(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "MousePosition" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnMousePosition(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "TreeUI" which allows adding and removing callbacks.

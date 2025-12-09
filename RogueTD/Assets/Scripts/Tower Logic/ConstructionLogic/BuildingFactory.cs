@@ -16,7 +16,7 @@ public class BuildingFactory : MonoBehaviour
         }
         
         // Рассчет мировой позиции
-        Vector3 worldPosition = GetWorldPosition(gridPos, blueprint);
+        Vector3 worldPosition = GetWorldPosition(gridPos);
         
         // создание объекта
         GameObject buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
@@ -42,7 +42,7 @@ public class BuildingFactory : MonoBehaviour
             Debug.LogWarning($"Cannot place building at position {gridPos} - not enough space");
             return null;
         }
-        Vector3 worldPosition = GetWorldPosition(gridPos, buildingBlueprint);
+        Vector3 worldPosition = GetWorldPosition(gridPos);
         GameObject buildingObj = Instantiate(buildingBlueprint.BuildingPrefab, worldPosition, Quaternion.identity);
         Building building = buildingObj.GetComponent<Building>();
         building.buildingName = buildingBlueprint.buildingName;
@@ -76,12 +76,12 @@ public class BuildingFactory : MonoBehaviour
         return true;
     }
     
-    private static Vector3 GetWorldPosition(Vector2 gridPos, BuildingBlueprint buildingBlueprint)
+    public static Vector3 GetWorldPosition(Vector2 gridPos)
     {
         Vector3 baseWorldPos = ConstructionGridManager.constructionGrid.CellToWorld(new Vector3Int((int)gridPos.x, (int)gridPos.y, 0));
         
-        float offsetX = (buildingBlueprint.Size.x - 1) * ConstructionGridManager.constructionGrid.cellSize.x * 0.5f;
-        float offsetY = (buildingBlueprint.Size.y - 1) * ConstructionGridManager.constructionGrid.cellSize.y * 0.5f;
+        float offsetX = ConstructionGridManager.constructionGrid.cellSize.x * 0.5f;
+        float offsetY = ConstructionGridManager.constructionGrid.cellSize.y * 0.5f;
         
         return new Vector3(baseWorldPos.x + offsetX, baseWorldPos.y + offsetY, baseWorldPos.z);
     }
