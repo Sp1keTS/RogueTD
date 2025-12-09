@@ -54,7 +54,7 @@ public class UIBlueprintHolderScript : MonoBehaviour
         }
     }
     
-    private void LoadExistingBlueprints()
+    public void LoadExistingBlueprints()
     {
         foreach (var kvp in BlueprintManager.blueprints)
         {

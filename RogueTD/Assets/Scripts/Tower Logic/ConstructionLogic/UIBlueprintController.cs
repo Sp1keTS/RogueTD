@@ -10,6 +10,7 @@ public class UIBlueprintController : MonoBehaviour
     private GameObject _buildingPreview;
     private SpriteRenderer _previewRenderer;
     private Color _originalPreviewColor;
+    [SerializeField] GameState gameState;
     
     private void Start()
     {
@@ -86,16 +87,16 @@ public class UIBlueprintController : MonoBehaviour
     private void TryCreateBlueprint(BuildingBlueprint blueprint, Vector2 gridPosition)
     {
         if (blueprint == null) return;
-        
-        Debug.Log($"Attempting to create {blueprint.buildingName} at grid position: {gridPosition}");
-        
-        if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
+        if (gameState.SpendCurrency(blueprint.Cost))
         {
-            BuildingFactory.CreateProjectileTower(gridPosition, projectileBlueprint);
-        }
-        else
-        {
-            BuildingFactory.CreateBuilding(gridPosition, blueprint);
+            if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
+            {
+                BuildingFactory.CreateProjectileTower(gridPosition, projectileBlueprint);
+            }
+            else
+            {
+                BuildingFactory.CreateBuilding(gridPosition, blueprint);
+            }
         }
     }
     

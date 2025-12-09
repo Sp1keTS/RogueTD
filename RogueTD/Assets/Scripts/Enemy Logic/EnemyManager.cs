@@ -20,25 +20,25 @@ public static class EnemyManager
             Debug.LogError("Cannot create enemy: EnemyData is null!");
             return null;
         }
-        
+    
         string enemyId = $"{data.EnemyName}_{enemyCounter++}";
-        
+    
         GameObject enemyObj = new GameObject(enemyId);
         enemyObj.transform.position = position;
-        
+    
         if (parent != null)
             enemyObj.transform.SetParent(parent);
-        
+    
         var enemy = enemyObj.AddComponent<Enemy>();
         var collider2D = enemyObj.AddComponent<BoxCollider2D>();
         collider2D.size = data.Size;
-        
+    
         var rb = enemyObj.AddComponent<Rigidbody2D>();
         rb.gravityScale = 0;
         rb.linearDamping = 0.5f;
         rb.angularDamping = 0.5f;
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-        
+    
         var spriteRenderer = enemyObj.AddComponent<SpriteRenderer>();
         if (data.Texture != null)
         {
@@ -47,10 +47,10 @@ public static class EnemyManager
                 new Vector2(0.5f, 0.5f));
         }
         spriteRenderer.color = Color.white;
-        
+    
         enemy.Initialize(data);
         RegisterEnemy(enemy);
-        
+    
         return enemy;
     }
     
@@ -59,7 +59,7 @@ public static class EnemyManager
     {
         if (enemy == null || enemy.Model == null) return;
         
-        string id = enemy.Model.id;
+        string id = enemy.Model.Id;
         if (!enemies.ContainsKey(id))
         {
             enemies[id] = enemy;
@@ -77,7 +77,7 @@ public static class EnemyManager
     {
         if (!enemy || enemy.Model == null) return;
         
-        string id = enemy.Model.id;
+        string id = enemy.Model.Id;
         if (enemies.ContainsKey(id))
         {
             enemies[id].OnDeath -= HandleEnemyDeath;

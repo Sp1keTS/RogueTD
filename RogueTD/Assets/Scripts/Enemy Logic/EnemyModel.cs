@@ -5,14 +5,17 @@ using UnityEngine;
 [System.Serializable]
 public class EnemyModel
 {
-    public string id;
-    public int healthPoints;
-    public int maxHealthPoints;
-    public float moveSpeed;
-    public Vector2 size;
-    public Texture2D texture;
+    public string Id { get; set; }
+    public int HealthPoints{ get; set; }
+    public int MaxHealthPoints{ get; set; }
+    public float MoveSpeed{ get; set; }
+    public Vector2 Size { get; set; }
+    public Texture2D Texture{ get; set; }
+    public int Reward { get; set; }
+    public int Rank { get; set; }
+    public int Cost { get; set; }
     
-    public Dictionary<System.Type, StatusEffect> activeEffects = new Dictionary<System.Type, StatusEffect>();
+    private Dictionary<System.Type, StatusEffect> activeEffects = new Dictionary<System.Type, StatusEffect>();
     public EnemyTargetingBehavior targetingBehavior;
     public EnemyMovementBehavior movementBehavior;
     
@@ -22,31 +25,41 @@ public class EnemyModel
     public event Action<EnemyModel> OnDeath;
     public event Action<int, int> OnDamageTaken;
     
-    public EnemyModel(string enemyId, int maxHP, float speed, Vector2 enemySize, Texture2D enemyTexture = null)
+    public EnemyModel(EnemyData data, string enemyId)
     {
-        id = enemyId;
-        maxHealthPoints = maxHP;
-        healthPoints = maxHP;
-        moveSpeed = speed;
-        size = enemySize;
-        texture = enemyTexture;
+        Id = enemyId;
+        MaxHealthPoints = data.MaxHealth;
+        HealthPoints = data.MaxHealth;
+        MoveSpeed = data.MoveSpeed;
+        Size = data.Size;
+        Texture = data.Texture;
+        Reward = data.Reward;
+        Rank = data.Rank;
+        Cost = data.Cost;
+        targetingBehavior = data.TargetingBehavior;
+        movementBehavior = data.MovementBehavior;
+        currentTargetPosition = Vector2.zero;
     }
     
     public void TakeDamage(int damage)
     {
-        healthPoints -= damage;
-        OnDamageTaken?.Invoke(healthPoints, damage);
+        HealthPoints -= damage;
+        OnDamageTaken?.Invoke(HealthPoints, damage);
         
-        if (healthPoints <= 0)
+        if (HealthPoints <= 0)
         {
-            healthPoints = 0;
+            HealthPoints = 0;
             OnDeath?.Invoke(this);
         }
     }
     
     public void UpdateTarget()
     {
-        if (targetingBehavior)
+        if (!targetingBehavior)
+        {
+            FindMainBuildingTarget();
+        }
+        else
         {
             Building newTarget = targetingBehavior.SelectTarget(this);
             if (newTarget != currentTarget)
@@ -59,6 +72,24 @@ public class EnemyModel
         if (currentTarget)
         {
             currentTargetPosition = currentTarget.transform.position;
+        }
+    }
+    
+    private void FindMainBuildingTarget()
+    {
+        
+        foreach (var building in ConstructionGridManager.buildingsPos.Values)
+        {
+            if (building && building.gameObject.activeInHierarchy && 
+                building.CompareTag("MainBuilding"))
+            {
+                if (currentTarget != building)
+                {
+                    currentTarget = building;
+                    currentTargetPosition = building.transform.position;
+                }
+                return;
+            }
         }
     }
     

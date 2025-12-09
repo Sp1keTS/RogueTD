@@ -7,6 +7,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Renderer enemyRenderer;
     [SerializeField] private EnemyModel enemyModel;
     [SerializeField] private Rigidbody2D rb;
+
+    [SerializeField] private GameState _gameState;
     
     public event System.Action<Enemy> OnDeath;
     
@@ -15,24 +17,19 @@ public class Enemy : MonoBehaviour
     public Renderer EnemyRenderer => enemyRenderer;
     public EnemyModel Model => enemyModel;
     public Rigidbody2D Rigidbody => rb;
-    public bool IsAlive => enemyModel?.healthPoints > 0;
+    public bool IsAlive => enemyModel?.HealthPoints > 0;
     public float MoveSpeed 
     { 
-        get => enemyModel?.moveSpeed ?? 0f; 
+        get => enemyModel?.MoveSpeed ?? 0f; 
         set 
         { 
             if (enemyModel != null) 
-                enemyModel.moveSpeed = value; 
+                enemyModel.MoveSpeed = value; 
         } 
     }
     
     void Start()
     {
-        if (enemyModel == null)
-        {
-            enemyModel = new EnemyModel(gameObject.name, 100, 1f, Vector2.one);
-        }
-        
         if (!rb)
         {
             rb = GetComponent<Rigidbody2D>();
@@ -64,35 +61,26 @@ public class Enemy : MonoBehaviour
                 Time.fixedDeltaTime
             );
         }
-        else if (rb)
+        else if (rb && enemyModel.movementBehavior)
         {
-            enemyModel.movementBehavior?.Stop(rb);
+            enemyModel.movementBehavior.Stop(rb);
         }
     }
     
     private void ApplyModelSettings()
     {
-        transform.localScale = new Vector3(enemyModel.size.x, enemyModel.size.y, 1f);
+        transform.localScale = new Vector3(enemyModel.Size.x, enemyModel.Size.y, 1f);
         
-        if (enemyModel.texture != null && enemyRenderer != null)
+        if (enemyModel.Texture != null && enemyRenderer != null)
         {
-            enemyRenderer.material.mainTexture = enemyModel.texture;
+            enemyRenderer.material.mainTexture = enemyModel.Texture;
         }
     }
     
     public void Initialize(EnemyData data)
     {
-        enemyModel = new EnemyModel(
-            data.name,
-            data.MaxHealth,
-            data.MoveSpeed,
-            data.Size,
-            data.Texture
-        );
-        
-        enemyModel.targetingBehavior = data.TargetingBehavior;
-        enemyModel.movementBehavior = data.MovementBehavior;
-        
+        enemyModel = new EnemyModel(data, gameObject.name);
+    
         if (isActiveAndEnabled)
         {
             ApplyModelSettings();
@@ -170,7 +158,8 @@ public class Enemy : MonoBehaviour
         {
             enemyModel.OnDeath -= HandleModelDeath;
         }
-        
+
+        _gameState.AddCurrency(enemyModel.Reward);
         StopAllEffects();
         EnemyManager.UnregisterEnemy(this);
         Destroy(gameObject);

@@ -167,6 +167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   button: {fileID: 8517367550014201389}
   image: {fileID: 5583536064101064250}
+  gameState: {fileID: 11400000, guid: 21c0baa329e1db3479886933fcac6090, type: 2}
 --- !u!114 &8517367550014201389
 MonoBehaviour:
   m_ObjectHideFlags: 0

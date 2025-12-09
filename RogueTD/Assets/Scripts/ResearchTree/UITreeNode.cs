@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine.UI;
 
@@ -7,6 +8,7 @@ public class UITreeNode : MonoBehaviour
 {
     [SerializeField] Button button;
     [SerializeField] Image image;
+    [SerializeField] private GameState gameState;
     ResearchTree.TreeSaveData.TreeSaveNode treeSaveNode;
     public ResearchTree.TreeSaveData.TreeSaveNode  TreeSaveNode {get => treeSaveNode; set => treeSaveNode = value; }
     public ProjectileTowerNode towerToUpgrade {get; set;}
@@ -28,7 +30,10 @@ public class UITreeNode : MonoBehaviour
         bool isRootNode = treeSaveNode.visitedNodes == null || treeSaveNode.visitedNodes.Count == 0;
         bool isChildNodeAvailable = !isRootNode && treeSaveNode.visitedNodes[0].IsActive;
         
-        if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable))
+        Debug.Log(gameState.Currency);
+        Debug.Log(TreeSaveNode.currentNode.Cost);
+        Debug.Log(gameState.SpendCurrency(TreeSaveNode.currentNode.Cost));
+        if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable) && gameState.SpendCurrency(TreeSaveNode.currentNode.Cost))
         {
             if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
             {
