@@ -3,6 +3,6 @@ using UnityEngine;
 
 public abstract class EnemyTargetingBehavior : ScriptableObject
 {
-    public abstract Building SelectTarget(EnemyModel enemy);
+    public abstract Building SelectTarget(Enemy enemy);
 }
 

@@ -5,66 +5,100 @@ using System.Collections.Generic;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] private Renderer enemyRenderer;
-    [SerializeField] private EnemyModel enemyModel;
+    [SerializeField] private EnemyModel enemyModel; 
     [SerializeField] private Rigidbody2D rb;
-
-    [SerializeField] private GameState _gameState;
+    [SerializeField] private GameState gameState;
+    
+    private string id;
+    private int currentHealth;
+    private Dictionary<System.Type, Coroutine> activeEffectCoroutines = new Dictionary<System.Type, Coroutine>();
     
     public event System.Action<Enemy> OnDeath;
     
-    private Dictionary<System.Type, Coroutine> activeEffectCoroutines = new Dictionary<System.Type, Coroutine>();
-    
-    public Renderer EnemyRenderer => enemyRenderer;
-    public EnemyModel Model => enemyModel;
-    public Rigidbody2D Rigidbody => rb;
-    public bool IsAlive => enemyModel?.HealthPoints > 0;
-    public float MoveSpeed 
-    { 
-        get => enemyModel?.MoveSpeed ?? 0f; 
-        set 
-        { 
-            if (enemyModel != null) 
-                enemyModel.MoveSpeed = value; 
-        } 
+    public string Id => id;
+    public int CurrentHealth => currentHealth;
+    public int MaxHealth {get => enemyModel.MaxHealth;
+        set => enemyModel.MaxHealth = value;
     }
+    public float MoveSpeed {get => enemyModel.MoveSpeed;
+        set => enemyModel.MoveSpeed = value;
+    }
+    public Vector2 Size {get => enemyModel.Size;
+        set => enemyModel.Size = value;
+    }
+    public int Reward => enemyModel?.Reward ?? 0;
+    public EnemyModel Model => enemyModel;
+    public Renderer EnemyRenderer => enemyRenderer;
+    public Rigidbody2D Rigidbody => rb;
+    public bool IsAlive => currentHealth > 0;
+    
+    private Building currentTarget;
+    private Vector2 currentTargetPosition;
+    
+    public Building GetCurrentTarget() => currentTarget;
+    public Vector2 GetCurrentTargetPosition() => currentTargetPosition;
     
     void Start()
     {
-        if (!rb)
+        Initialize();
+    }
+    
+    private void Initialize()
+    {
+        if (enemyModel == null)
         {
-            rb = GetComponent<Rigidbody2D>();
-            if (rb == null)
-            {
-                rb = gameObject.AddComponent<Rigidbody2D>();
-                rb.gravityScale = 0;
-                rb.constraints = RigidbodyConstraints2D.FreezeRotation;
-            }
+            Debug.LogError($"EnemyInstance {name}: EnemyModel is not assigned!");
+            Destroy(gameObject);
+            return;
         }
         
+        id = $"{enemyModel.EnemyName}_{GetInstanceID()}";
+        
+        currentHealth = enemyModel.MaxHealth;
+        
+        SetupRigidbody();
+        
         ApplyModelSettings();
-        enemyModel.OnDeath += HandleModelDeath;
+        
         EnemyManager.RegisterEnemy(this);
     }
     
     void FixedUpdate()
     {
-        if (enemyModel == null || !IsAlive || !rb) return;
+        if (!IsAlive || !rb) return;
         
-        enemyModel.UpdateTarget();
+        UpdateTarget();
         
-        if (enemyModel.currentTarget && enemyModel.movementBehavior)
+        if (currentTarget && enemyModel.MovementBehavior)
         {
-            enemyModel.movementBehavior.Move(
-                enemyModel, 
+            enemyModel.MovementBehavior.Move(
+                this, 
                 rb, 
                 transform.position, 
                 Time.fixedDeltaTime
             );
         }
-        else if (rb && enemyModel.movementBehavior)
+        else if (rb && enemyModel.MovementBehavior)
         {
-            enemyModel.movementBehavior.Stop(rb);
+            enemyModel.MovementBehavior.Stop(rb);
         }
+    }
+    
+    private void SetupRigidbody()
+    {
+        if (rb == null)
+        {
+            rb = GetComponent<Rigidbody2D>();
+            if (rb == null)
+            {
+                rb = gameObject.AddComponent<Rigidbody2D>();
+            }
+        }
+        
+        rb.gravityScale = 0;
+        rb.linearDamping = 0.5f;
+        rb.angularDamping = 0.5f;
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
     
     private void ApplyModelSettings()
@@ -77,19 +111,48 @@ public class Enemy : MonoBehaviour
         }
     }
     
-    public void Initialize(EnemyData data)
+    private void UpdateTarget()
     {
-        enemyModel = new EnemyModel(data, gameObject.name);
-    
-        if (isActiveAndEnabled)
+        if (!enemyModel.TargetingBehavior)
         {
-            ApplyModelSettings();
+            FindMainBuildingTarget();
+        }
+        else
+        {
+            Building newTarget = enemyModel.TargetingBehavior.SelectTarget(this);
+            if (newTarget != currentTarget)
+            {
+                currentTarget = newTarget;
+                currentTargetPosition = newTarget ? (Vector2)newTarget.transform.position : Vector2.zero;
+            }
+        }
+        
+        if (currentTarget)
+        {
+            currentTargetPosition = currentTarget.transform.position;
+        }
+    }
+    
+    private void FindMainBuildingTarget()
+    {
+        foreach (var building in ConstructionGridManager.buildingsPos.Values)
+        {
+            if (building && building.gameObject.activeInHierarchy && 
+                building.CompareTag("MainBuilding"))
+            {
+                if (currentTarget != building)
+                {
+                    currentTarget = building;
+                    currentTargetPosition = building.transform.position;
+                }
+                return;
+            }
         }
     }
     
     public void TakeDamage(int damage, StatusEffect[] statusEffects)
     {
-        if (enemyModel == null) return;
+        if (!IsAlive) return;
         
         if (statusEffects != null)
         {
@@ -98,8 +161,13 @@ public class Enemy : MonoBehaviour
                 ApplyStatusEffect(statusEffect);
             }
         }
+        currentHealth -= damage;
         
-        enemyModel.TakeDamage(damage);
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            HandleDeath();
+        }
     }
     
     public void ApplyStatusEffect(StatusEffect statusEffect)
@@ -114,65 +182,66 @@ public class Enemy : MonoBehaviour
         {
             var newCoroutine = StartCoroutine(RunStatusEffect(statusEffect));
             activeEffectCoroutines[effectType] = newCoroutine;
-            enemyModel.AddStatusEffect(statusEffect);
         }
     }
     
     private IEnumerator RunStatusEffect(StatusEffect statusEffect)
     {
         var effectType = statusEffect.GetType();
-        
+        bool effectCompleted = false;
+    
         try
         {
             yield return statusEffect.ApplyEffect(this);
+            effectCompleted = true; 
         }
         finally
         {
-            if (activeEffectCoroutines.ContainsKey(effectType))
+            if (effectCompleted && 
+                activeEffectCoroutines.TryGetValue(effectType, out var currentCoroutine) &&
+                currentCoroutine == null)
             {
                 activeEffectCoroutines.Remove(effectType);
             }
-            enemyModel.RemoveStatusEffect(effectType);
         }
     }
     
+    private void HandleDeath()
+    {
+        if (rb && enemyModel.MovementBehavior)
+        {
+            enemyModel.MovementBehavior.Stop(rb);
+        }
+        
+        gameState.AddCurrency(enemyModel.Reward);
+        
+        OnDeath?.Invoke(this);
+        
+        StopAllEffects();
+        
+        EnemyManager.UnregisterEnemy(this);
+        
+        Destroy(gameObject);
+    }
     public void ReplaceEffectCoroutine(System.Type effectType, Coroutine newCoroutine)
     {
         if (activeEffectCoroutines.ContainsKey(effectType))
         {
-            StopCoroutine(activeEffectCoroutines[effectType]);
-            activeEffectCoroutines[effectType] = newCoroutine;
+            var oldCoroutine = activeEffectCoroutines[effectType];
+            if (oldCoroutine != null)
+            {
+                StopCoroutine(oldCoroutine);
+            }
         }
-    }
     
-    private void HandleModelDeath(EnemyModel model)
-    {
-        if (rb && enemyModel.movementBehavior)
-        {
-            enemyModel.movementBehavior.Stop(rb);
-        }
-        
-        OnDeath?.Invoke(this);
-        
-        if (enemyModel != null)
-        {
-            enemyModel.OnDeath -= HandleModelDeath;
-        }
-
-        _gameState.AddCurrency(enemyModel.Reward);
-        StopAllEffects();
-        EnemyManager.UnregisterEnemy(this);
-        Destroy(gameObject);
+        activeEffectCoroutines[effectType] = newCoroutine;
     }
-    
     void OnDestroy()
     {
-        if (enemyModel != null)
+        if (IsAlive) 
         {
-            enemyModel.OnDeath -= HandleModelDeath;
+            EnemyManager.UnregisterEnemy(this);
         }
-        
-        EnemyManager.UnregisterEnemy(this);
         StopAllEffects();
     }
     
@@ -184,6 +253,5 @@ public class Enemy : MonoBehaviour
                 StopCoroutine(coroutine);
         }
         activeEffectCoroutines.Clear();
-        enemyModel?.ClearAllStatusEffects();
     }
 }

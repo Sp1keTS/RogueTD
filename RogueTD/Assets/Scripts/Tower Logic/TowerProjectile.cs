@@ -10,7 +10,7 @@ public class TowerProjectile : MonoBehaviour
     private Queue<ProjectileEffect> effectsToProcess; 
     private float lifeTime;
     private GameObject enemy;
-    private Enemy enemyBase;
+    private Enemy _enemyBase;
 
     public Queue<ProjectileEffect> EffectsToProcess  {get => effectsToProcess; set => effectsToProcess = value;}
     public void Initialize(ProjectileTower tower)
@@ -56,14 +56,14 @@ public class TowerProjectile : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         enemy = collision.gameObject;
-        enemyBase = enemy.GetComponent<Enemy>();
+        _enemyBase = enemy.GetComponent<Enemy>();
         if (enemy.CompareTag("Enemy"))
         {
-            if (enemyBase != null)
+            if (_enemyBase != null)
             {
                 while (effectsToProcess.Count > 0)
                 {
-                    if (effectsToProcess.Dequeue().OnCollision(enemyBase,this, projectileTower))
+                    if (effectsToProcess.Dequeue().OnCollision(_enemyBase,this, projectileTower))
                     {
                         break;
                     }
@@ -72,7 +72,7 @@ public class TowerProjectile : MonoBehaviour
                 //{
                 //    effect.OnCollision(enemyBase,this, projectileTower);
                 //}
-                enemyBase.TakeDamage(projectileTower.Damage, projectileTower.statusEffects);
+                _enemyBase.TakeDamage(projectileTower.Damage, projectileTower.statusEffects);
                 if(projectileTower.ProjectileFragile)
                 {
                     Destroy(gameObject);
