@@ -17,15 +17,33 @@ public class Enemy : MonoBehaviour
     
     public string Id => id;
     public int CurrentHealth => currentHealth;
-    public int MaxHealth {get => enemyModel.MaxHealth;
-        set => enemyModel.MaxHealth = value;
+    public int MaxHealth 
+    { 
+        get => enemyModel != null ? enemyModel.MaxHealth : 0;
+        set 
+        { 
+            if (enemyModel != null) enemyModel.MaxHealth = value; 
+        }
     }
-    public float MoveSpeed {get => enemyModel.MoveSpeed;
-        set => enemyModel.MoveSpeed = value;
+    
+    public float MoveSpeed 
+    { 
+        get => enemyModel ? enemyModel.MoveSpeed : 0f;
+        set 
+        { 
+            if (enemyModel) enemyModel.MoveSpeed = value; 
+        }
     }
-    public Vector2 Size {get => enemyModel.Size;
-        set => enemyModel.Size = value;
+    
+    public Vector2 Size 
+    { 
+        get => enemyModel != null ? enemyModel.Size : Vector2.one;
+        set 
+        { 
+            if (enemyModel != null) enemyModel.Size = value; 
+        }
     }
+    
     public int Reward => enemyModel?.Reward ?? 0;
     public EnemyModel Model => enemyModel;
     public Renderer EnemyRenderer => enemyRenderer;
@@ -40,11 +58,16 @@ public class Enemy : MonoBehaviour
     
     void Start()
     {
-        Initialize();
+        if (enemyModel != null)
+        {
+            Initialize(enemyModel);
+        }
     }
     
-    private void Initialize()
+    public void Initialize(EnemyModel model)
     {
+        enemyModel = model;
+        
         if (enemyModel == null)
         {
             Debug.LogError($"EnemyInstance {name}: EnemyModel is not assigned!");
@@ -53,15 +76,16 @@ public class Enemy : MonoBehaviour
         }
         
         id = $"{enemyModel.EnemyName}_{GetInstanceID()}";
-        
         currentHealth = enemyModel.MaxHealth;
         
         SetupRigidbody();
-        
         ApplyModelSettings();
         
         EnemyManager.RegisterEnemy(this);
     }
+    
+    
+    
     
     void FixedUpdate()
     {
@@ -69,7 +93,7 @@ public class Enemy : MonoBehaviour
         
         UpdateTarget();
         
-        if (currentTarget && enemyModel.MovementBehavior)
+        if (currentTarget && enemyModel && enemyModel.MovementBehavior)
         {
             enemyModel.MovementBehavior.Move(
                 this, 
@@ -78,7 +102,7 @@ public class Enemy : MonoBehaviour
                 Time.fixedDeltaTime
             );
         }
-        else if (rb && enemyModel.MovementBehavior)
+        else if (rb && enemyModel && enemyModel.MovementBehavior)
         {
             enemyModel.MovementBehavior.Stop(rb);
         }
@@ -113,7 +137,7 @@ public class Enemy : MonoBehaviour
     
     private void UpdateTarget()
     {
-        if (!enemyModel.TargetingBehavior)
+        if (!enemyModel || !enemyModel.TargetingBehavior)
         {
             FindMainBuildingTarget();
         }
@@ -208,12 +232,15 @@ public class Enemy : MonoBehaviour
     
     private void HandleDeath()
     {
-        if (rb && enemyModel.MovementBehavior)
+        if (rb && enemyModel && enemyModel.MovementBehavior)
         {
             enemyModel.MovementBehavior.Stop(rb);
         }
         
-        gameState.AddCurrency(enemyModel.Reward);
+        if (gameState && enemyModel)
+        {
+            gameState.AddCurrency(enemyModel.Reward);
+        }
         
         OnDeath?.Invoke(this);
         
@@ -223,6 +250,7 @@ public class Enemy : MonoBehaviour
         
         Destroy(gameObject);
     }
+    
     public void ReplaceEffectCoroutine(System.Type effectType, Coroutine newCoroutine)
     {
         if (activeEffectCoroutines.ContainsKey(effectType))
@@ -236,6 +264,7 @@ public class Enemy : MonoBehaviour
     
         activeEffectCoroutines[effectType] = newCoroutine;
     }
+    
     void OnDestroy()
     {
         if (IsAlive) 
