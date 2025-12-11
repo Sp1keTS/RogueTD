@@ -13,7 +13,6 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private MapManager mapManager;
     [SerializeField] private UIBlueprintHolderScript uiBlueprintHolder;
     [SerializeField] private GameState gameState;
-    [SerializeField] private bool simulateNewRun = true;
     [SerializeField] private ConstructionGridManager gridManager;
     
 
@@ -21,8 +20,6 @@ public class GameHandler : MonoBehaviour
     {
         
         ConstructionGridManager.ConstructionGrid = constructionGrid;
-        if (simulateNewRun) {gameState.IsANewRun = true;}
-        else {gameState.IsANewRun = false;}
         
         if (gameState.IsANewRun)
         {

@@ -12,13 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 352c05bd37f6467991ee604b85fb6db5, type: 3}
   m_Name: NewEnemyModel
   m_EditorClassIdentifier: 
-  enemyName: 
+  enemyName: BasicEnemy
   rank: 1
   maxHealth: 100
   moveSpeed: 1
   size: {x: 1, y: 1}
-  texture: {fileID: 0}
+  texture: {fileID: 2800000, guid: 4f8d9eab2a78fd942b0ba22a1e37ffde, type: 3}
   cost: 10
   reward: 5
   targetingBehavior: {fileID: 0}
-  movementBehavior: {fileID: 0}
+  movementBehavior: {fileID: 11400000, guid: 54ccf62920bf75c438e3c2a95776228a, type: 2}
+  <EnemyName>k__BackingField: 
+  <Rank>k__BackingField: 0
+  <MaxHealth>k__BackingField: 0
+  <MoveSpeed>k__BackingField: 0
+  <Size>k__BackingField: {x: 0, y: 0}
+  <Texture>k__BackingField: {fileID: 0}
+  <Cost>k__BackingField: 0
+  <Reward>k__BackingField: 0

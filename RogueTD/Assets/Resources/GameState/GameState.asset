@@ -12,3 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ea4a6bcc101d893448e82b9aa3d88ef4, type: 3}
   m_Name: GameState
   m_EditorClassIdentifier: 
+  isANewRun: 0
+  buildings:
+  - Position: {x: -3, y: 2}
+    Blueprint: {fileID: 11400000, guid: aaa08eca154ce3a4796b76dc37c4ca40, type: 2}
+  - Position: {x: -3, y: 0}
+    Blueprint: {fileID: 11400000, guid: aaa08eca154ce3a4796b76dc37c4ca40, type: 2}
+  - Position: {x: -3, y: -2}
+    Blueprint: {fileID: 11400000, guid: aaa08eca154ce3a4796b76dc37c4ca40, type: 2}
+  - Position: {x: -3, y: 2}
+    Blueprint: {fileID: 11400000, guid: aaa08eca154ce3a4796b76dc37c4ca40, type: 2}
+  - Position: {x: -3, y: 2}
+    Blueprint: {fileID: 11400000, guid: aaa08eca154ce3a4796b76dc37c4ca40, type: 2}

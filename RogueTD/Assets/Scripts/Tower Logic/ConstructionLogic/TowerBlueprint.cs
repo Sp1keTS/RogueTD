@@ -10,7 +10,6 @@ public class TowerBlueprint : BuildingBlueprint
     [SerializeField] protected float damageMult = 1f;
     [SerializeField] protected float attackSpeed = 1f;
     [SerializeField] protected int damage = 1;
-    [SerializeField] protected int projectileCount;
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected float currentAmmo;
     [SerializeField] protected float ammoRegeneration;
@@ -24,7 +23,6 @@ public class TowerBlueprint : BuildingBlueprint
     public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
     public int Damage { get => damage; set => damage = value; }
     public ResourceReference<StatusEffect>[] StatusEffects { get => statusEffects; set => statusEffects = value; } // Обновлено
-    public int ProjectileCount { get => projectileCount; set => projectileCount = value; }
     public int MaxAmmo { get => maxAmmo; set => maxAmmo = value; }
     public float CurrentAmmo { get => currentAmmo; set => currentAmmo = value; }
     public float AmmoRegeneration { get => ammoRegeneration; set => ammoRegeneration = value; }

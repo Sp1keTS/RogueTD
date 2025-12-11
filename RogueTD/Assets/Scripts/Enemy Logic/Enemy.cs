@@ -13,6 +13,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] private int cost = 10;
     [SerializeField] private int reward = 5;
     
+    [Header("Attack Stats")]
+    [SerializeField] private float attackRange = 1f;
+    [SerializeField] private int attackDamage = 10;
+    [SerializeField] private float attackSpeed = 1f; // Атак в секунду
+    
     [Header("Components")]
     [SerializeField] private Renderer enemyRenderer;
     [SerializeField] private Rigidbody2D rb;
@@ -24,8 +29,12 @@ public class Enemy : MonoBehaviour
     private string id;
     private int currentHealth;
     private Dictionary<System.Type, Coroutine> activeEffectCoroutines = new Dictionary<System.Type, Coroutine>();
+    private Coroutine attackCoroutine;
+    private bool isAttacking = false;
+    private float attackCooldown => 1f / attackSpeed;
     
     public event System.Action<Enemy> OnDeath;
+    public event System.Action<Building> OnAttackBuilding;
     
     public string Id => id;
     
@@ -73,6 +82,24 @@ public class Enemy : MonoBehaviour
         set => reward = value; 
     }
     
+    public float AttackRange 
+    { 
+        get => attackRange; 
+        set => attackRange = value; 
+    }
+    
+    public int AttackDamage 
+    { 
+        get => attackDamage; 
+        set => attackDamage = value; 
+    }
+    
+    public float AttackSpeed 
+    { 
+        get => attackSpeed; 
+        set => attackSpeed = value; 
+    }
+    
     public EnemyTargetingBehavior TargetingBehavior 
     { 
         get => targetingBehavior; 
@@ -97,17 +124,15 @@ public class Enemy : MonoBehaviour
         set => rb = value; 
     }
     
-    public bool IsAlive => currentHealth > 0;
-    
     private Building currentTarget;
     private Vector2 currentTargetPosition;
+    private float lastAttackTime = 0f;
     
     public Building GetCurrentTarget() => currentTarget;
     public Vector2 GetCurrentTargetPosition() => currentTargetPosition;
     
     void Start()
     {
-        // Если не был инициализирован через InitializeImmediate
         if (string.IsNullOrEmpty(id))
         {
             Initialize();
@@ -123,9 +148,10 @@ public class Enemy : MonoBehaviour
         ApplySettings();
         
         EnemyManager.RegisterEnemy(this);
+        
+        Debug.Log($"{enemyName} spawned with {attackRange} attack range");
     }
     
-    // Метод для немедленной инициализации при создании через EnemyManager
     public void InitializeImmediate()
     {
         id = $"{enemyName}_{GetInstanceID()}";
@@ -135,9 +161,16 @@ public class Enemy : MonoBehaviour
         ApplySettings();
     }
     
+    void Update()
+    {
+        if (currentHealth <= 0) return;
+        
+        CheckForTargetsInRange();
+    }
+    
     void FixedUpdate()
     {
-        if (!IsAlive || !rb) return;
+        if (currentHealth <= 0 || !rb) return;
         
         UpdateTarget();
         
@@ -217,9 +250,131 @@ public class Enemy : MonoBehaviour
         }
     }
     
+    private void CheckForTargetsInRange()
+    {
+        bool foundTargetInRange = false;
+        Building closestTarget = null;
+        float closestDistance = float.MaxValue;
+        
+        Vector2 enemyPos = transform.position;
+        
+        foreach (var building in ConstructionGridManager.BuildingsPos.Values)
+        {
+            if (!building || !building.gameObject.activeInHierarchy) continue;
+            
+            float distance = GetDistanceToBuilding(enemyPos, building);
+            
+            if (distance <= attackRange)
+            {
+                foundTargetInRange = true;
+                
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestTarget = building;
+                }
+                
+                #if UNITY_EDITOR
+                Debug.DrawLine(enemyPos, building.GetClosestPoint(enemyPos), Color.red);
+                #endif
+            }
+        }
+        
+        if (foundTargetInRange)
+        {
+            if (closestTarget && closestTarget != currentTarget)
+            {
+                currentTarget = closestTarget;
+                currentTargetPosition = closestTarget.transform.position;
+            }
+            
+            if (!isAttacking)
+            {
+                StartAttack();
+            }
+        }
+        else
+        {
+            if (isAttacking)
+            {
+                StopAttack();
+            }
+        }
+    }
+    
+    private float GetDistanceToBuilding(Vector2 enemyPosition, Building building)
+    {
+        Vector2 closestPoint = building.GetClosestPoint(enemyPosition);
+        float distance = Vector2.Distance(enemyPosition, closestPoint);
+        
+        
+        return distance;
+    }
+    
+    private void StartAttack()
+    {
+        if (isAttacking || attackCoroutine != null) return;
+        
+        isAttacking = true;
+        attackCoroutine = StartCoroutine(AttackRoutine());
+        
+    }
+    
+    private void StopAttack()
+    {
+        if (!isAttacking) return;
+        
+        isAttacking = false;
+        
+        if (attackCoroutine != null)
+        {
+            StopCoroutine(attackCoroutine);
+            attackCoroutine = null;
+        }
+    }
+    
+    private IEnumerator AttackRoutine()
+    {
+        while (isAttacking && currentHealth > 0)
+        {
+            if (currentTarget && currentTarget.gameObject.activeInHierarchy)
+            {
+                float distance = GetDistanceToBuilding(transform.position, currentTarget);
+                
+                if (distance <= attackRange)
+                {
+                    PerformAttack();
+                    yield return new WaitForSeconds(attackCooldown);
+                }
+                else
+                {
+                    yield return null;
+                }
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+        
+        StopAttack();
+    }
+    
+    private void PerformAttack()
+    {
+        if (!currentTarget || !currentTarget.gameObject.activeInHierarchy) return;
+        
+        currentTarget.TakeDamage(attackDamage);
+        
+        OnAttackBuilding?.Invoke(currentTarget);
+        
+        
+        lastAttackTime = Time.time;
+    }
+    
     public void TakeDamage(int damage, StatusEffect[] statusEffects)
     {
-        if (!IsAlive) return;
+        if (currentHealth <= 0) return;
         
         if (statusEffects != null)
         {
@@ -275,6 +430,8 @@ public class Enemy : MonoBehaviour
     
     private void HandleDeath()
     {
+        StopAttack();
+        
         if (rb && movementBehavior)
         {
             movementBehavior.Stop(rb);
@@ -305,7 +462,9 @@ public class Enemy : MonoBehaviour
     
     void OnDestroy()
     {
-        if (IsAlive) 
+        StopAttack();
+        
+        if (currentHealth > 0) 
         {
             EnemyManager.UnregisterEnemy(this);
         }
@@ -330,4 +489,5 @@ public class Enemy : MonoBehaviour
             HandleDeath();
         }
     }
+    
 }

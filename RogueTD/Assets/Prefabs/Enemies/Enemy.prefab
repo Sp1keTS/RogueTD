@@ -109,6 +109,9 @@ MonoBehaviour:
   size: {x: 0.25, y: 0.25}
   cost: 5
   reward: 5
+  attackRange: 1
+  attackDamage: 2
+  attackSpeed: 1
   enemyRenderer: {fileID: 3947744773811677630}
   rb: {fileID: 751452968047400020}
   targetingBehavior: {fileID: 0}

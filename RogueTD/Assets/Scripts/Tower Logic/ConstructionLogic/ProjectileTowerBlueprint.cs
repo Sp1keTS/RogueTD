@@ -12,6 +12,8 @@ public class ProjectileTowerBlueprint : TowerBlueprint
     [SerializeField] private float projectileLifetime = 3f;
     [SerializeField] private bool projectileFragile = true;
     
+    [SerializeField] protected int projectileCount;
+    
     [Header("Projectile Behaviors")]
     [SerializeField] private ResourceReference<ProjectileBehavior>[] projectileBehaviors;
     [SerializeField] private ResourceReference<ProjectileEffect>[] projectileEffects;
@@ -21,6 +23,8 @@ public class ProjectileTowerBlueprint : TowerBlueprint
     public GameObject ProjectilePrefab { get => projectilePrefab; set => projectilePrefab = value; }
     public float ProjectileSpeed { get => projectileSpeed; set => projectileSpeed = value; }
     public float Spread { get => spread; set => spread = value; }
+    
+    public int ProjectileCount { get => projectileCount; set => projectileCount = value; }
     public float ProjectileLifetime { get => projectileLifetime; set => projectileLifetime = value; }
     public bool ProjectileFragile { get => projectileFragile; set => projectileFragile = value; }
     
