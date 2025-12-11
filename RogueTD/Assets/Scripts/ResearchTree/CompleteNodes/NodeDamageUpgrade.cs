@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "DamageUpgrade", menuName = "Research Tree/Upgrades/Damage Upgrade")]
-public class NodePTDamageUpgrade : ProjectileTowerUpgradeTreeNode
+public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
 {
     [SerializeField] private float baseDamageMultiplier = 1.3f;
     [SerializeField] private float rankBonusPerLevel = 0.1f;

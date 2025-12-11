@@ -173,11 +173,6 @@ public class ResearchTree : MonoBehaviour
                 var towerToUpgrade = GetTowerToUpgradeForNode(parentNode, visited);
                 nextNode.nodeToUpgrade = towerToUpgrade;
             
-                projectileNode.TowersToUpgrade = projectileNode.TowersToUpgrade ?? new List<ProjectileTowerNode>();
-                if (towerToUpgrade != null && !projectileNode.TowersToUpgrade.Contains(towerToUpgrade))
-                {
-                    projectileNode.TowersToUpgrade.Add(towerToUpgrade);
-                }
             }
         }
     }

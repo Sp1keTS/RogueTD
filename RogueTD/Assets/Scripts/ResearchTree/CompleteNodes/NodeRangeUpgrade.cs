@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "RangeUpgrade", menuName = "Research Tree/Upgrades/Range Upgrade")]
-public class NodePTRangeUpgrade : ProjectileTowerUpgradeTreeNode
+public class NodeRangeUpgrade : ProjectileTowerUpgradeTreeNode
 {
     [SerializeField] private float baseRangeMultiplier = 1.2f;
     [SerializeField] private float rankBonusPerLevel = 0.05f;
@@ -11,9 +11,6 @@ public class NodePTRangeUpgrade : ProjectileTowerUpgradeTreeNode
     {
         float totalMultiplier = baseRangeMultiplier + (rank * rankBonusPerLevel);
         blueprint.TargetingRange *= totalMultiplier;
-        blueprint.ProjectileSpeed *= (1f + rank * projectileSpeedBonus);
-        
-        Debug.Log($"Range upgraded to {totalMultiplier:F1}x! New range: {blueprint.TargetingRange:F1}");
     }
 
     public override void LoadDependencies()

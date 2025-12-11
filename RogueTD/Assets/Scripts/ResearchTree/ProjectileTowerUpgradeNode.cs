@@ -3,7 +3,6 @@ using UnityEngine;
 
 public abstract class ProjectileTowerUpgradeTreeNode : TreeNode
 {
-    public List<ProjectileTowerNode> TowersToUpgrade { get; set; }
     
     public abstract void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank);
 
