@@ -11,44 +11,37 @@ public static class EnemyManager
     public static IReadOnlyDictionary<string, Enemy> Enemies => enemies;
     public static int EnemyCount => enemies.Count;
     
-    public static Enemy CreateEnemy(EnemyModel model, Vector2 position, Transform parent = null)
+    public static Enemy SpawnEnemy(Enemy enemyPrefab, Vector2 position, Transform parent = null)
     {
-        if (model == null)
+        if (!enemyPrefab)
         {
-            Debug.LogError("Cannot create enemy: EnemyModel is null!");
+            Debug.LogWarning("Cannot spawn enemy: prefab is null!");
             return null;
         }
     
-        GameObject enemyObj = new GameObject(model.EnemyName);
-        enemyObj.transform.position = position;
-    
-        if (parent != null)
-            enemyObj.transform.SetParent(parent);
-    
-        var enemy = enemyObj.AddComponent<Enemy>();
+        var enemyInstance = GameObject.Instantiate(enemyPrefab, position, Quaternion.identity);
         
-        var collider2D = enemyObj.AddComponent<BoxCollider2D>();
-        collider2D.size = model.Size;
+        if (parent)
+            enemyInstance.transform.SetParent(parent);
     
-        var spriteRenderer = enemyObj.AddComponent<SpriteRenderer>();
-        if (model.Texture != null)
-        {
-            spriteRenderer.sprite = Sprite.Create(model.Texture, 
-                new Rect(0, 0, model.Texture.width, model.Texture.height), 
-                new Vector2(0.5f, 0.5f));
-        }
-        spriteRenderer.color = Color.white;
+        // Инициализируем врага перед регистрацией
+        enemyInstance.InitializeImmediate();
+        RegisterEnemy(enemyInstance);
     
-        RegisterEnemy(enemy);
-    
-        return enemy;
+        return enemyInstance;
     }
     
     public static void RegisterEnemy(Enemy enemy)
     {
-        if (enemy == null) return;
+        if (!enemy) return;
         
         string id = enemy.Id;
+        if (string.IsNullOrEmpty(id))
+        {
+            Debug.LogWarning($"Cannot register enemy with null or empty ID: {enemy.EnemyName}");
+            return;
+        }
+        
         if (!enemies.ContainsKey(id))
         {
             enemies[id] = enemy;
@@ -67,7 +60,7 @@ public static class EnemyManager
         if (!enemy) return;
         
         string id = enemy.Id;
-        if (enemies.ContainsKey(id))
+        if (!string.IsNullOrEmpty(id) && enemies.ContainsKey(id))
         {
             enemies[id].OnDeath -= HandleEnemyDeath;
             enemies.Remove(id);
@@ -81,7 +74,7 @@ public static class EnemyManager
             if (enemy)
             {
                 enemy.OnDeath -= HandleEnemyDeath;
-                UnityEngine.Object.Destroy(enemy.gameObject);
+                GameObject.Destroy(enemy.gameObject);
             }
         }
         enemies.Clear();

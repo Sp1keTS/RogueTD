@@ -4,10 +4,22 @@ using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour
 {
+    [Header("Basic Stats")]
+    [SerializeField] private string enemyName = "Basic Enemy";
+    [SerializeField] private int rank = 1;
+    [SerializeField] private int maxHealth = 100;
+    [SerializeField] private float moveSpeed = 1f;
+    [SerializeField] private Vector2 size = Vector2.one;
+    [SerializeField] private int cost = 10;
+    [SerializeField] private int reward = 5;
+    
+    [Header("Components")]
     [SerializeField] private Renderer enemyRenderer;
-    [SerializeField] private EnemyModel enemyModel; 
     [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private GameState gameState;
+    
+    [Header("Behavior")]
+    [SerializeField] private EnemyTargetingBehavior targetingBehavior;
+    [SerializeField] private EnemyMovementBehavior movementBehavior;
     
     private string id;
     private int currentHealth;
@@ -16,38 +28,75 @@ public class Enemy : MonoBehaviour
     public event System.Action<Enemy> OnDeath;
     
     public string Id => id;
+    
+    public string EnemyName 
+    { 
+        get => enemyName; 
+        set => enemyName = value; 
+    }
+    
+    public int Rank 
+    { 
+        get => rank; 
+        set => rank = value; 
+    }
+    
     public int CurrentHealth => currentHealth;
+    
     public int MaxHealth 
     { 
-        get => enemyModel != null ? enemyModel.MaxHealth : 0;
-        set 
-        { 
-            if (enemyModel != null) enemyModel.MaxHealth = value; 
-        }
+        get => maxHealth; 
+        set => maxHealth = value; 
     }
     
     public float MoveSpeed 
     { 
-        get => enemyModel ? enemyModel.MoveSpeed : 0f;
-        set 
-        { 
-            if (enemyModel) enemyModel.MoveSpeed = value; 
-        }
+        get => moveSpeed; 
+        set => moveSpeed = value; 
     }
     
     public Vector2 Size 
     { 
-        get => enemyModel != null ? enemyModel.Size : Vector2.one;
-        set 
-        { 
-            if (enemyModel != null) enemyModel.Size = value; 
-        }
+        get => size; 
+        set => size = value; 
     }
     
-    public int Reward => enemyModel?.Reward ?? 0;
-    public EnemyModel Model => enemyModel;
-    public Renderer EnemyRenderer => enemyRenderer;
-    public Rigidbody2D Rigidbody => rb;
+    public int Cost 
+    { 
+        get => cost; 
+        set => cost = value; 
+    }
+    
+    public int Reward 
+    { 
+        get => reward; 
+        set => reward = value; 
+    }
+    
+    public EnemyTargetingBehavior TargetingBehavior 
+    { 
+        get => targetingBehavior; 
+        set => targetingBehavior = value; 
+    }
+    
+    public EnemyMovementBehavior MovementBehavior 
+    { 
+        get => movementBehavior; 
+        set => movementBehavior = value; 
+    }
+    
+    public Renderer EnemyRenderer 
+    { 
+        get => enemyRenderer; 
+        set => enemyRenderer = value; 
+    }
+    
+    public Rigidbody2D Rigidbody 
+    { 
+        get => rb; 
+        set => rb = value; 
+    }
+    
     public bool IsAlive => currentHealth > 0;
     
     private Building currentTarget;
@@ -58,34 +107,33 @@ public class Enemy : MonoBehaviour
     
     void Start()
     {
-        if (enemyModel != null)
+        // Если не был инициализирован через InitializeImmediate
+        if (string.IsNullOrEmpty(id))
         {
-            Initialize(enemyModel);
+            Initialize();
         }
     }
     
-    public void Initialize(EnemyModel model)
+    private void Initialize()
     {
-        enemyModel = model;
-        
-        if (enemyModel == null)
-        {
-            Debug.LogError($"EnemyInstance {name}: EnemyModel is not assigned!");
-            Destroy(gameObject);
-            return;
-        }
-        
-        id = $"{enemyModel.EnemyName}_{GetInstanceID()}";
-        currentHealth = enemyModel.MaxHealth;
+        id = $"{enemyName}_{GetInstanceID()}";
+        currentHealth = maxHealth;
         
         SetupRigidbody();
-        ApplyModelSettings();
+        ApplySettings();
         
         EnemyManager.RegisterEnemy(this);
     }
     
-    
-    
+    // Метод для немедленной инициализации при создании через EnemyManager
+    public void InitializeImmediate()
+    {
+        id = $"{enemyName}_{GetInstanceID()}";
+        currentHealth = maxHealth;
+        
+        SetupRigidbody();
+        ApplySettings();
+    }
     
     void FixedUpdate()
     {
@@ -93,27 +141,27 @@ public class Enemy : MonoBehaviour
         
         UpdateTarget();
         
-        if (currentTarget && enemyModel && enemyModel.MovementBehavior)
+        if (currentTarget && movementBehavior)
         {
-            enemyModel.MovementBehavior.Move(
+            movementBehavior.Move(
                 this, 
                 rb, 
                 transform.position, 
                 Time.fixedDeltaTime
             );
         }
-        else if (rb && enemyModel && enemyModel.MovementBehavior)
+        else if (rb && movementBehavior)
         {
-            enemyModel.MovementBehavior.Stop(rb);
+            movementBehavior.Stop(rb);
         }
     }
     
     private void SetupRigidbody()
     {
-        if (rb == null)
+        if (!rb)
         {
             rb = GetComponent<Rigidbody2D>();
-            if (rb == null)
+            if (!rb)
             {
                 rb = gameObject.AddComponent<Rigidbody2D>();
             }
@@ -125,25 +173,20 @@ public class Enemy : MonoBehaviour
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
     
-    private void ApplyModelSettings()
+    private void ApplySettings()
     {
-        transform.localScale = new Vector3(enemyModel.Size.x, enemyModel.Size.y, 1f);
-        
-        if (enemyModel.Texture != null && enemyRenderer != null)
-        {
-            enemyRenderer.material.mainTexture = enemyModel.Texture;
-        }
+        transform.localScale = new Vector3(size.x, size.y, 1f);
     }
     
     private void UpdateTarget()
     {
-        if (!enemyModel || !enemyModel.TargetingBehavior)
+        if (!targetingBehavior)
         {
             FindMainBuildingTarget();
         }
         else
         {
-            Building newTarget = enemyModel.TargetingBehavior.SelectTarget(this);
+            Building newTarget = targetingBehavior.SelectTarget(this);
             if (newTarget != currentTarget)
             {
                 currentTarget = newTarget;
@@ -232,14 +275,9 @@ public class Enemy : MonoBehaviour
     
     private void HandleDeath()
     {
-        if (rb && enemyModel && enemyModel.MovementBehavior)
+        if (rb && movementBehavior)
         {
-            enemyModel.MovementBehavior.Stop(rb);
-        }
-        
-        if (gameState && enemyModel)
-        {
-            gameState.AddCurrency(enemyModel.Reward);
+            movementBehavior.Stop(rb);
         }
         
         OnDeath?.Invoke(this);
@@ -282,5 +320,14 @@ public class Enemy : MonoBehaviour
                 StopCoroutine(coroutine);
         }
         activeEffectCoroutines.Clear();
+    }
+    
+    public void SetCurrentHealth(int health)
+    {
+        currentHealth = Mathf.Clamp(health, 0, maxHealth);
+        if (currentHealth <= 0)
+        {
+            HandleDeath();
+        }
     }
 }

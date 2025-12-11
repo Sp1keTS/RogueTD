@@ -23,7 +23,6 @@ public class EnemyWave
     [Serializable]
     public class SubWave
     {
-        [NonSerialized]
-        public Dictionary<Vector2, List<(EnemyModel model, int count)>> enemiesPerSpawnpoint;
+        public Dictionary<Vector2, List<(Enemy prefab, int count)>> enemiesPerSpawnpoint;
     }
 }

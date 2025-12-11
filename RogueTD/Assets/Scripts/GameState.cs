@@ -4,9 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameState", menuName = "Tower Defense/Game State")]
 public class GameState : ScriptableObject
 {
-    
+    [SerializeField]private bool isANewRun;
     public ResearchTree.TreeSaveData TreeSaveData { get; set; }
-    
+    public bool IsANewRun { get => isANewRun; set  => isANewRun = value; }
+    public EnemyWave CurrentWave {get; set;}
     private int _currency;
     private int _wave;
     
@@ -22,6 +23,7 @@ public class GameState : ScriptableObject
 
     public Action<int> OnWaveChanged;
     public Action<int> OnCurrencyChanged;
+    private static object get;
 
     public void ChangeWave(int newWave)
     {
@@ -44,7 +46,9 @@ public class GameState : ScriptableObject
 
     public void ChangeCurrency(int amount)
     {
+        
         int newCurrency = _currency + amount;
+        OnCurrencyChanged.Invoke(newCurrency);
         _currency = newCurrency;
     }
     

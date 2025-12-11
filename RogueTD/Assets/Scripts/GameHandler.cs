@@ -10,7 +10,6 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private BuildingBlueprint mainBuildingBlueprint;
     [SerializeField] private ResearchTree researchTree;
     [SerializeField] private TreeSolver treeSolver;
-    [SerializeField] private bool geneRateANewTree = false;
     [SerializeField] private MapManager mapManager;
     [SerializeField] private UIBlueprintHolderScript uiBlueprintHolder;
     [SerializeField] private GameState gameState;
@@ -22,10 +21,10 @@ public class GameHandler : MonoBehaviour
         ConstructionGridManager.constructionGrid = constructionGrid;
         mapManager.CreateMap();
         CreateMainBuilding();
-        gameState.Initialize(150, 1);
-        if (geneRateANewTree)
+        if (gameState.IsANewRun)
         {
             GenerateResearchTree();
+            gameState.Initialize(300, 1);
         }
         else
         {
