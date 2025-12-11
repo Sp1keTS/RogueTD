@@ -13,24 +13,37 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private MapManager mapManager;
     [SerializeField] private UIBlueprintHolderScript uiBlueprintHolder;
     [SerializeField] private GameState gameState;
+    [SerializeField] private bool simulateNewRun = true;
+    [SerializeField] private ConstructionGridManager gridManager;
     
 
     void Start()
     {
-        instance = this;
-        ConstructionGridManager.constructionGrid = constructionGrid;
-        mapManager.CreateMap();
-        CreateMainBuilding();
+        
+        ConstructionGridManager.ConstructionGrid = constructionGrid;
+        if (simulateNewRun) {gameState.IsANewRun = true;}
+        else {gameState.IsANewRun = false;}
+        
         if (gameState.IsANewRun)
         {
             GenerateResearchTree();
+            LoadUITree();
+            gameState.ResetGameState();
+            gameState.IsANewRun = false;
             gameState.Initialize(300, 1);
         }
         else
         {
+            LoadUITree();
+            gridManager.RecreateBuildings();
             uiBlueprintHolder.LoadExistingBlueprints();
         }
-        LoadUITree();
+        instance = this;
+        
+        mapManager.CreateMap();
+        CreateMainBuilding();
+        
+        
         
     }
 
@@ -64,7 +77,7 @@ public class GameHandler : MonoBehaviour
             return;
         }
 
-        Vector2 gridPosition = Vector2.zero;
+        var gridPosition = Vector2Int.zero;
         Building mainBuilding = BuildingFactory.CreateBuilding(gridPosition, mainBuildingBlueprint);
         
         if (mainBuilding != null)

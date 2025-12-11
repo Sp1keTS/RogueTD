@@ -9,6 +9,7 @@ public class EnemyWaveGenerator : MonoBehaviour
     [SerializeField] private MapManager mapManager;
     [SerializeField] private float standardWaveBudget = 30;
     
+    
     private EnemyWave currentWave;
 
     public EnemyWave GenerateWave(int waveNum)

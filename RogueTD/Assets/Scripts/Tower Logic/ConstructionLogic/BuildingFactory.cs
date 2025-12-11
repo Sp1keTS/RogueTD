@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class BuildingFactory : MonoBehaviour
 {
-    
-    public static Building CreateProjectileTower(Vector2 gridPos, ProjectileTowerBlueprint blueprint)
+    static public Action<Vector2Int,BuildingBlueprint> OnBuildingCreated;
+    public static Building CreateProjectileTower(Vector2Int gridPos, ProjectileTowerBlueprint blueprint)
     {
 
         // можно ли разместить постройку
@@ -32,22 +32,24 @@ public class BuildingFactory : MonoBehaviour
         
         // Обновление сетки с ссылкой на созданное здание
         UpdateGridWithBuilding(gridPos, building, blueprint);
+        OnBuildingCreated.Invoke(gridPos, blueprint);
         return building;
     }
 
-    public static Building CreateBuilding(Vector2 gridPos, BuildingBlueprint buildingBlueprint)
+    public static Building CreateBuilding(Vector2Int gridPos, BuildingBlueprint blueprint)
     {
-        if (!CanPlaceBuilding(gridPos, buildingBlueprint))
+        if (!CanPlaceBuilding(gridPos, blueprint))
         {
             Debug.LogWarning($"Cannot place building at position {gridPos} - not enough space");
             return null;
         }
         Vector3 worldPosition = GetWorldPosition(gridPos);
-        GameObject buildingObj = Instantiate(buildingBlueprint.BuildingPrefab, worldPosition, Quaternion.identity);
+        GameObject buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
         Building building = buildingObj.GetComponent<Building>();
-        building.buildingName = buildingBlueprint.buildingName;
-        building.Initialize(buildingBlueprint.MaxHealthPoints);
-        UpdateGridWithBuilding(gridPos, building, buildingBlueprint);
+        building.buildingName = blueprint.buildingName;
+        building.Initialize(blueprint.MaxHealthPoints);
+        //OnBuildingCreated.Invoke(gridPos, blueprint);
+        UpdateGridWithBuilding(gridPos, building, blueprint);
         return building;
     }
     
@@ -60,14 +62,14 @@ public class BuildingFactory : MonoBehaviour
         }
     }
     
-    private static bool  CanPlaceBuilding(Vector2 gridPos, BuildingBlueprint buildingBlueprint)
+    public static bool  CanPlaceBuilding(Vector2 gridPos, BuildingBlueprint buildingBlueprint)
     {
         for (int x = 0; x < buildingBlueprint.Size.x; x++)
         {
             for (int y = 0; y < buildingBlueprint.Size.y; y++)
             {
                 Vector2 checkPos = gridPos + new Vector2(x, y);
-                if (ConstructionGridManager.buildingsSpace.ContainsKey(checkPos) && ConstructionGridManager.buildingsSpace[checkPos] != null)
+                if (ConstructionGridManager.BuildingsSpace.ContainsKey(checkPos) && ConstructionGridManager.BuildingsSpace[checkPos] != null)
                 {
                     return false; 
                 }
@@ -78,10 +80,10 @@ public class BuildingFactory : MonoBehaviour
     
     public static Vector3 GetWorldPosition(Vector2 gridPos)
     {
-        Vector3 baseWorldPos = ConstructionGridManager.constructionGrid.CellToWorld(new Vector3Int((int)gridPos.x, (int)gridPos.y, 0));
+        Vector3 baseWorldPos = ConstructionGridManager.ConstructionGrid.CellToWorld(new Vector3Int((int)gridPos.x, (int)gridPos.y, 0));
         
-        float offsetX = ConstructionGridManager.constructionGrid.cellSize.x * 0.5f;
-        float offsetY = ConstructionGridManager.constructionGrid.cellSize.y * 0.5f;
+        float offsetX = ConstructionGridManager.ConstructionGrid.cellSize.x * 0.5f;
+        float offsetY = ConstructionGridManager.ConstructionGrid.cellSize.y * 0.5f;
         
         return new Vector3(baseWorldPos.x + offsetX, baseWorldPos.y + offsetY, baseWorldPos.z);
     }
@@ -110,24 +112,21 @@ public class BuildingFactory : MonoBehaviour
     
     private static void UpdateGridWithBuilding(Vector2 gridPos, Building building, BuildingBlueprint buildingBlueprint)
     {
-        ConstructionGridManager.buildingsPos[gridPos] = building;
+        ConstructionGridManager.BuildingsPos[gridPos] = building;
         for (int x = 0; x < buildingBlueprint.Size.x; x++)
         {
             for (int y = 0; y < buildingBlueprint.Size.y; y++)
             {
                 // Debug.Log(gridPos + new Vector2(x, y) + buildingBlueprint.buildingName);
                 Vector2 occupiedPos = gridPos + new Vector2(x, y);
-                ConstructionGridManager.buildingsSpace[occupiedPos] = building;
+                ConstructionGridManager.BuildingsSpace[occupiedPos] = building;
             }
         }
     }
 
     public static void UpdateProjectileTowers(ProjectileTowerBlueprint blueprint, string name)
     {
-        Debug.Log($"Апдейт происходит");
-        
-        Debug.Log(ConstructionGridManager.buildingsSpace.Count);
-        foreach (var buildingPosition in ConstructionGridManager.buildingsSpace)
+        foreach (var buildingPosition in ConstructionGridManager.BuildingsSpace)
         {
             var building = buildingPosition.Value;
             Debug.Log(building.GetType());

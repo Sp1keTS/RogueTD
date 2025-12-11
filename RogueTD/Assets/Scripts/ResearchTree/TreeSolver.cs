@@ -13,6 +13,7 @@ public class TreeSolver : MonoBehaviour
     private Dictionary<ResearchTree.TreeSaveData.TreeSaveNode, UITreeNode> nodeToUI = 
         new Dictionary<ResearchTree.TreeSaveData.TreeSaveNode, UITreeNode>();
 
+    
     public void LoadAndSolveTree()
     {
         nodeToUI.Clear();
@@ -25,14 +26,14 @@ public class TreeSolver : MonoBehaviour
             return;
         }
 
-        RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+        var canvasRect = canvas.GetComponent<RectTransform>();
         if (canvasRect == null)
         {
             Debug.LogError("Canvas RectTransform not found!");
             return;
         }
 
-        Vector2 centralPoint = canvasRect.rect.center;
+        var centralPoint = canvasRect.rect.center;
         
         float angleStep = (roots.Count > 0) ? 360f / roots.Count : 0f;
         float currentAngle = 0f;
@@ -40,16 +41,16 @@ public class TreeSolver : MonoBehaviour
         foreach (var root in roots)
         {
             if (root == null) continue;
-
-            Vector2 direction = AngleToDirection(currentAngle);
-            Vector2 position = centralPoint + (startRadius * direction);
+            ProcessBuildingNode(root);
+            var direction = AngleToDirection(currentAngle);
+            var position = centralPoint + (startRadius * direction);
             
             if (float.IsNaN(position.x) || float.IsNaN(position.y))
             {
                 Debug.LogError($"Invalid position calculated for root node: {position}");
                 position = centralPoint;
             }
-
+            
             var rootNode = Instantiate(uiTreeNodePrefab, canvas.transform);
             rootNode.transform.localPosition = position;
             rootNode.TreeSaveNode = root;
@@ -71,14 +72,15 @@ public class TreeSolver : MonoBehaviour
         var queue = new Queue<BranchNode>();
         queue.Enqueue(new BranchNode { node = startNode, position = startPosition, angle = startAngle, depth = 0 });
 
-        int maxDepth = 10;
-        int processedCount = 0;
-        int maxProcessCount = 100;
+        var maxDepth = 10;
+        var processedCount = 0;
+        var maxProcessCount = 100;
 
         while (queue.Count > 0 && processedCount < maxProcessCount)
         {
             var current = queue.Dequeue();
             
+            ProcessBuildingNode(current.node);
             if (current.depth > maxDepth)
             {
                 Debug.LogWarning("Max depth reached!");
@@ -87,29 +89,28 @@ public class TreeSolver : MonoBehaviour
 
             if (current.node.nextSaveNodes == null || current.node.nextSaveNodes.Count == 0)
                 continue;
-            if (current.node.IsActive && current.node.currentNode != null)
+            if (current.node.IsActive && current.node.currentNode)
             {
                 Debug.Log(current.node.currentNode + " " +  current.node.IsActive);
                 current.node.currentNode.LoadDependencies();
             }
 
             
-            int childCount = current.node.nextSaveNodes.Count;
-            float childAngleStep = (childCount > 1) ? branchAngle / (childCount - 1) : 0f;
-            float startChildAngle = current.angle - (branchAngle / 2f);
+            var childCount = current.node.nextSaveNodes.Count;
+            var childAngleStep = (childCount > 1) ? branchAngle / (childCount - 1) : 0f;
+            var startChildAngle = current.angle - (branchAngle / 2f);
                 
-            for (int i = 0; i < childCount; i++)
+            for (var i = 0; i < childCount; i++)
             {
                 var nextSaveNode = current.node.nextSaveNodes[i];
                 if (nextSaveNode == null) continue;
 
-                // Пропускаем если нода уже обработана
                 if (nodeToUI.ContainsKey(nextSaveNode))
                     continue;
 
-                float childAngle = startChildAngle + (childAngleStep * i);
-                Vector2 childDirection = AngleToDirection(childAngle);
-                Vector2 childPosition = current.position + (nodeDistance * childDirection);
+                var childAngle = startChildAngle + (childAngleStep * i);
+                var childDirection = AngleToDirection(childAngle);
+                var childPosition = current.position + (nodeDistance * childDirection);
                 
                 if (float.IsNaN(childPosition.x) || float.IsNaN(childPosition.y))
                 {
@@ -130,7 +131,6 @@ public class TreeSolver : MonoBehaviour
                 {
                     uiNode.Button.interactable = false;
                 }
-                // Добавляем дочернюю ноду в очередь для обработки
                 queue.Enqueue(new BranchNode 
                 { 
                     node = nextSaveNode, 
@@ -161,6 +161,21 @@ public class TreeSolver : MonoBehaviour
         );
     }
 
+    private void ProcessBuildingNode(ResearchTree.TreeSaveData.TreeSaveNode node)
+    {
+        if (node == null) return;
+    
+        if (node.currentNode is ProjectileTowerNode towerNode)
+        {
+            if (node.IsActive)
+            {
+                if (!BlueprintManager.HasBlueprint(towerNode.TowerBlueprint.buildingName))
+                {
+                    BlueprintManager.InsertProjectileTowerBlueprint(towerNode.TowerBlueprint);
+                }
+            }
+        }
+    }
     private struct BranchNode
     {
         public ResearchTree.TreeSaveData.TreeSaveNode node;

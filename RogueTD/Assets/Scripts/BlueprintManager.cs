@@ -13,12 +13,6 @@ public static class BlueprintManager
     private const string TEMP_BLUEPRINTS_FOLDER = "Blueprints";
 
 
-    public static void LoadTemporaryBlueprints()
-    {
-        ClearDictionaries();
-        LoadResources<BuildingBlueprint>(TEMP_BLUEPRINTS_FOLDER, blueprints);
-        Debug.Log($" loaded: {blueprints.Count} blueprints");
-    }
     private static void LoadResources<T>(string folderPath, Dictionary<string, T> dictionary) where T : ScriptableObject
     {
         T[] resources = Resources.LoadAll<T>(folderPath);
@@ -43,7 +37,6 @@ public static class BlueprintManager
    
     static BlueprintManager()
     {
-        LoadTemporaryBlueprints();
         if (blueprints == null)
         {
             blueprints = new Dictionary<string, BuildingBlueprint>();

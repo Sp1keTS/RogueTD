@@ -41,8 +41,12 @@ public class EnemyWaveManager : MonoBehaviour
     public void StartWave()
     {
         if (isWaveActive) return;
+        if (gameState.CurrentWave != null)
+        {
+            currentWave = gameState.CurrentWave;
+        }
+        else {currentWave = waveGenerator.GenerateWave(currentWaveNumber);}
         
-        currentWave = waveGenerator.GenerateWave(currentWaveNumber);
         
         if (currentWave == null || currentWave.SubWaves == null || currentWave.SubWaves.Count == 0)
         {

@@ -1,22 +1,135 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public static class ConstructionGridManager
+public class ConstructionGridManager : MonoBehaviour
 {
-    static public Grid constructionGrid;
-    static public Dictionary<Vector2,Building> buildingsSpace = new Dictionary<Vector2,Building>();
-    static public Dictionary<Vector2, Building> buildingsPos = new Dictionary<Vector2,Building>();
+    public static Grid ConstructionGrid { get; set; }
+    static public Dictionary<Vector2, Building> buildingsSpace = new Dictionary<Vector2, Building>();
+    static public Dictionary<Vector2, Building> buildingsPos = new Dictionary<Vector2, Building>();
+    
+    [SerializeField] private List<BuildingSaveData> savePoses = new List<BuildingSaveData>();
+    [SerializeField] private GameState gameState;
+    
+    private bool isRecreatingBuildings = false; // Флаг для отслеживания реконструкции
+    
+    static public Dictionary<Vector2, Building> BuildingsSpace => buildingsSpace;
+    static public Dictionary<Vector2, Building> BuildingsPos => buildingsPos;
+    public List<BuildingSaveData> SavePoses => savePoses;
+    
+    private void Awake()
+    {
+        BuildingFactory.OnBuildingCreated += OnBuildingCreated;
+        
+        if (gameState != null && gameState.Buildings != null)
+        {
+            savePoses = new List<BuildingSaveData>(gameState.Buildings);
+            
+            buildingsSpace.Clear();
+            buildingsPos.Clear();
+            
+            RecreateBuildings();
+        }
+    }
+    
+    private void OnDestroy()
+    {
+        BuildingFactory.OnBuildingCreated -= OnBuildingCreated;
+    }
     
     static public void RemoveBuilding(Building buildingToRemove)
     {
-        foreach (var pair in buildingsSpace.Where(p => p.Value == buildingToRemove).ToList())
+        foreach (var pair in BuildingsSpace.Where(p => p.Value == buildingToRemove).ToList())
         {
-            buildingsSpace.Remove(pair.Key);
+            BuildingsSpace.Remove(pair.Key);
         }
-        foreach (var pair in buildingsPos.Where(p => p.Value == buildingToRemove).ToList())
+        foreach (var pair in BuildingsPos.Where(p => p.Value == buildingToRemove).ToList())
         {
-            buildingsPos.Remove(pair.Key);
+            BuildingsPos.Remove(pair.Key);
         }
+    }
+
+    public void OnBuildingCreated(Vector2Int gridPos, BuildingBlueprint buildingBlueprint)
+    {
+        if (isRecreatingBuildings) return;
+        
+        bool alreadyExists = savePoses.Any(data => data.Position == gridPos);
+        
+        if (!alreadyExists)
+        {
+            savePoses.Add(new BuildingSaveData(gridPos, buildingBlueprint));
+            
+            if (gameState != null)
+            {
+                gameState.Buildings = new List<BuildingSaveData>(savePoses); 
+            }
+        }
+    }
+
+    static public void TryCreateBlueprint(BuildingBlueprint blueprint, Vector2Int gridPosition)
+    {
+        if (blueprint == null) return;
+        
+        if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
+        { 
+            BuildingFactory.CreateProjectileTower(gridPosition, projectileBlueprint);
+        }
+        else
+        {
+            BuildingFactory.CreateBuilding(gridPosition, blueprint);
+        }
+    }
+    
+    public void RecreateBuildings()
+    {
+        if (!gameState || gameState.Buildings == null || gameState.Buildings.Count == 0)
+        {
+            return;
+        }
+        
+        isRecreatingBuildings = true;
+        
+        try
+        {
+            var buildingsToRecreate = new List<BuildingSaveData>(gameState.Buildings);
+            
+            foreach (var saveData in buildingsToRecreate)
+            {
+                if (saveData == null || saveData.Blueprint == null)
+                {
+                    continue;
+                }
+                
+                TryCreateBlueprint(saveData.Blueprint, saveData.Position);
+            }
+        }
+        finally
+        {
+            isRecreatingBuildings = false;
+        }
+        
+    }
+    
+    public void ClearAllSavedBuildings()
+    {
+        savePoses.Clear();
+        
+        if (gameState != null)
+        {
+            gameState.Buildings = new List<BuildingSaveData>();
+        }
+        
+    }
+    
+    public void RemoveSavedBuilding(Vector2Int position)
+    {
+        savePoses.RemoveAll(data => data.Position == position);
+        
+        if (gameState != null)
+        {
+            gameState.Buildings = new List<BuildingSaveData>(savePoses);
+        }
+        
     }
 }

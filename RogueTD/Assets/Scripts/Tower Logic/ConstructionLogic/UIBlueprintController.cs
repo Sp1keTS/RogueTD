@@ -40,7 +40,7 @@ public class UIBlueprintController : MonoBehaviour
     {
         if (blueprint == null)
         {
-            Debug.LogWarning("Received null blueprint in OnBlueprintSelected!");
+            Debug.LogWarning("Received null blueprint in OnBlueprintSelected");
             return;
         }
         
@@ -54,7 +54,7 @@ public class UIBlueprintController : MonoBehaviour
 
     private void CreateBuildingPreview(BuildingBlueprint blueprint)
     {
-        if (blueprint.BuildingPrefab == null) return;
+        if (!blueprint.BuildingPrefab) return;
         
         _buildingPreview = new GameObject($"{blueprint.buildingName}_Preview");
         
@@ -72,43 +72,28 @@ public class UIBlueprintController : MonoBehaviour
 
     private void OnLeftMouseClick(InputAction.CallbackContext context)
     {
-        if (selectedBlueprint == null) 
+        if (!selectedBlueprint) 
         {
             Debug.Log("No blueprint selected!");
             return;
         }
         
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Vector2 gridPos = GetGridPosition(mousePosition);
+        Vector2Int gridPos = GetGridPosition(mousePosition);
+        if (BuildingFactory.CanPlaceBuilding(gridPos, selectedBlueprint) && gameState.SpendCurrency(selectedBlueprint.Cost))
+        {
+            ConstructionGridManager.TryCreateBlueprint(selectedBlueprint, gridPos);
+        }
         
-        TryCreateBlueprint(selectedBlueprint, gridPos);
     }
 
-    private void TryCreateBlueprint(BuildingBlueprint blueprint, Vector2 gridPosition)
-    {
-        if (blueprint == null) return;
-        if (gameState.SpendCurrency(blueprint.Cost))
-        {
-            if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
-            {
-                BuildingFactory.CreateProjectileTower(gridPosition, projectileBlueprint);
-            }
-            else
-            {
-                BuildingFactory.CreateBuilding(gridPosition, blueprint);
-            }
-        }
-    }
     
-    private Vector2 GetGridPosition(Vector2 worldPosition)
+    
+    private Vector2Int GetGridPosition(Vector2 worldPosition)
     {
-        if (!ConstructionGridManager.constructionGrid)
-        {
-            return worldPosition;
-        }
         
-        Vector3Int cellPosition = ConstructionGridManager.constructionGrid.WorldToCell(worldPosition);
-        return new Vector2(cellPosition.x, cellPosition.y);
+        Vector3Int cellPosition = ConstructionGridManager.ConstructionGrid.WorldToCell((Vector2) worldPosition);
+        return new Vector2Int(cellPosition.x, cellPosition.y);
     }
     
 

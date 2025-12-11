@@ -202,7 +202,7 @@ public class Enemy : MonoBehaviour
     
     private void FindMainBuildingTarget()
     {
-        foreach (var building in ConstructionGridManager.buildingsPos.Values)
+        foreach (var building in ConstructionGridManager.BuildingsPos.Values)
         {
             if (building && building.gameObject.activeInHierarchy && 
                 building.CompareTag("MainBuilding"))

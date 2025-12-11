@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "GameState", menuName = "Tower Defense/Game State")]
@@ -7,7 +9,15 @@ public class GameState : ScriptableObject
     [SerializeField]private bool isANewRun;
     public ResearchTree.TreeSaveData TreeSaveData { get; set; }
     public bool IsANewRun { get => isANewRun; set  => isANewRun = value; }
+    
     public EnemyWave CurrentWave {get; set;}
+    [SerializeField] private List<BuildingSaveData> buildings = new List<BuildingSaveData>();
+    public List<BuildingSaveData> Buildings 
+    { 
+        get => buildings; 
+        set => buildings = value ?? new List<BuildingSaveData>(); 
+    }
+
     private int _currency;
     private int _wave;
     
@@ -80,12 +90,10 @@ public class GameState : ScriptableObject
     
     public void ResetGameState()
     {
-        int oldCurrency = _currency;
-        int oldWave = _wave;
-        
+        Buildings = new List<BuildingSaveData>();
+        CurrentWave = null;
         _currency = 0;
         _wave = 0;
-        TreeSaveData = null;
     }
     
     public void Initialize(int startingCurrency = 100, int startingWave = 0)

@@ -76,7 +76,6 @@ public class ProjectileTower : Tower
         projectileFragile = blueprint.ProjectileFragile;
         projectilePrefab = blueprint.ProjectilePrefab;
         
-        // Преобразуем ResourceReference в реальные значения
         effects = ConvertResourceReferencesToValues(blueprint.ProjectileEffects);
         movements = ConvertResourceReferencesToValues(blueprint.ProjectileBehaviors);
         towerBehavior = blueprint.ShotBehavior?.Value;
@@ -85,7 +84,6 @@ public class ProjectileTower : Tower
         BuildShootChain();
     }
     
-    // Метод для обновления поведения/эффектов без изменения базовых параметров
     public void UpdateFromBlueprint(ProjectileTowerBlueprint blueprint)
     {
         effects = ConvertResourceReferencesToValues(blueprint.ProjectileEffects);
@@ -98,7 +96,6 @@ public class ProjectileTower : Tower
     
     private void BuildShootChain()
     {
-        // Начинаем с основного поведения (конец цепочки)
         Action<ShotData> chain = null;
         
         if (towerBehavior != null)
@@ -106,7 +103,6 @@ public class ProjectileTower : Tower
             chain = (shotData) => towerBehavior.Shoot(this, shotData, null);
         }
         
-        // Оборачиваем вторичными поведениями (в обратном порядке)
         if (secondaryShots != null && chain != null)
         {
             for (int i = secondaryShots.Length - 1; i >= 0; i--)
@@ -114,7 +110,7 @@ public class ProjectileTower : Tower
                 if (secondaryShots[i] != null)
                 {
                     var currentBehavior = secondaryShots[i];
-                    var nextInChain = chain; // Сохраняем текущую цепочку
+                    var nextInChain = chain; 
                     chain = (shotData) => currentBehavior.Shoot(this, shotData, nextInChain);
                 }
             }
