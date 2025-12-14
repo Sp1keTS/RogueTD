@@ -24,6 +24,7 @@ public class GameState : ScriptableObject
     public int Wave
     {
         get => _wave;
+        set => _wave = value;
     }
 
     public int Currency

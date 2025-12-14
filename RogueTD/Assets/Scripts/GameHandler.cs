@@ -28,6 +28,7 @@ public class GameHandler : MonoBehaviour
             gameState.ResetGameState();
             gameState.IsANewRun = false;
             gameState.Initialize(300, 1);
+            gameState.Wave = 1;
         }
         else
         {
