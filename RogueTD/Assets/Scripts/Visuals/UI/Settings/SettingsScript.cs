@@ -6,6 +6,8 @@ public class SettingsScript : MonoBehaviour
 {
     [SerializeField] Button goBackButton;
     [SerializeField] Button soundSettingsButton;
+    [SerializeField] Button saveSettingsButton;
+    
     [SerializeField] GameObject mainMenuCanvas;
     [SerializeField] GameObject settingsCanvas;
     [SerializeField] Slider globalVolumeSlider;
@@ -15,10 +17,20 @@ public class SettingsScript : MonoBehaviour
     [SerializeField] TMP_InputField effectsInputField;
     [SerializeField] TMP_InputField musicInputField;
     
+    [SerializeField] int defaultVolume = 100;
+    [SerializeField] int defaultEffectsVolume = 100;
+    [SerializeField] int defaultMusicVolume = 100;
+    
+    private int globalVolume;
+    private int effectsVolume;
+    private int musicVolume;
+    
     void Start()
     {
         goBackButton = goBackButton.GetComponent<Button>();
         soundSettingsButton = soundSettingsButton.GetComponent<Button>();
+        saveSettingsButton = saveSettingsButton.GetComponent<Button>();
+        
         globalVolumeSlider = globalVolumeSlider.GetComponent<Slider>();
         effectsVolumeSlider = effectsVolumeSlider.GetComponent<Slider>();
         musicVolumeSlider = musicVolumeSlider.GetComponent<Slider>();
@@ -29,6 +41,7 @@ public class SettingsScript : MonoBehaviour
         soundSettingsButton.interactable = false;
         
         goBackButton.onClick.AddListener(OnGoBackClicked);
+        saveSettingsButton.onClick.AddListener(SaveSettings);
         
         globalVolumeSlider.onValueChanged.AddListener(OnGlobalVolumeSliderValueChanged);
         globalVolumeInputField.onValueChanged.AddListener(OnGlobalVolumeInputFieldValueChanged);
@@ -38,7 +51,8 @@ public class SettingsScript : MonoBehaviour
         
         musicVolumeSlider.onValueChanged.AddListener(OnMusicVolumeSliderValueChanged);
         musicInputField.onValueChanged.AddListener(OnMusicInputFieldValueChanged);
-
+        
+        LoadSettings();
     }
 
     // Update is called once per frame
@@ -56,36 +70,78 @@ public class SettingsScript : MonoBehaviour
         }
     }
 
-    private void OnGlobalVolumeSliderValueChanged(float value)
+    private void LoadSettings()
     {
-        globalVolumeInputField.text = value.ToString();
+        if (PlayerPrefs.HasKey("GlobalVolume"))
+            globalVolume = PlayerPrefs.GetInt("GlobalVolume");
+        else globalVolume = defaultVolume;
+        if (PlayerPrefs.HasKey("EffectsVolume"))
+            effectsVolume = PlayerPrefs.GetInt("EffectsVolume");
+        else effectsVolume = defaultEffectsVolume;
+        if (PlayerPrefs.HasKey("MusicVolume"))
+            musicVolume = PlayerPrefs.GetInt("MusicVolume");
+        else musicVolume = defaultMusicVolume;
+        
+        UpdateGlobalVolumeUI();
+        UpdateEffectsVolumeUI();
+        UpdateMusicVolumeUI();
     }
 
+    private void SaveSettings()
+    {
+        PlayerPrefs.SetInt("GlobalVolume", globalVolume);
+        PlayerPrefs.SetInt("EffectsVolume", effectsVolume);
+        PlayerPrefs.SetInt("MusicVolume", musicVolume);
+    }
+
+    private void OnGlobalVolumeSliderValueChanged(float value)
+    {
+        globalVolume = (int)value;
+        UpdateGlobalVolumeUI();
+    }
     private void OnGlobalVolumeInputFieldValueChanged(string value)
     {
         int.TryParse(value, out int currentVolume);
-        globalVolumeSlider.value = currentVolume;
+        globalVolume = currentVolume;
+        UpdateGlobalVolumeUI();
+    }
+    private void UpdateGlobalVolumeUI()
+    {
+        globalVolumeSlider.value = globalVolume;
+        globalVolumeInputField.text = globalVolume.ToString();
     }
 
     private void OnMusicVolumeSliderValueChanged(float value)
     {
-        musicInputField.text = value.ToString();
+        musicVolume = (int)value;
+        UpdateMusicVolumeUI();
     }
-
     private void OnMusicInputFieldValueChanged(string value)
     {
         int.TryParse(value, out int currentVolume);
-        musicVolumeSlider.value = currentVolume;
+        musicVolume = currentVolume;
+        UpdateMusicVolumeUI();
     }
-
+    private void UpdateMusicVolumeUI()
+    {
+        musicVolumeSlider.value = musicVolume;
+        musicInputField.text = musicVolume.ToString();
+    }
+    
     private void OnEffectsVolumeSliderValueChanged(float value)
     {
-        effectsInputField.text = value.ToString();
+        effectsVolume = (int)value;
+        UpdateEffectsVolumeUI();
     }
-
     private void OnEffectsInputFieldValueChanged(string value)
     {
         int.TryParse(value, out int currentVolume);
-        effectsVolumeSlider.value = currentVolume;
+        effectsVolume = currentVolume;
+        UpdateEffectsVolumeUI();
+    }
+    private void UpdateEffectsVolumeUI()
+    {
+        effectsVolumeSlider.value = effectsVolume;
+        effectsInputField.text = effectsVolume.ToString();
     }
 }
