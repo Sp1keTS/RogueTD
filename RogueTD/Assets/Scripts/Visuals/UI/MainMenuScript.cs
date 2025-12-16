@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -11,6 +12,8 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField] int scene;
     [SerializeField] GameObject mainMenuCanvas;
     [SerializeField] GameObject settingsCanvas;
+    
+    [SerializeField] AudioClip menuMusic;
     void Start()
     {
         newGameButton = newGameButton.GetComponent<Button>();

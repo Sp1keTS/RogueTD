@@ -4,22 +4,22 @@ using TMPro;
 
 public class SettingsScript : MonoBehaviour
 {
-    [SerializeField] Button goBackButton;
-    [SerializeField] Button soundSettingsButton;
-    [SerializeField] Button saveSettingsButton;
+    [SerializeField] private  Button goBackButton;
+    [SerializeField] private  Button soundSettingsButton;
+    [SerializeField] private  Button saveSettingsButton;
     
-    [SerializeField] GameObject mainMenuCanvas;
-    [SerializeField] GameObject settingsCanvas;
-    [SerializeField] Slider globalVolumeSlider;
-    [SerializeField] Slider effectsVolumeSlider;
-    [SerializeField] Slider musicVolumeSlider;
-    [SerializeField] TMP_InputField globalVolumeInputField;
-    [SerializeField] TMP_InputField effectsInputField;
-    [SerializeField] TMP_InputField musicInputField;
+    [SerializeField] private  GameObject mainMenuCanvas;
+    [SerializeField] private  GameObject settingsCanvas;
+    [SerializeField] private  Slider globalVolumeSlider;
+    [SerializeField] private  Slider effectsVolumeSlider;
+    [SerializeField] private  Slider musicVolumeSlider;
+    [SerializeField] private  TMP_InputField globalVolumeInputField;
+    [SerializeField] private  TMP_InputField effectsInputField;
+    [SerializeField] private  TMP_InputField musicInputField;
     
-    [SerializeField] int defaultVolume = 100;
-    [SerializeField] int defaultEffectsVolume = 100;
-    [SerializeField] int defaultMusicVolume = 100;
+    [SerializeField] private int defaultVolume = 100;
+    [SerializeField] private int defaultEffectsVolume = 100;
+    [SerializeField] private int defaultMusicVolume = 100;
     
     private int globalVolume;
     private int effectsVolume;
@@ -72,15 +72,19 @@ public class SettingsScript : MonoBehaviour
 
     private void LoadSettings()
     {
-        if (PlayerPrefs.HasKey("GlobalVolume"))
-            globalVolume = PlayerPrefs.GetInt("GlobalVolume");
+        if (PlayerPrefs.HasKey("MasterVolume"))
+            globalVolume = (int)(PlayerPrefs.GetFloat("MasterVolume") * 100f);
         else globalVolume = defaultVolume;
-        if (PlayerPrefs.HasKey("EffectsVolume"))
-            effectsVolume = PlayerPrefs.GetInt("EffectsVolume");
+        if (PlayerPrefs.HasKey("SoundFXVolume"))
+            effectsVolume = (int)(PlayerPrefs.GetFloat("SoundFXVolume") * 100f);
         else effectsVolume = defaultEffectsVolume;
         if (PlayerPrefs.HasKey("MusicVolume"))
-            musicVolume = PlayerPrefs.GetInt("MusicVolume");
+            musicVolume = (int)(PlayerPrefs.GetFloat("MusicVolume") * 100f);
         else musicVolume = defaultMusicVolume;
+        
+        Debug.Log(PlayerPrefs.GetFloat("MasterVolume"));
+        Debug.Log(PlayerPrefs.GetFloat("SoundFXVolume"));
+        Debug.Log(PlayerPrefs.GetFloat("MusicVolume"));
         
         UpdateGlobalVolumeUI();
         UpdateEffectsVolumeUI();
@@ -89,9 +93,10 @@ public class SettingsScript : MonoBehaviour
 
     private void SaveSettings()
     {
-        PlayerPrefs.SetInt("GlobalVolume", globalVolume);
-        PlayerPrefs.SetInt("EffectsVolume", effectsVolume);
-        PlayerPrefs.SetInt("MusicVolume", musicVolume);
+        PlayerPrefs.SetFloat("MasterVolume", globalVolume / 100f);
+        PlayerPrefs.SetFloat("SoundFXVolume", effectsVolume / 100f);
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume / 100f);
+        AudioMixerManager.instance.UpdateVolume();
     }
 
     private void OnGlobalVolumeSliderValueChanged(float value)
