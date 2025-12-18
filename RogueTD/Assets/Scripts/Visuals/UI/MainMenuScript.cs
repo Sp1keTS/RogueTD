@@ -13,16 +13,21 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField] GameObject settingsCanvas;
     
     [SerializeField] AudioClip menuMusic;
+    
     void Start()
     {
-        GameState.Instance = new GameState();
+        GameState.Instance.LoadGameState();
+        
         newGameButton = newGameButton.GetComponent<Button>();
         continueButton = continueButton.GetComponent<Button>();
         settingsButton = settingsButton.GetComponent<Button>();
         scene = SceneManager.GetActiveScene().buildIndex + 1;
+        
         newGameButton.onClick.AddListener(OnNewGameButtonClick);
         continueButton.onClick.AddListener(OnContinueButtonClick);
         settingsButton.onClick.AddListener(OnSettingsButtonClick);
+        
+        continueButton.interactable = GameState.Instance.HasSavedData();
     }
 
     private void OnNewGameButtonClick()
@@ -45,5 +50,4 @@ public class MainMenuScript : MonoBehaviour
             mainMenuCanvas.SetActive(false);
         }
     }
-
 }

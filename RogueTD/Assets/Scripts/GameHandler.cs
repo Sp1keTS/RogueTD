@@ -17,38 +17,36 @@ public class GameHandler : MonoBehaviour
 
     void Start()
     {
-        
         ConstructionGridManager.ConstructionGrid = constructionGrid;
         
         if (GameState.Instance.IsANewRun)
         {
+            GameState.Instance.ResetGameState();
             GenerateResearchTree();
             LoadUITree();
-            GameState.Instance.ResetGameState();
-            GameState.Instance.IsANewRun = false;
             GameState.Instance.Initialize(300, 1);
             GameState.Instance.Wave = 1;
         }
         else
         {
-            LoadUITree();
+            GameState.Instance.LoadBuildings();
+            GameState.Instance.LoadResearchTree();
             gridManager.RecreateBuildings();
             uiBlueprintHolder.LoadExistingBlueprints();
         }
+        
         instance = this;
         
         mapManager.CreateMap();
         CreateMainBuilding();
-        
-        
-        
     }
 
     private void LoadUITree()
     {
-        treeSolver.LoadAndSolveTree();
-        Debug.Log("Research tree Loaded successfully");
-        
+        if (treeSolver != null)
+        {
+            treeSolver.LoadAndSolveTree();
+        }
     }
 
     private void GenerateResearchTree()
@@ -56,38 +54,16 @@ public class GameHandler : MonoBehaviour
         if (researchTree != null)
         {
             researchTree.GenerateATree();
-            Debug.Log("Research tree generated successfully");
         }
-        else
-        {
-            Debug.LogError("ResearchTree is not assigned!");
-            
-        }
-        
     }
     
     private void CreateMainBuilding()
     {
-        if (mainBuildingBlueprint == null)
-        {
-            Debug.LogError("MainBuilding blueprint is not assigned!");
-            return;
-        }
+        if (mainBuildingBlueprint == null) return;
 
         var gridPosition = Vector2Int.zero;
         Building mainBuilding = BuildingFactory.CreateBuilding(gridPosition, mainBuildingBlueprint);
-        
-        if (mainBuilding != null)
-        {
-            Debug.Log("Main building created successfully at position (0,0)");
-        }
-        else
-        {
-            Debug.LogError("Failed to create main building");
-        }
     }
-
-
 
     void OnDestroy()
     {
