@@ -10,9 +10,8 @@ public class ConstructionGridManager : MonoBehaviour
     static public Dictionary<Vector2, Building> buildingsPos = new Dictionary<Vector2, Building>();
     
     [SerializeField] private List<BuildingSaveData> savePoses = new List<BuildingSaveData>();
-    [SerializeField] private GameState gameState;
     
-    private bool isRecreatingBuildings = false; // Флаг для отслеживания реконструкции
+    private bool isRecreatingBuildings = false; 
     
     static public Dictionary<Vector2, Building> BuildingsSpace => buildingsSpace;
     static public Dictionary<Vector2, Building> BuildingsPos => buildingsPos;
@@ -22,9 +21,9 @@ public class ConstructionGridManager : MonoBehaviour
     {
         BuildingFactory.OnBuildingCreated += OnBuildingCreated;
         
-        if (gameState != null && gameState.Buildings != null)
+        if (GameState.Instance != null && GameState.Instance.Buildings != null)
         {
-            savePoses = new List<BuildingSaveData>(gameState.Buildings);
+            savePoses = new List<BuildingSaveData>(GameState.Instance.Buildings);
             
             buildingsSpace.Clear();
             buildingsPos.Clear();
@@ -60,9 +59,9 @@ public class ConstructionGridManager : MonoBehaviour
         {
             savePoses.Add(new BuildingSaveData(gridPos, buildingBlueprint));
             
-            if (gameState != null)
+            if (GameState.Instance != null)
             {
-                gameState.Buildings = new List<BuildingSaveData>(savePoses); 
+                GameState.Instance.Buildings = new List<BuildingSaveData>(savePoses); 
             }
         }
     }
@@ -83,7 +82,7 @@ public class ConstructionGridManager : MonoBehaviour
     
     public void RecreateBuildings()
     {
-        if (!gameState || gameState.Buildings == null || gameState.Buildings.Count == 0)
+        if (GameState.Instance != null || GameState.Instance.Buildings == null || GameState.Instance.Buildings.Count == 0)
         {
             return;
         }
@@ -92,7 +91,7 @@ public class ConstructionGridManager : MonoBehaviour
         
         try
         {
-            var buildingsToRecreate = new List<BuildingSaveData>(gameState.Buildings);
+            var buildingsToRecreate = new List<BuildingSaveData>(GameState.Instance.Buildings);
             
             foreach (var saveData in buildingsToRecreate)
             {
@@ -115,9 +114,9 @@ public class ConstructionGridManager : MonoBehaviour
     {
         savePoses.Clear();
         
-        if (gameState != null)
+        if (GameState.Instance != null)
         {
-            gameState.Buildings = new List<BuildingSaveData>();
+            GameState.Instance.Buildings = new List<BuildingSaveData>();
         }
         
     }
@@ -126,9 +125,9 @@ public class ConstructionGridManager : MonoBehaviour
     {
         savePoses.RemoveAll(data => data.Position == position);
         
-        if (gameState != null)
+        if (GameState.Instance != null)
         {
-            gameState.Buildings = new List<BuildingSaveData>(savePoses);
+            GameState.Instance.Buildings = new List<BuildingSaveData>(savePoses);
         }
         
     }

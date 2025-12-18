@@ -8,7 +8,6 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField] Button newGameButton;
     [SerializeField] Button continueButton;
     [SerializeField] Button settingsButton;
-    [SerializeField] GameState gameState;
     [SerializeField] int scene;
     [SerializeField] GameObject mainMenuCanvas;
     [SerializeField] GameObject settingsCanvas;
@@ -16,6 +15,7 @@ public class MainMenuScript : MonoBehaviour
     [SerializeField] AudioClip menuMusic;
     void Start()
     {
+        GameState.Instance = new GameState();
         newGameButton = newGameButton.GetComponent<Button>();
         continueButton = continueButton.GetComponent<Button>();
         settingsButton = settingsButton.GetComponent<Button>();
@@ -27,13 +27,13 @@ public class MainMenuScript : MonoBehaviour
 
     private void OnNewGameButtonClick()
     {
-        gameState.IsANewRun = true;
+        GameState.Instance.IsANewRun = true;
         SceneManager.LoadScene(scene);
     }
 
     private void OnContinueButtonClick()
     {
-        gameState.IsANewRun = false;
+        GameState.Instance.IsANewRun = false;
         SceneManager.LoadScene(scene);
     }
 

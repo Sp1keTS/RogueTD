@@ -7,7 +7,6 @@ public class ResearchTree : MonoBehaviour
 {
     [SerializeField] static public int _maxRank = 7;
     [SerializeField] private int rootCount = 4;
-    [SerializeField] GameState gameState;
     
     static List<TreeNode> allAvailableNodes = new List<TreeNode>();
     private Dictionary<TreeNode, float> _weightedNodes = new Dictionary<TreeNode, float>();
@@ -40,7 +39,7 @@ public class ResearchTree : MonoBehaviour
     {
         try
         {
-            gameState.TreeSaveData = new TreeSaveData
+            GameState.Instance.TreeSaveData = new TreeSaveData
             {
                 rootSaveNodes = new List<TreeSaveData.TreeSaveNode>()
             };
@@ -56,7 +55,7 @@ public class ResearchTree : MonoBehaviour
             
             CreateRoots();
             
-            if (gameState.TreeSaveData.rootSaveNodes == null || gameState.TreeSaveData.rootSaveNodes.Count == 0)
+            if (GameState.Instance.TreeSaveData.rootSaveNodes == null || GameState.Instance.TreeSaveData.rootSaveNodes.Count == 0)
             {
                 Debug.LogError("No root nodes created!");
                 return;
@@ -66,7 +65,7 @@ public class ResearchTree : MonoBehaviour
             
             UnloadAllNodes();
             
-            Debug.Log($"Tree generated successfully with {gameState.TreeSaveData.rootSaveNodes.Count} root nodes");
+            Debug.Log($"Tree generated successfully with {GameState.Instance.TreeSaveData.rootSaveNodes.Count} root nodes");
         }
         catch (System.Exception e)
         {
@@ -76,7 +75,7 @@ public class ResearchTree : MonoBehaviour
 
     private void CreateRoots()
     {
-        gameState.TreeSaveData.rootSaveNodes.Clear();
+        GameState.Instance.TreeSaveData.rootSaveNodes.Clear();
         _weightedNodes.Clear();
         
         foreach (TreeNode node in allAvailableNodes)
@@ -103,7 +102,7 @@ public class ResearchTree : MonoBehaviour
                     new List<TreeSaveData.TreeSaveNode>()
                 );
                 
-                gameState.TreeSaveData.rootSaveNodes.Add(rootSaveNode);
+                GameState.Instance.TreeSaveData.rootSaveNodes.Add(rootSaveNode);
                 _weightedNodes.Remove(rootNode);
                 
                 Debug.Log($"Added root node: {rootNode.name}");
@@ -113,7 +112,7 @@ public class ResearchTree : MonoBehaviour
 
     public void CreateBranches()
     {
-        var currentRank = gameState.TreeSaveData.rootSaveNodes;
+        var currentRank = GameState.Instance.TreeSaveData.rootSaveNodes;
         var nextRank = new List<TreeSaveData.TreeSaveNode>();
         
         for (int rank = 1; rank < _maxRank; rank++)

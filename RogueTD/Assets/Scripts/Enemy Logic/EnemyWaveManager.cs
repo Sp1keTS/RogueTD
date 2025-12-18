@@ -8,7 +8,6 @@ public class EnemyWaveManager : MonoBehaviour
 {
     [SerializeField] private Button waveButton;
     [SerializeField] private EnemyWaveGenerator waveGenerator;
-    [SerializeField] private GameState gameState;
     [SerializeField] private float timeBetweenSubWaves = 5f;
     
     private bool isWaveActive = false;
@@ -22,7 +21,7 @@ public class EnemyWaveManager : MonoBehaviour
     
     void Start()
     {
-        currentWaveNumber = gameState.Wave;
+        currentWaveNumber = GameState.Instance.Wave;
         
         if (waveButton)
         {
@@ -41,9 +40,9 @@ public class EnemyWaveManager : MonoBehaviour
     public void StartWave()
     {
         if (isWaveActive) return;
-        if (gameState.CurrentWave != null)
+        if (GameState.Instance.CurrentWave != null)
         {
-            currentWave = gameState.CurrentWave;
+            currentWave = GameState.Instance.CurrentWave;
         }
         else {currentWave = waveGenerator.GenerateWave(currentWaveNumber);}
         
@@ -159,7 +158,7 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if (enemy)
         {
-            gameState.AddCurrency(enemy.Reward);
+            GameState.Instance.AddCurrency(enemy.Reward);
         }
     }
     
@@ -180,10 +179,10 @@ public class EnemyWaveManager : MonoBehaviour
         if (!isWaveActive) return;
         
         int waveReward = CalculateWaveReward(currentWaveNumber);
-        gameState.AddCurrency(waveReward);
+        GameState.Instance.AddCurrency(waveReward);
         
         currentWaveNumber++;
-        gameState.ChangeWave(currentWaveNumber);
+        GameState.Instance.ChangeWave(currentWaveNumber);
         
         isWaveActive = false;
         EnemyManager.OnEnemyDied -= OnEnemyDied;

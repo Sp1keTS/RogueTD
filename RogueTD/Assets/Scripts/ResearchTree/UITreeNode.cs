@@ -8,7 +8,6 @@ public class UITreeNode : MonoBehaviour
 {
     [SerializeField] Button button;
     [SerializeField] Image image;
-    [SerializeField] private GameState gameState;
     ResearchTree.TreeSaveData.TreeSaveNode treeSaveNode;
     public ResearchTree.TreeSaveData.TreeSaveNode  TreeSaveNode {get => treeSaveNode; set => treeSaveNode = value; }
     public ProjectileTowerNode towerToUpgrade {get; set;}
@@ -30,10 +29,10 @@ public class UITreeNode : MonoBehaviour
         bool isRootNode = treeSaveNode.visitedNodes == null || treeSaveNode.visitedNodes.Count == 0;
         bool isChildNodeAvailable = !isRootNode && treeSaveNode.visitedNodes[0].IsActive;
         
-        Debug.Log(gameState.Currency);
+        Debug.Log(GameState.Instance.Currency);
         Debug.Log(TreeSaveNode.currentNode.Cost);
-        Debug.Log(gameState.SpendCurrency(TreeSaveNode.currentNode.Cost));
-        if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable) && gameState.SpendCurrency(TreeSaveNode.currentNode.Cost))
+        Debug.Log(GameState.Instance.SpendCurrency(TreeSaveNode.currentNode.Cost));
+        if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable) && GameState.Instance.SpendCurrency(TreeSaveNode.currentNode.Cost))
         {
             if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
             {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using AYellowpaper.SerializedCollections;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "GameState", menuName = "Tower Defense/Game State")]
-public class GameState : ScriptableObject
+public class GameState
 {
-    [SerializeField]private bool isANewRun;
+    public static GameState Instance;
+    private bool isANewRun;
     public ResearchTree.TreeSaveData TreeSaveData { get; set; }
     public bool IsANewRun { get => isANewRun; set  => isANewRun = value; }
     

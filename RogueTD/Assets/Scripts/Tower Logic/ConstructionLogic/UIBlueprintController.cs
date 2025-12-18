@@ -10,7 +10,6 @@ public class UIBlueprintController : MonoBehaviour
     private GameObject _buildingPreview;
     private SpriteRenderer _previewRenderer;
     private Color _originalPreviewColor;
-    [SerializeField] GameState gameState;
     
     private void Start()
     {
@@ -80,7 +79,7 @@ public class UIBlueprintController : MonoBehaviour
         
         Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         Vector2Int gridPos = GetGridPosition(mousePosition);
-        if (BuildingFactory.CanPlaceBuilding(gridPos, selectedBlueprint) && gameState.SpendCurrency(selectedBlueprint.Cost))
+        if (BuildingFactory.CanPlaceBuilding(gridPos, selectedBlueprint) && GameState.Instance.SpendCurrency(selectedBlueprint.Cost))
         {
             ConstructionGridManager.TryCreateBlueprint(selectedBlueprint, gridPos);
         }
