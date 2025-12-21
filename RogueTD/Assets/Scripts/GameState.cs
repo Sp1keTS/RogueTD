@@ -62,7 +62,6 @@ public class GameState
         set
         {
             currentWave = value;
-            SaveToJson();
         }
     }
     
@@ -72,7 +71,6 @@ public class GameState
         set 
         {
             buildings = value ?? new List<BuildingSaveData>(); 
-            //SaveBuildingsToJson();
         }
     }
 

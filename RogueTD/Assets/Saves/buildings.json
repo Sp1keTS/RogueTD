@@ -1,0 +1,38 @@
+{
+  "$id": "1",
+  "Buildings": [
+    {
+      "$id": "2",
+      "Position": {
+        "$id": "3",
+        "x": 0,
+        "y": 0,
+        "magnitude": 0.0,
+        "sqrMagnitude": 0
+      },
+      "BlueprintName": "MainBuildingBlueprint"
+    },
+    {
+      "$id": "4",
+      "Position": {
+        "$id": "5",
+        "x": -3,
+        "y": 0,
+        "magnitude": 3.0,
+        "sqrMagnitude": 9
+      },
+      "BlueprintName": "RapidTurretBlueprint"
+    },
+    {
+      "$id": "6",
+      "Position": {
+        "$id": "7",
+        "x": 0,
+        "y": 3,
+        "magnitude": 3.0,
+        "sqrMagnitude": 9
+      },
+      "BlueprintName": "RapidTurretBlueprint"
+    }
+  ]
+}

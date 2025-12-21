@@ -23,6 +23,7 @@ public class GameHandler : MonoBehaviour
         {
             GameState.Instance.ResetGameState();
             GenerateResearchTree();
+            LoadUITree();
             GameState.Instance.Initialize(300, 1);
             GameState.Instance.Wave = 1;
         }
@@ -30,11 +31,12 @@ public class GameHandler : MonoBehaviour
         {
             GameState.Instance.LoadBuildings();
             GameState.Instance.LoadResearchTree();
+            LoadUITree();
             gridManager.RecreateBuildings();
             uiBlueprintHolder.LoadExistingBlueprints();
         }
         
-        LoadUITree();
+        
         instance = this;
         
         mapManager.CreateMap();

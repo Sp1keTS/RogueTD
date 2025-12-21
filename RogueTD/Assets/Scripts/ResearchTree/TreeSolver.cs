@@ -40,6 +40,11 @@ public class TreeSolver : MonoBehaviour
         {
             if (root == null) continue;
             ProcessBuildingNode(root);
+            if (root.IsActive && root.currentNode != null)
+            {
+                root.currentNode.LoadDependencies();
+                Debug.Log($"Загружены зависимости корневой ноды: {root.currentNodeId}");
+            }
             var direction = AngleToDirection(currentAngle);
             var position = centralPoint + (startRadius * direction);
             

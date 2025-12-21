@@ -82,6 +82,8 @@ public class UIBlueprintController : MonoBehaviour
         if (BuildingFactory.CanPlaceBuilding(gridPos, selectedBlueprint) && GameState.Instance.SpendCurrency(selectedBlueprint.Cost))
         {
             ConstructionGridManager.TryCreateBlueprint(selectedBlueprint, gridPos);
+            
+            GameState.Instance.SaveBuildingsToJson();
         }
         
     }

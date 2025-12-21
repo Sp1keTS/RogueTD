@@ -2,6 +2,6 @@
   "$id": "1",
   "Currency": 0,
   "Wave": 1,
-  "IsANewRun": true,
+  "IsANewRun": false,
   "CurrentWaveJson": ""
 }

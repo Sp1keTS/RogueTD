@@ -95,7 +95,7 @@ public class ConstructionGridManager : MonoBehaviour
             
             foreach (var saveData in buildingsToRecreate)
             {
-                if (saveData == null || saveData.Blueprint == null)
+                if (saveData == null || saveData.Blueprint == null || saveData.BlueprintName == "MainBuildingBlueprint")
                 {
                     continue;
                 }
