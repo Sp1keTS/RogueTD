@@ -11,7 +11,7 @@ public class BuildingSaveData
     public BuildingSaveData(Vector2Int position, BuildingBlueprint blueprint)
     {
         Position = position;
-        BlueprintName = blueprint.name;
+        BlueprintName = blueprint.buildingName;
     }
     public BuildingSaveData()
     {
@@ -39,7 +39,7 @@ public class BuildingSaveData
         {
             if (value != null)
             {
-                BlueprintName = value.name;
+                BlueprintName = value.buildingName;
                 if (BlueprintManager.blueprints != null)
                 {
                     BlueprintManager.blueprints[BlueprintName] = value;

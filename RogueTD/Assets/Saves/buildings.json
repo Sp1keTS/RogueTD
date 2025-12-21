@@ -10,29 +10,51 @@
         "magnitude": 0.0,
         "sqrMagnitude": 0
       },
-      "BlueprintName": "MainBuildingBlueprint"
+      "BlueprintName": "MainBuilding"
     },
     {
       "$id": "4",
       "Position": {
         "$id": "5",
-        "x": -3,
-        "y": 0,
-        "magnitude": 3.0,
-        "sqrMagnitude": 9
+        "x": -4,
+        "y": 2,
+        "magnitude": 4.472136,
+        "sqrMagnitude": 20
       },
-      "BlueprintName": "RapidTurretBlueprint"
+      "BlueprintName": "BasicTurret"
     },
     {
       "$id": "6",
       "Position": {
         "$id": "7",
-        "x": 0,
-        "y": 3,
-        "magnitude": 3.0,
-        "sqrMagnitude": 9
+        "x": 4,
+        "y": 2,
+        "magnitude": 4.472136,
+        "sqrMagnitude": 20
       },
-      "BlueprintName": "RapidTurretBlueprint"
+      "BlueprintName": "BasicTurret"
+    },
+    {
+      "$id": "8",
+      "Position": {
+        "$id": "9",
+        "x": 4,
+        "y": -2,
+        "magnitude": 4.472136,
+        "sqrMagnitude": 20
+      },
+      "BlueprintName": "BasicTurret"
+    },
+    {
+      "$id": "10",
+      "Position": {
+        "$id": "11",
+        "x": -4,
+        "y": -2,
+        "magnitude": 4.472136,
+        "sqrMagnitude": 20
+      },
+      "BlueprintName": "BasicTurret"
     }
   ]
 }

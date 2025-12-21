@@ -32,8 +32,8 @@ public class GameHandler : MonoBehaviour
             GameState.Instance.LoadBuildings();
             GameState.Instance.LoadResearchTree();
             LoadUITree();
-            gridManager.RecreateBuildings();
             uiBlueprintHolder.LoadExistingBlueprints();
+            gridManager.RecreateBuildings();
         }
         
         

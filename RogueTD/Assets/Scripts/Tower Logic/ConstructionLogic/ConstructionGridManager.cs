@@ -82,32 +82,40 @@ public class ConstructionGridManager : MonoBehaviour
     
     public void RecreateBuildings()
     {
-        if (GameState.Instance != null || GameState.Instance.Buildings == null || GameState.Instance.Buildings.Count == 0)
+    
+        if (GameState.Instance == null || GameState.Instance.Buildings == null || GameState.Instance.Buildings.Count == 0)
         {
             return;
         }
-        
+    
         isRecreatingBuildings = true;
-        
+    
         try
         {
             var buildingsToRecreate = new List<BuildingSaveData>(GameState.Instance.Buildings);
-            
+        
+        
             foreach (var saveData in buildingsToRecreate)
             {
-                if (saveData == null || saveData.Blueprint == null || saveData.BlueprintName == "MainBuildingBlueprint")
+                if (saveData.BlueprintName == "MainBuildingBlueprint")
                 {
                     continue;
                 }
-                
-                TryCreateBlueprint(saveData.Blueprint, saveData.Position);
+            
+                var blueprint = saveData.Blueprint;
+                if (blueprint == null)
+                {
+                    continue;
+                }
+            
+                TryCreateBlueprint(blueprint, saveData.Position);
             }
+        
         }
         finally
         {
             isRecreatingBuildings = false;
         }
-        
     }
     
     public void ClearAllSavedBuildings()
