@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class ResearchTree : MonoBehaviour
@@ -18,18 +19,58 @@ public class ResearchTree : MonoBehaviour
         [System.Serializable]
         public class TreeSaveNode
         {
-            public TreeSaveNode(TreeNode node, List<TreeSaveNode> nextNodes, List<TreeSaveNode> visited)
-            {
-                currentNode = node;
-                nextSaveNodes = nextNodes ?? new List<TreeSaveNode>();
-                visitedNodes = visited ?? new List<TreeSaveNode>();
-            }
-
-            public ProjectileTowerNode nodeToUpgrade; 
+            public string currentNodeId;
+            public string nodeToUpgradeId;
             public bool IsActive;
             public List<TreeSaveNode> nextSaveNodes;
             public List<TreeSaveNode> visitedNodes;
-            public TreeNode currentNode;
+        
+            public TreeSaveNode(TreeNode node, List<TreeSaveNode> nextNodes, List<TreeSaveNode> visited)
+            {
+                currentNodeId = node?.name ?? string.Empty;
+                nodeToUpgradeId = string.Empty;
+                IsActive = false;
+                nextSaveNodes = nextNodes ?? new List<TreeSaveNode>();
+                visitedNodes = visited ?? new List<TreeSaveNode>();
+            }
+        
+            public TreeSaveNode() 
+            {
+                nextSaveNodes = new List<TreeSaveNode>();
+                visitedNodes = new List<TreeSaveNode>();
+            }
+        
+            [JsonIgnore]
+            public TreeNode currentNode
+            {
+                get
+                {
+                    if (string.IsNullOrEmpty(currentNodeId))
+                        return null;
+                    
+                    return ResourceManager.GetTreeNode(currentNodeId);
+                }
+                set
+                {
+                    currentNodeId = value?.name ?? string.Empty;
+                }
+            }
+        
+            [JsonIgnore]
+            public ProjectileTowerNode nodeToUpgrade
+            {
+                get
+                {
+                    if (string.IsNullOrEmpty(nodeToUpgradeId))
+                        return null;
+                    
+                    return ResourceManager.GetTreeNode(nodeToUpgradeId) as ProjectileTowerNode;
+                }
+                set
+                {
+                    nodeToUpgradeId = value?.name ?? string.Empty;
+                }
+            }
         }
 
         public List<TreeSaveNode> rootSaveNodes;
@@ -64,8 +105,9 @@ public class ResearchTree : MonoBehaviour
             CreateBranches();
             
             UnloadAllNodes();
-            
+            GameState.Instance.SaveTreeToJson();
             Debug.Log($"Tree generated successfully with {GameState.Instance.TreeSaveData.rootSaveNodes.Count} root nodes");
+            
         }
         catch (System.Exception e)
         {

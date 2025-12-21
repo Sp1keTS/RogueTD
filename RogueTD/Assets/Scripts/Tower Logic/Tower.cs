@@ -98,7 +98,7 @@ public class Tower : Building
     }
     
     // Вспомогательные методы для преобразования ResourceReference[] в T[]
-    protected T[] ConvertResourceReferencesToValues<T>(ResourceReference<T>[] references) where T : Resource
+    protected T[] ConvertResourceReferencesToValues<T>(ResourceReference<T>[] references) where T : ScriptableObject
     {
         if (references == null || references.Length == 0)
             return Array.Empty<T>();

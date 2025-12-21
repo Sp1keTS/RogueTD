@@ -9,26 +9,27 @@ public static class ResourceManager
     private static readonly Dictionary<string, ProjectileEffect> _projectileEffects = new();
     private static readonly Dictionary<string, StatusEffect> _statusEffects = new();
     private static readonly Dictionary<string, SecondaryProjectileTowerBehavior> _secondaryBehaviors = new();
-    private static readonly Dictionary<string, ProjectileTowerBehavior> _projectileTowerBehaviors = new(); // ← ДОБАВИЛИ
-
+    private static readonly Dictionary<string, ProjectileTowerBehavior> _projectileTowerBehaviors = new();
+    private static readonly Dictionary<string, TreeNode> _treeNodes = new(); 
     public static IReadOnlyDictionary<string, ProjectileBehavior> ProjectileBehaviors => _projectileBehaviors;
     public static IReadOnlyDictionary<string, ProjectileEffect> ProjectileEffects => _projectileEffects;
     public static IReadOnlyDictionary<string, StatusEffect> StatusEffects => _statusEffects;
     public static IReadOnlyDictionary<string, SecondaryProjectileTowerBehavior> SecondaryBehaviors => _secondaryBehaviors;
-    public static IReadOnlyDictionary<string, ProjectileTowerBehavior> ProjectileTowerBehaviors => _projectileTowerBehaviors; 
+    public static IReadOnlyDictionary<string, ProjectileTowerBehavior> ProjectileTowerBehaviors => _projectileTowerBehaviors;
+    public static IReadOnlyDictionary<string, TreeNode> TreeNodes => _treeNodes;
     
     private const string BEHAVIORS_FOLDER = "Behaviors";
     private const string EFFECTS_FOLDER = "Effects"; 
     private const string STATUS_FOLDER = "StatusEffects";
     private const string SECONDARY_FOLDER = "SecondaryBehaviors";
-    private const string PROJECTILE_TOWER_BEHAVIORS_FOLDER = "ProjectileTowerBehaviors"; 
+    private const string PROJECTILE_TOWER_BEHAVIORS_FOLDER = "ProjectileTowerBehaviors";
+    private const string TREE_NODES_FOLDER = "Nodes"; 
     
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     public static void Initialize()
     {
         #if UNITY_EDITOR
         CreateResourceFoldersIfNeeded();
-       
         #endif
         LoadAllResources();
     }
@@ -43,7 +44,14 @@ public static class ResourceManager
             Debug.Log("Created Resources folder");
         }
 
-        string[] folders = { BEHAVIORS_FOLDER, EFFECTS_FOLDER, STATUS_FOLDER, SECONDARY_FOLDER, PROJECTILE_TOWER_BEHAVIORS_FOLDER }; // ← ДОБАВИЛИ
+        string[] folders = { 
+            BEHAVIORS_FOLDER, 
+            EFFECTS_FOLDER, 
+            STATUS_FOLDER, 
+            SECONDARY_FOLDER, 
+            PROJECTILE_TOWER_BEHAVIORS_FOLDER,
+            TREE_NODES_FOLDER 
+        };
         
         foreach (string folder in folders)
         {
@@ -57,8 +65,6 @@ public static class ResourceManager
         
         AssetDatabase.Refresh();
     }
-
-    
 #endif
 
     public static void LoadAllResources()
@@ -69,9 +75,12 @@ public static class ResourceManager
         LoadResources<ProjectileEffect>(EFFECTS_FOLDER, _projectileEffects);
         LoadResources<StatusEffect>(STATUS_FOLDER, _statusEffects);
         LoadResources<SecondaryProjectileTowerBehavior>(SECONDARY_FOLDER, _secondaryBehaviors);
-        LoadResources<ProjectileTowerBehavior>(PROJECTILE_TOWER_BEHAVIORS_FOLDER, _projectileTowerBehaviors); // ← ДОБАВИЛИ
+        LoadResources<ProjectileTowerBehavior>(PROJECTILE_TOWER_BEHAVIORS_FOLDER, _projectileTowerBehaviors);
+        LoadResources<TreeNode>(TREE_NODES_FOLDER, _treeNodes); 
 
-        Debug.Log($"ResourceManager loaded: {_projectileBehaviors.Count} behaviors, {_projectileEffects.Count} effects, {_projectileTowerBehaviors.Count} tower behaviors");
+        Debug.Log($"ResourceManager loaded: {_projectileBehaviors.Count} behaviors, " +
+                 $"{_projectileEffects.Count} effects, {_projectileTowerBehaviors.Count} tower behaviors, " +
+                 $"{_treeNodes.Count} tree nodes"); 
     }
 
     public static void DropResources()
@@ -86,10 +95,11 @@ public static class ResourceManager
         _projectileEffects.Clear();
         _statusEffects.Clear();
         _secondaryBehaviors.Clear();
-        _projectileTowerBehaviors.Clear(); // ← ДОБАВИЛИ
+        _projectileTowerBehaviors.Clear();
+        _treeNodes.Clear(); // ← ДОБАВИЛИ
     }
     
-    private static void LoadResources<T>(string folderPath, Dictionary<string, T> dictionary) where T : Resource
+    private static void LoadResources<T>(string folderPath, Dictionary<string, T> dictionary) where T : ScriptableObject
     {
         T[] resources = Resources.LoadAll<T>(folderPath);
         foreach (T resource in resources)
@@ -100,6 +110,59 @@ public static class ResourceManager
             }
         }
     }
+
+
+    public static void RegisterTreeNode(string key, TreeNode node)
+    {
+        if (node != null && !_treeNodes.ContainsKey(key))
+        {
+            _treeNodes[key] = node;
+            Debug.Log($"TreeNode registered: {key}");
+        }
+    }
+
+    public static TreeNode GetTreeNode(string key)
+    {
+        if (_treeNodes.TryGetValue(key, out var node))
+        {
+            return node;
+        }
+        
+        var loadedNode = Resources.Load<TreeNode>($"{TREE_NODES_FOLDER}/{key}");
+        if (loadedNode != null)
+        {
+            _treeNodes[key] = loadedNode;
+            return loadedNode;
+        }
+        
+        return null;
+    }
+
+    public static T GetTreeNode<T>(string key) where T : TreeNode
+    {
+        var node = GetTreeNode(key);
+        return node as T;
+    }
+
+    public static List<TreeNode> GetAllTreeNodes()
+    {
+        return new List<TreeNode>(_treeNodes.Values);
+    }
+
+    public static List<TreeNode> GetTreeNodesByTag(string tag)
+    {
+        var result = new List<TreeNode>();
+        foreach (var node in _treeNodes.Values)
+        {
+            if (node.Tags != null && System.Array.IndexOf(node.Tags, tag) >= 0)
+            {
+                result.Add(node);
+            }
+        }
+        return result;
+    }
+
+    // === КОПИРУЕМ СУЩЕСТВУЮЩИЕ МЕТОДЫ (остаются без изменений) ===
 
     public static void RegisterTowerBehavior(string key, ProjectileTowerBehavior behavior)
     {
@@ -113,8 +176,6 @@ public static class ResourceManager
     {
         return _projectileTowerBehaviors.TryGetValue(key, out var behavior) ? behavior : null;
     }
-
-   
 
     public static void RegisterProjectileBehavior(string key, ProjectileBehavior behavior)
     {
@@ -136,7 +197,8 @@ public static class ResourceManager
         if (typeof(T) == typeof(ProjectileEffect)) return _projectileEffects as Dictionary<string, T>;
         if (typeof(T) == typeof(StatusEffect)) return _statusEffects as Dictionary<string, T>;
         if (typeof(T) == typeof(SecondaryProjectileTowerBehavior)) return _secondaryBehaviors as Dictionary<string, T>;
-        if (typeof(T) == typeof(ProjectileTowerBehavior)) return _projectileTowerBehaviors as Dictionary<string, T>; // ← ДОБАВИЛИ
+        if (typeof(T) == typeof(ProjectileTowerBehavior)) return _projectileTowerBehaviors as Dictionary<string, T>;
+        if (typeof(T) == typeof(TreeNode)) return _treeNodes as Dictionary<string, T>; // ← ДОБАВИЛИ
         return null;
     }
     

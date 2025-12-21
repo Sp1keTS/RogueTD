@@ -69,7 +69,7 @@ public static class BlueprintManager
     }
     
 
-    private static ResourceReference<T>[] ConvertToResourceReferences<T>(T[] items) where T : Resource
+    private static ResourceReference<T>[] ConvertToResourceReferences<T>(T[] items) where T : ScriptableObject
     {
         if (items == null || items.Length == 0)
             return null;
@@ -82,7 +82,7 @@ public static class BlueprintManager
         return references;
     }
 
-    private static ResourceReference<T> ConvertToResourceReference<T>(T item) where T : Resource
+    private static ResourceReference<T> ConvertToResourceReference<T>(T item) where T : ScriptableObject
     {
         if (item == null)
             return null;

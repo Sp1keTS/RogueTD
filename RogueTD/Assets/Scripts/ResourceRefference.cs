@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 [Serializable]
-public class ResourceReference<T> where T : Resource
+public class ResourceReference<T> where T : ScriptableObject
 {
     [SerializeField] private string resourceName;
     [SerializeField] private T directReference; 

@@ -23,31 +23,32 @@ public class UITreeNode : MonoBehaviour
     {
         image.sprite = treeSaveNode.currentNode.Icon;
     }
-    
+
     private void OnButtonClick()
     {
         bool isRootNode = treeSaveNode.visitedNodes == null || treeSaveNode.visitedNodes.Count == 0;
-        bool isChildNodeAvailable = !isRootNode && treeSaveNode.visitedNodes[0].IsActive;
-        
-        Debug.Log(GameState.Instance.Currency);
-        Debug.Log(TreeSaveNode.currentNode.Cost);
-        Debug.Log(GameState.Instance.SpendCurrency(TreeSaveNode.currentNode.Cost));
-        if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable) && GameState.Instance.SpendCurrency(TreeSaveNode.currentNode.Cost))
+        bool isChildNodeAvailable = IsParentActive();
+
+        if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable))
         {
-            if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
+            if (GameState.Instance.SpendCurrency(treeSaveNode.currentNode.Cost))
             {
-                if (towerToUpgrade != null && towerToUpgrade.TowerBlueprint != null)
+                if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
                 {
-                    upgradeNode.ApplyUpgrade(towerToUpgrade.TowerBlueprint, upgradeNode.CurrentRank);
+                    if (towerToUpgrade != null && towerToUpgrade.TowerBlueprint != null)
+                    {
+                        upgradeNode.ApplyUpgrade(towerToUpgrade.TowerBlueprint, upgradeNode.CurrentRank);
+                    }
                 }
+
+                treeSaveNode.currentNode.OnActivate();
+                treeSaveNode.IsActive = true;
+                button.interactable = false;
+                GameState.Instance.SaveTreeToJson();
             }
-            
-            treeSaveNode.currentNode.OnActivate();
-            treeSaveNode.IsActive = true;
-            button.interactable = false;
         }
     }
-    
+
     private void OnEnable()
     {
     }
@@ -55,7 +56,21 @@ public class UITreeNode : MonoBehaviour
     private void OnDisable()
     {
     }
-
+    private bool IsRootNode()
+    {
+        return treeSaveNode.visitedNodes == null || treeSaveNode.visitedNodes.Count == 0;
+    }
+    private bool IsParentActive()
+    {
+        if (IsRootNode()) return true; 
+        if (treeSaveNode.visitedNodes != null && treeSaveNode.visitedNodes.Count > 0)
+        {
+            var parentNode = treeSaveNode.visitedNodes[treeSaveNode.visitedNodes.Count - 1];
+            return parentNode != null && parentNode.IsActive;
+        }
+    
+        return false;
+    }
     private void OnDestroy()
     {
         button.onClick.RemoveListener(OnButtonClick);

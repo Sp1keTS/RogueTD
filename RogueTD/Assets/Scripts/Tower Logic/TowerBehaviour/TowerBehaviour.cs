@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TowerBehaviour : Resource
+public class TowerBehaviour : ScriptableObject
 {
     
 }

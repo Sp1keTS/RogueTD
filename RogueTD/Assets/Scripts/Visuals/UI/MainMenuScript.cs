@@ -50,4 +50,6 @@ public class MainMenuScript : MonoBehaviour
             mainMenuCanvas.SetActive(false);
         }
     }
+    
+    
 }

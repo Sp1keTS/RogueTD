@@ -71,8 +71,8 @@ public class GameState
         get => buildings; 
         set 
         {
-            buildings = value ?? new List<BuildingSaveData>();
-            SaveBuildingsToJson();
+            buildings = value ?? new List<BuildingSaveData>(); 
+            //SaveBuildingsToJson();
         }
     }
 
@@ -197,7 +197,8 @@ public class GameState
             Formatting = Formatting.Indented,
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
-            TypeNameHandling = TypeNameHandling.None
+            TypeNameHandling = TypeNameHandling.None,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects 
         };
     }
 
