@@ -55,7 +55,7 @@ public class BuildingFactory : MonoBehaviour
     
     public static void DestroyBuilding(Building buildingToDestroy)
     {
-        if (buildingToDestroy != null)
+        if (buildingToDestroy)
         {
             ConstructionGridManager.RemoveBuilding(buildingToDestroy);
             Destroy(buildingToDestroy.gameObject);
@@ -64,9 +64,9 @@ public class BuildingFactory : MonoBehaviour
     
     public static bool  CanPlaceBuilding(Vector2 gridPos, BuildingBlueprint buildingBlueprint)
     {
-        for (int x = 0; x < buildingBlueprint.Size.x; x++)
+        for (int x = 1; x < buildingBlueprint.Size.x +1; x++)
         {
-            for (int y = 0; y < buildingBlueprint.Size.y; y++)
+            for (int y = 1; y < buildingBlueprint.Size.y +1; y++)
             {
                 Vector2 checkPos = gridPos + new Vector2(x, y);
                 if (ConstructionGridManager.BuildingsSpace.ContainsKey(checkPos) && ConstructionGridManager.BuildingsSpace[checkPos] != null)
@@ -117,7 +117,6 @@ public class BuildingFactory : MonoBehaviour
         {
             for (int y = 0; y < buildingBlueprint.Size.y; y++)
             {
-                // Debug.Log(gridPos + new Vector2(x, y) + buildingBlueprint.buildingName);
                 Vector2 occupiedPos = gridPos + new Vector2(x, y);
                 ConstructionGridManager.BuildingsSpace[occupiedPos] = building;
             }
