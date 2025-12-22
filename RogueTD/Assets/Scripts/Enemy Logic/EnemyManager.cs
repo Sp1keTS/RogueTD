@@ -24,7 +24,6 @@ public static class EnemyManager
         if (parent)
             enemyInstance.transform.SetParent(parent);
     
-        // Инициализируем врага перед регистрацией
         enemyInstance.InitializeImmediate();
         RegisterEnemy(enemyInstance);
     

@@ -1,19 +1,20 @@
+using System;
 using UnityEngine;
-
+using Ilumisoft.HealthSystem;
 public class Building : MonoBehaviour
 {
     public string buildingName;
-    [SerializeField] private int healthPoints;
-    [SerializeField] private int maxHealthPoints;
+    [SerializeField] private HealthComponent healthComponent;
     [SerializeField] private Vector2Int size;
     [SerializeField] private Collider2D buildingCollider;
-    
-    public int CurrentHealthPoints => healthPoints;
+    static public Action<Vector2Int> onBuildingDestroyed;
+    public float CurrentHealthPoints => healthComponent.CurrentHealth;
+    public Vector2Int GridPosition {get; set; }
     public Vector2Int Size => size;
     
     void Awake()
     {
-        healthPoints = maxHealthPoints;
+        healthComponent.CurrentHealth = healthComponent.MaxHealth;
         
         if (!buildingCollider)
         {
@@ -34,11 +35,12 @@ public class Building : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        healthPoints -= damage;
+        healthComponent.CurrentHealth -= damage;
         
-        if (healthPoints <= 0)
+        if (healthComponent.CurrentHealth <= 0)
         {
             BuildingFactory.DestroyBuilding(this);
+            onBuildingDestroyed.Invoke(GridPosition);
         }
     }
     
@@ -56,13 +58,13 @@ public class Building : MonoBehaviour
     
     public void Initialize(int maxHP)
     {
-        maxHealthPoints = maxHP;
-        healthPoints = maxHealthPoints;
+        healthComponent.MaxHealth = maxHP;
+        healthComponent.CurrentHealth = healthComponent.MaxHealth;
     }
 
     public void InitializeFromBlueprint(BuildingBlueprint buildingBlueprint)
     {
-        maxHealthPoints = buildingBlueprint.MaxHealthPoints;
-        healthPoints = maxHealthPoints;
+        healthComponent.MaxHealth = buildingBlueprint.MaxHealthPoints;
+        healthComponent.CurrentHealth = healthComponent.MaxHealth;
     }
 }

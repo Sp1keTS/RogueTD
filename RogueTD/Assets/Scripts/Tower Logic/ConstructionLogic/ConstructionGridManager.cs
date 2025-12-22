@@ -20,6 +20,7 @@ public class ConstructionGridManager : MonoBehaviour
     private void Awake()
     {
         BuildingFactory.OnBuildingCreated += OnBuildingCreated;
+        Building.onBuildingDestroyed += OnBuildingDeatroyed;
         
         if (GameState.Instance != null && GameState.Instance.Buildings != null)
         {
@@ -36,7 +37,13 @@ public class ConstructionGridManager : MonoBehaviour
     {
         BuildingFactory.OnBuildingCreated -= OnBuildingCreated;
     }
-    
+
+    private void OnBuildingDeatroyed(Vector2Int gridPos)
+    {
+        RemoveSavedBuilding(gridPos);
+        GameState.Instance.SaveBuildingsToJson();
+    }
+
     static public void RemoveBuilding(Building buildingToRemove)
     {
         foreach (var pair in BuildingsSpace.Where(p => p.Value == buildingToRemove).ToList())

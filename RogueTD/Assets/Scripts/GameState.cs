@@ -233,11 +233,9 @@ public class GameState
 
             string json = JsonConvert.SerializeObject(saveData, GetJsonSettings());
             File.WriteAllText(BUILDINGS_SAVE_PATH, json);
-            Debug.Log($"Buildings сохранены в: {BUILDINGS_SAVE_PATH}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"Ошибка сохранения Buildings: {e.Message}");
         }
     }
 

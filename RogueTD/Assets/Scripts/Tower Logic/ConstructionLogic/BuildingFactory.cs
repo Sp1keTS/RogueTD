@@ -48,6 +48,7 @@ public class BuildingFactory : MonoBehaviour
         Building building = buildingObj.GetComponent<Building>();
         building.buildingName = blueprint.buildingName;
         building.Initialize(blueprint.MaxHealthPoints);
+        building.GridPosition = gridPos;
         OnBuildingCreated.Invoke(gridPos, blueprint);
         UpdateGridWithBuilding(gridPos, building, blueprint);
         return building;
