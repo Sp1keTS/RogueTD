@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Tower : Building
+public class Tower : MonoBehaviour
 {
     [SerializeField] protected float targetingRange = 5f;
     [SerializeField] protected float damageMult = 1f;
@@ -28,7 +28,6 @@ public class Tower : Building
     
     public virtual void InitializeFromBlueprint(TowerBlueprint blueprint)
     {
-        buildingName = blueprint.buildingName;
         targetingRange = blueprint.TargetingRange;
         damageMult = blueprint.DamageMult;
         attackSpeed = blueprint.AttackSpeed;

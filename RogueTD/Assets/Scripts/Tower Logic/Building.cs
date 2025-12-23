@@ -14,6 +14,7 @@ public class Building : MonoBehaviour
     
     void Awake()
     {
+        
         healthComponent.CurrentHealth = healthComponent.MaxHealth;
         
         if (!buildingCollider)

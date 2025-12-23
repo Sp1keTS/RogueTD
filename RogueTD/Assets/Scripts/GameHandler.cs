@@ -18,7 +18,7 @@ public class GameHandler : MonoBehaviour
     void Start()
     {
         ConstructionGridManager.ConstructionGrid = constructionGrid;
-        
+        Debug.Log(GameState.Instance.IsANewRun);
         if (GameState.Instance.IsANewRun)
         {
             GameState.Instance.ResetGameState();
@@ -26,6 +26,8 @@ public class GameHandler : MonoBehaviour
             LoadUITree();
             GameState.Instance.Initialize(300, 1);
             GameState.Instance.Wave = 1;
+            GameState.Instance.SaveToJson();
+            GameState.Instance.IsANewRun = false;
         }
         else
         {

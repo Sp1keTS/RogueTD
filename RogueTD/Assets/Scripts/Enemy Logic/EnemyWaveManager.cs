@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class EnemyWaveManager : MonoBehaviour
     [SerializeField] private Button waveButton;
     [SerializeField] private EnemyWaveGenerator waveGenerator;
     [SerializeField] private float timeBetweenSubWaves = 5f;
+    [SerializeField] private float spawnDelay = 0.2f;
+    [SerializeField] private EnemyRegistry enemyRegistry;
     
     private bool isWaveActive = false;
     private int currentWaveNumber = 0;
@@ -16,8 +19,8 @@ public class EnemyWaveManager : MonoBehaviour
     private int currentSubWaveIndex = 0;
     private Coroutine waveCoroutine;
     
-    private Dictionary<Vector2, Queue<(Enemy prefab, int count)>> spawnQueues = 
-        new Dictionary<Vector2, Queue<(Enemy prefab, int count)>>();
+    private Dictionary<Vector2, Queue<KeyValuePair<string, int>>> spawnQueues = 
+        new Dictionary<Vector2, Queue<KeyValuePair<string, int>>>();
     
     void Start()
     {
@@ -39,16 +42,21 @@ public class EnemyWaveManager : MonoBehaviour
     
     public void StartWave()
     {
+       
         if (isWaveActive) return;
+        
         if (GameState.Instance.CurrentWave != null)
         {
             currentWave = GameState.Instance.CurrentWave;
         }
-        else {currentWave = waveGenerator.GenerateWave(currentWaveNumber);}
-        
+        else
+        {
+            currentWave = waveGenerator.GenerateWave(currentWaveNumber);
+        }
         
         if (currentWave == null || currentWave.SubWaves == null || currentWave.SubWaves.Count == 0)
         {
+            Debug.LogError("Не удалось создать или загрузить волну!");
             return;
         }
         
@@ -64,6 +72,10 @@ public class EnemyWaveManager : MonoBehaviour
             StopCoroutine(waveCoroutine);
         }
         waveCoroutine = StartCoroutine(WaveSequence());
+        
+        Debug.Log($"Начата волна {currentWaveNumber}");
+        GameState.Instance.CurrentWave = currentWave;
+        GameState.Instance.SaveToJson();
     }
     
     private IEnumerator WaveSequence()
@@ -78,6 +90,8 @@ public class EnemyWaveManager : MonoBehaviour
             SpawnSubWave(currentSubWaveIndex);
             currentSubWaveIndex++;
         }
+        
+        Debug.Log("Все подволны запущены");
     }
     
     private void SpawnSubWave(int subWaveIndex)
@@ -90,20 +104,22 @@ public class EnemyWaveManager : MonoBehaviour
         }
         
         var subWave = currentWave.SubWaves[subWaveIndex];
+        Debug.Log($"Запуск подволны {subWaveIndex + 1}/{currentWave.SubWaves.Count}");
         
-        foreach (var spawnData in subWave.enemiesPerSpawnpoint)
+        foreach (var spawnPointData in subWave.enemiesPerSpawnpoint)
         {
-            var spawnPoint = spawnData.Key;
-            var enemyList = spawnData.Value;
+            var spawnPoint = spawnPointData.Key;
+            var enemyDict = spawnPointData.Value; 
             
             if (!spawnQueues.ContainsKey(spawnPoint))
             {
-                spawnQueues[spawnPoint] = new Queue<(Enemy prefab, int count)>();
+                spawnQueues[spawnPoint] = new Queue<KeyValuePair<string, int>>();
             }
             
-            foreach (var enemyData in enemyList)
+            foreach (var enemyData in enemyDict)
             {
                 spawnQueues[spawnPoint].Enqueue(enemyData);
+                Debug.Log($"Добавлен в очередь: {enemyData.Key} x{enemyData.Value} в точку {spawnPoint}");
             }
         }
         
@@ -112,24 +128,41 @@ public class EnemyWaveManager : MonoBehaviour
     
     private IEnumerator SpawnEnemiesFromQueues()
     {
-        const float spawnDelay = 0.2f;
-        
         while (HasEnemiesInQueues())
         {
+            bool spawnedThisFrame = false;
+            
             foreach (var spawnPoint in spawnQueues.Keys)
             {
                 if (spawnQueues[spawnPoint].Count > 0)
                 {
                     var enemyData = spawnQueues[spawnPoint].Dequeue();
+                    string enemyId = enemyData.Key;
+                    int count = enemyData.Value;
                     
-                    for (int i = 0; i < enemyData.count; i++)
+                    Enemy enemyPrefab = enemyRegistry.GetEnemyPrefab(enemyId);
+                    
+                    if (enemyPrefab)
                     {
-                        EnemyManager.SpawnEnemy(enemyData.prefab, spawnPoint);
-                        yield return new WaitForSeconds(spawnDelay);
+                        for (int i = 0; i < count; i++)
+                        {
+                            Vector2 offset = UnityEngine.Random.insideUnitCircle * 2f;
+                            EnemyManager.SpawnEnemy(enemyPrefab, spawnPoint + offset);
+                            
+                            spawnedThisFrame = true;
+                            yield return new WaitForSeconds(spawnDelay);
+                        }
+                        
                     }
                 }
             }
+            
+            if (!spawnedThisFrame)
+            {
+                yield return null;
+            }
         }
+        
     }
     
     private bool HasEnemiesInQueues()
@@ -149,7 +182,7 @@ public class EnemyWaveManager : MonoBehaviour
         {
             foreach (var spawnPoint in currentWave.SpawnPoints)
             {
-                spawnQueues[spawnPoint] = new Queue<(Enemy prefab, int count)>();
+                spawnQueues[spawnPoint] = new Queue<KeyValuePair<string, int>>();
             }
         }
     }
@@ -164,6 +197,8 @@ public class EnemyWaveManager : MonoBehaviour
     
     private void CheckWaveCompletion()
     {
+        if (!isWaveActive) return;
+        
         bool allSubWavesSpawned = currentSubWaveIndex >= currentWave.SubWaves.Count;
         bool noSpawnQueues = !HasEnemiesInQueues();
         bool noEnemiesAlive = EnemyManager.EnemyCount == 0;
@@ -178,8 +213,12 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if (!isWaveActive) return;
         
+        Debug.Log($"Волна {currentWaveNumber} завершена!");
+        
         int waveReward = CalculateWaveReward(currentWaveNumber);
         GameState.Instance.AddCurrency(waveReward);
+        
+        GameState.Instance.CurrentWave = currentWave;
         
         currentWaveNumber++;
         GameState.Instance.ChangeWave(currentWaveNumber);
@@ -194,6 +233,8 @@ public class EnemyWaveManager : MonoBehaviour
         }
         
         spawnQueues.Clear();
+        GameState.Instance.CurrentWave = null;
+        GameState.Instance.SaveToJson();
     }
     
     private int CalculateWaveReward(int waveNumber)

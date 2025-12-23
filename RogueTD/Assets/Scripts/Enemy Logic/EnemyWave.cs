@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [Serializable]
 public class EnemyWave 
@@ -23,6 +24,6 @@ public class EnemyWave
     [Serializable]
     public class SubWave
     {
-        public Dictionary<Vector2, List<(Enemy prefab, int count)>> enemiesPerSpawnpoint;
+        public AYellowpaper.SerializedCollections.SerializedDictionary<Vector2, AYellowpaper.SerializedCollections.SerializedDictionary<string, int>> enemiesPerSpawnpoint;
     }
 }

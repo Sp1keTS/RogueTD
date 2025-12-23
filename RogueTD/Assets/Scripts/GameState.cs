@@ -79,11 +79,10 @@ public class GameState
         get => _wave;
         set
         {
-            if (value < 0) return;
+            if (value <= 0) return;
             
             _wave = value;
             OnWaveChanged?.Invoke(_wave);
-            SaveToJson();
         }
     }
 
@@ -208,7 +207,6 @@ public class GameState
             {
                 Currency = _currency,
                 Wave = _wave,
-                IsANewRun = isANewRun,
                 CurrentWaveJson = currentWave != null ? JsonConvert.SerializeObject(currentWave, GetJsonSettings()) : ""
             };
 
@@ -236,6 +234,7 @@ public class GameState
         }
         catch (Exception e)
         {
+            Debug.Log(e);
         }
     }
 
@@ -279,7 +278,6 @@ public class GameState
             {
                 _currency = saveData.Currency;
                 _wave = saveData.Wave;
-                isANewRun = saveData.IsANewRun;
                 
                 if (!string.IsNullOrEmpty(saveData.CurrentWaveJson))
                 {

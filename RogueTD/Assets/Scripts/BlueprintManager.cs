@@ -9,10 +9,6 @@ public static class BlueprintManager
     public static event Action<ProjectileTowerBlueprint, string> ProjectileTowerChanged = delegate { };
     public static IReadOnlyDictionary<string, BuildingBlueprint> Blueprints => blueprints;
     
-    
-    private const string TEMP_BLUEPRINTS_FOLDER = "Blueprints";
-
-
     private static void LoadResources<T>(string folderPath, Dictionary<string, T> dictionary) where T : ScriptableObject
     {
         T[] resources = Resources.LoadAll<T>(folderPath);
