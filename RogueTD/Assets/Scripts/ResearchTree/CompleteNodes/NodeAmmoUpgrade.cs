@@ -16,6 +16,8 @@ public class NodeAmmoUpgrade : ProjectileTowerUpgradeTreeNode
             projectileBlueprint.MaxAmmo = Mathf.RoundToInt(projectileBlueprint.MaxAmmo * totalMultiplier);
             projectileBlueprint.AmmoRegeneration *= (1f + rank * regenerationBonus);
         }
+        
+        BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
     public override void LoadDependencies()

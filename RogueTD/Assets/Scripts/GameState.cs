@@ -93,7 +93,6 @@ public class GameState
         {
             _currency = value;
             OnCurrencyChanged?.Invoke(_currency);
-            SaveToJson();
         }
     }
 
@@ -107,7 +106,6 @@ public class GameState
         
         _wave = newWave;
         OnWaveChanged?.Invoke(_wave);
-        SaveToJson();
     }
     
     public void IncrementWave()
@@ -125,7 +123,6 @@ public class GameState
         int newCurrency = _currency + amount;
         _currency = newCurrency;
         OnCurrencyChanged?.Invoke(_currency);
-        SaveToJson();
     }
     
     public void AddCurrency(int amount)
@@ -194,8 +191,12 @@ public class GameState
             Formatting = Formatting.Indented,
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
             NullValueHandling = NullValueHandling.Ignore,
-            TypeNameHandling = TypeNameHandling.None,
-            PreserveReferencesHandling = PreserveReferencesHandling.Objects 
+            TypeNameHandling = TypeNameHandling.Auto,
+            PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+            Converters = new List<JsonConverter>
+            {
+                new Vector2Converter() 
+            }
         };
     }
 
@@ -312,9 +313,11 @@ public class GameState
             if (saveData != null)
             {
                 buildings = saveData.Buildings ?? new List<BuildingSaveData>();
-                Debug.Log($"Buildings загружены из: {BUILDINGS_SAVE_PATH}. Количество: {buildings.Count}");
+                ConstructionGridManager.SavePoses = Buildings;
+                SaveBuildingsToJson();
                 return true;
             }
+            
         }
         catch (Exception e)
         {

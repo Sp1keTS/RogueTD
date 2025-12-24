@@ -9,18 +9,18 @@ public class ConstructionGridManager : MonoBehaviour
     static public Dictionary<Vector2, Building> buildingsSpace = new Dictionary<Vector2, Building>();
     static public Dictionary<Vector2, Building> buildingsPos = new Dictionary<Vector2, Building>();
     
-    [SerializeField] private List<BuildingSaveData> savePoses = new List<BuildingSaveData>();
+    [SerializeField] private static List<BuildingSaveData> savePoses = new List<BuildingSaveData>();
     
     private bool isRecreatingBuildings = false; 
     
     static public Dictionary<Vector2, Building> BuildingsSpace => buildingsSpace;
-    static public Dictionary<Vector2, Building> BuildingsPos => buildingsPos;
-    public List<BuildingSaveData> SavePoses => savePoses;
-    
+    static public Dictionary<Vector2, Building> BuildingsPos {get => buildingsPos;set => buildingsPos = value; }
+    public static List<BuildingSaveData> SavePoses { get => savePoses; set => savePoses = value; }
+
     private void Awake()
     {
         BuildingFactory.OnBuildingCreated += OnBuildingCreated;
-        Building.onBuildingDestroyed += OnBuildingDeatroyed;
+        Building.onBuildingDestroyed += OnBuildingDestroyed;
         
         if (GameState.Instance != null && GameState.Instance.Buildings != null)
         {
@@ -38,7 +38,7 @@ public class ConstructionGridManager : MonoBehaviour
         BuildingFactory.OnBuildingCreated -= OnBuildingCreated;
     }
 
-    private void OnBuildingDeatroyed(Vector2Int gridPos)
+    private void OnBuildingDestroyed(Vector2Int gridPos)
     {
         RemoveSavedBuilding(gridPos);
         GameState.Instance.SaveBuildingsToJson();

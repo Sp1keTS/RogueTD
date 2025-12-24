@@ -67,6 +67,8 @@ public class GameHandler : MonoBehaviour
 
         var gridPosition = Vector2Int.zero;
         Building mainBuilding = BuildingFactory.CreateBuilding(gridPosition, mainBuildingBlueprint);
+        BlueprintManager.RemoveBlueprint("MainBuilding");
+        GameState.Instance.SaveBuildingsToJson();
     }
 
     void OnDestroy()

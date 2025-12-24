@@ -1,16 +1,38 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 
 public class PauseMenueUI : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private Button mainMenuButton; 
+    private GameInput _gameInput;
+
+    private void Awake()
     {
-        
+        _gameInput = GameInputManager.Instance.GameInput;
+        if (pauseButton == null)
+            pauseButton = GetComponent<Button>();
+        if (mainMenuButton == null)
+            mainMenuButton = GetComponent<Button>();
+        pauseButton.onClick.AddListener(OnPauseButtonClick);
+        mainMenuButton.onClick.AddListener(OnMainMenuButtonClick);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnPauseButtonClick()
     {
-        
+        pausePanel.SetActive(false);
+        Time.timeScale = 1;
+        _gameInput.Gameplay.Enable();
+    }
+
+    private void OnMainMenuButtonClick()
+    {
+        _gameInput.Gameplay.Enable();
+        Time.timeScale = 1;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
     }
 }
