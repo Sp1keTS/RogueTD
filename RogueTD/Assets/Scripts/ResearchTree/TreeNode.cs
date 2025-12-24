@@ -13,7 +13,11 @@ public abstract class TreeNode : ScriptableObject
     [SerializeField] protected TreeNode directUpgradeOf;
     [SerializeField] protected int cost;
     [SerializeField] protected Sprite icon;
+    
+    [SerializeField] protected string tooltipText = "Description failed to load properly";
+    public string TooltipText => tooltipText;
     public int MaxRank => maxRank;
+    
     public int MinRank => minRank;
     public Sprite Icon => icon;
     public TreeNode DirectUpgradeOf => directUpgradeOf;

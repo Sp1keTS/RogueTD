@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Tooltip Library (Fixed)</title>
+  <link rel="stylesheet" href="tooltip.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Modern Tooltip Library (Fixed)</h1>
+      <p class="subtitle">Lightweight, customizable tooltips with flicker-free hover and proper cleanup.</p>
+    </header>
+
+    <section class="demo-section">
+      <h2>Demo</h2>
+      <div class="demo-grid">
+        <div class="demo-item">
+          <button class="btn" data-tooltip="Default tooltip">Default</button>
+          <button class="btn btn-secondary" data-tooltip="Success tooltip" data-tooltip-theme="success">Success</button>
+          <button class="btn btn-warning" data-tooltip="Warning tooltip" data-tooltip-theme="warning">Warning</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>Modern Tooltip Library &copy; 2025 | Fixed Version</p>
+    </footer>
+  </div>
+
+  <script src="tooltip.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      Tooltip.init();
+    });
+  </script>
+</body>
+</html>

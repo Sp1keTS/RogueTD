@@ -2,9 +2,10 @@ using UnityEngine;
 using System;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UITreeNode : MonoBehaviour
+public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] Button button;
     [SerializeField] Image image;
@@ -15,7 +16,6 @@ public class UITreeNode : MonoBehaviour
     private void Awake()
     {
         button = GetComponent<Button>();
-        
         button.onClick.AddListener(OnButtonClick);
     }
 
@@ -74,5 +74,16 @@ public class UITreeNode : MonoBehaviour
     private void OnDestroy()
     {
         button.onClick.RemoveListener(OnButtonClick);
+    }
+    
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNode.name, TreeSaveNode.currentNode.TooltipText, 
+            new Vector2(transform.position.x, transform.position.y - GetComponent<RectTransform>().sizeDelta.y) );
+    }
+    
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        UIToolTipManager.Instance.HideTooltip();
     }
 }

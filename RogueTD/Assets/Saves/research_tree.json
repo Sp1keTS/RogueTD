@@ -3,44 +3,44 @@
   "rootSaveNodes": [
     {
       "$id": "2",
-      "currentNodeId": "BasicTurret",
+      "currentNodeId": "NodeRapidFireTurret",
       "nodeToUpgradeId": "",
       "IsActive": false,
       "nextSaveNodes": [
         {
           "$id": "3",
           "currentNodeId": "DamageUpgrade",
-          "nodeToUpgradeId": "BasicTurret",
+          "nodeToUpgradeId": "NodeRapidFireTurret",
           "IsActive": false,
           "nextSaveNodes": [
             {
               "$id": "4",
               "currentNodeId": "RangeUpgrade",
-              "nodeToUpgradeId": "BasicTurret",
+              "nodeToUpgradeId": "NodeRapidFireTurret",
               "IsActive": false,
               "nextSaveNodes": [
                 {
                   "$id": "5",
                   "currentNodeId": "AttackSpeedUpgrade",
-                  "nodeToUpgradeId": "BasicTurret",
+                  "nodeToUpgradeId": "NodeRapidFireTurret",
                   "IsActive": false,
                   "nextSaveNodes": [
                     {
                       "$id": "6",
                       "currentNodeId": "DamageUpgrade",
-                      "nodeToUpgradeId": "BasicTurret",
+                      "nodeToUpgradeId": "NodeRapidFireTurret",
                       "IsActive": false,
                       "nextSaveNodes": [
                         {
                           "$id": "7",
-                          "currentNodeId": "AttackSpeedUpgrade",
-                          "nodeToUpgradeId": "BasicTurret",
+                          "currentNodeId": "ProjectileSpeed",
+                          "nodeToUpgradeId": "NodeRapidFireTurret",
                           "IsActive": false,
                           "nextSaveNodes": [
                             {
                               "$id": "8",
-                              "currentNodeId": "DamageUpgrade",
-                              "nodeToUpgradeId": "BasicTurret",
+                              "currentNodeId": "AttackSpeedUpgrade",
+                              "nodeToUpgradeId": "NodeRapidFireTurret",
                               "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
@@ -61,58 +61,6 @@
                                 },
                                 {
                                   "$ref": "7"
-                                }
-                              ]
-                            }
-                          ],
-                          "visitedNodes": [
-                            {
-                              "$ref": "2"
-                            },
-                            {
-                              "$ref": "3"
-                            },
-                            {
-                              "$ref": "4"
-                            },
-                            {
-                              "$ref": "5"
-                            },
-                            {
-                              "$ref": "6"
-                            }
-                          ]
-                        },
-                        {
-                          "$id": "9",
-                          "currentNodeId": "RangeUpgrade",
-                          "nodeToUpgradeId": "BasicTurret",
-                          "IsActive": false,
-                          "nextSaveNodes": [
-                            {
-                              "$id": "10",
-                              "currentNodeId": "RangeUpgrade",
-                              "nodeToUpgradeId": "BasicTurret",
-                              "IsActive": false,
-                              "nextSaveNodes": [],
-                              "visitedNodes": [
-                                {
-                                  "$ref": "2"
-                                },
-                                {
-                                  "$ref": "3"
-                                },
-                                {
-                                  "$ref": "4"
-                                },
-                                {
-                                  "$ref": "5"
-                                },
-                                {
-                                  "$ref": "6"
-                                },
-                                {
-                                  "$ref": "9"
                                 }
                               ]
                             }
@@ -163,29 +111,58 @@
                       "$ref": "4"
                     }
                   ]
+                }
+              ],
+              "visitedNodes": [
+                {
+                  "$ref": "2"
                 },
                 {
+                  "$ref": "3"
+                }
+              ]
+            }
+          ],
+          "visitedNodes": [
+            {
+              "$ref": "2"
+            }
+          ]
+        },
+        {
+          "$id": "9",
+          "currentNodeId": "BleedUpgrade",
+          "nodeToUpgradeId": "NodeRapidFireTurret",
+          "IsActive": false,
+          "nextSaveNodes": [
+            {
+              "$id": "10",
+              "currentNodeId": "RangeUpgrade",
+              "nodeToUpgradeId": "NodeRapidFireTurret",
+              "IsActive": false,
+              "nextSaveNodes": [
+                {
                   "$id": "11",
-                  "currentNodeId": "ProjectileSpeed",
-                  "nodeToUpgradeId": "BasicTurret",
+                  "currentNodeId": "RangeUpgrade",
+                  "nodeToUpgradeId": "NodeRapidFireTurret",
                   "IsActive": false,
                   "nextSaveNodes": [
                     {
                       "$id": "12",
-                      "currentNodeId": "ProjectileSpeed",
-                      "nodeToUpgradeId": "BasicTurret",
+                      "currentNodeId": "DamageUpgrade",
+                      "nodeToUpgradeId": "NodeRapidFireTurret",
                       "IsActive": false,
                       "nextSaveNodes": [
                         {
                           "$id": "13",
-                          "currentNodeId": "ProjectileSpeed",
-                          "nodeToUpgradeId": "BasicTurret",
+                          "currentNodeId": "AttackSpeedUpgrade",
+                          "nodeToUpgradeId": "NodeRapidFireTurret",
                           "IsActive": false,
                           "nextSaveNodes": [
                             {
                               "$id": "14",
                               "currentNodeId": "AttackSpeedUpgrade",
-                              "nodeToUpgradeId": "BasicTurret",
+                              "nodeToUpgradeId": "NodeRapidFireTurret",
                               "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
@@ -193,10 +170,10 @@
                                   "$ref": "2"
                                 },
                                 {
-                                  "$ref": "3"
+                                  "$ref": "9"
                                 },
                                 {
-                                  "$ref": "4"
+                                  "$ref": "10"
                                 },
                                 {
                                   "$ref": "11"
@@ -215,10 +192,10 @@
                               "$ref": "2"
                             },
                             {
-                              "$ref": "3"
+                              "$ref": "9"
                             },
                             {
-                              "$ref": "4"
+                              "$ref": "10"
                             },
                             {
                               "$ref": "11"
@@ -234,84 +211,10 @@
                           "$ref": "2"
                         },
                         {
-                          "$ref": "3"
+                          "$ref": "9"
                         },
                         {
-                          "$ref": "4"
-                        },
-                        {
-                          "$ref": "11"
-                        }
-                      ]
-                    },
-                    {
-                      "$id": "15",
-                      "currentNodeId": "DamageUpgrade",
-                      "nodeToUpgradeId": "BasicTurret",
-                      "IsActive": false,
-                      "nextSaveNodes": [
-                        {
-                          "$id": "16",
-                          "currentNodeId": "ProjectileSpeed",
-                          "nodeToUpgradeId": "BasicTurret",
-                          "IsActive": false,
-                          "nextSaveNodes": [
-                            {
-                              "$id": "17",
-                              "currentNodeId": "DamageUpgrade",
-                              "nodeToUpgradeId": "BasicTurret",
-                              "IsActive": false,
-                              "nextSaveNodes": [],
-                              "visitedNodes": [
-                                {
-                                  "$ref": "2"
-                                },
-                                {
-                                  "$ref": "3"
-                                },
-                                {
-                                  "$ref": "4"
-                                },
-                                {
-                                  "$ref": "11"
-                                },
-                                {
-                                  "$ref": "15"
-                                },
-                                {
-                                  "$ref": "16"
-                                }
-                              ]
-                            }
-                          ],
-                          "visitedNodes": [
-                            {
-                              "$ref": "2"
-                            },
-                            {
-                              "$ref": "3"
-                            },
-                            {
-                              "$ref": "4"
-                            },
-                            {
-                              "$ref": "11"
-                            },
-                            {
-                              "$ref": "15"
-                            }
-                          ]
-                        }
-                      ],
-                      "visitedNodes": [
-                        {
-                          "$ref": "2"
-                        },
-                        {
-                          "$ref": "3"
-                        },
-                        {
-                          "$ref": "4"
+                          "$ref": "10"
                         },
                         {
                           "$ref": "11"
@@ -324,10 +227,103 @@
                       "$ref": "2"
                     },
                     {
-                      "$ref": "3"
+                      "$ref": "9"
                     },
                     {
-                      "$ref": "4"
+                      "$ref": "10"
+                    }
+                  ]
+                },
+                {
+                  "$id": "15",
+                  "currentNodeId": "ProjectileSpeed",
+                  "nodeToUpgradeId": "NodeRapidFireTurret",
+                  "IsActive": false,
+                  "nextSaveNodes": [
+                    {
+                      "$id": "16",
+                      "currentNodeId": "DamageUpgrade",
+                      "nodeToUpgradeId": "NodeRapidFireTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "17",
+                          "currentNodeId": "AmmoUpgrade",
+                          "nodeToUpgradeId": "NodeRapidFireTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "18",
+                              "currentNodeId": "AttackSpeedUpgrade",
+                              "nodeToUpgradeId": "NodeRapidFireTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "2"
+                                },
+                                {
+                                  "$ref": "9"
+                                },
+                                {
+                                  "$ref": "10"
+                                },
+                                {
+                                  "$ref": "15"
+                                },
+                                {
+                                  "$ref": "16"
+                                },
+                                {
+                                  "$ref": "17"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "2"
+                            },
+                            {
+                              "$ref": "9"
+                            },
+                            {
+                              "$ref": "10"
+                            },
+                            {
+                              "$ref": "15"
+                            },
+                            {
+                              "$ref": "16"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "2"
+                        },
+                        {
+                          "$ref": "9"
+                        },
+                        {
+                          "$ref": "10"
+                        },
+                        {
+                          "$ref": "15"
+                        }
+                      ]
+                    }
+                  ],
+                  "visitedNodes": [
+                    {
+                      "$ref": "2"
+                    },
+                    {
+                      "$ref": "9"
+                    },
+                    {
+                      "$ref": "10"
                     }
                   ]
                 }
@@ -337,7 +333,7 @@
                   "$ref": "2"
                 },
                 {
-                  "$ref": "3"
+                  "$ref": "9"
                 }
               ]
             }
@@ -352,51 +348,48 @@
       "visitedNodes": []
     },
     {
-      "$id": "18",
-      "currentNodeId": "NodeShotgunTurret",
+      "$id": "19",
+      "currentNodeId": "BasicTurret",
       "nodeToUpgradeId": "",
-      "IsActive": true,
+      "IsActive": false,
       "nextSaveNodes": [
         {
-          "$id": "19",
-          "currentNodeId": "BleedUpgrade",
-          "nodeToUpgradeId": "NodeShotgunTurret",
-          "IsActive": true,
+          "$id": "20",
+          "currentNodeId": "ProjectileSpeed",
+          "nodeToUpgradeId": "BasicTurret",
+          "IsActive": false,
           "nextSaveNodes": [
             {
-              "$id": "20",
+              "$id": "21",
               "currentNodeId": "ProjectileSpeed",
-              "nodeToUpgradeId": "NodeShotgunTurret",
+              "nodeToUpgradeId": "BasicTurret",
               "IsActive": false,
               "nextSaveNodes": [
                 {
-                  "$id": "21",
+                  "$id": "22",
                   "currentNodeId": "AmmoUpgrade",
-                  "nodeToUpgradeId": "NodeShotgunTurret",
+                  "nodeToUpgradeId": "BasicTurret",
                   "IsActive": false,
                   "nextSaveNodes": [
                     {
-                      "$id": "22",
+                      "$id": "23",
                       "currentNodeId": "AttackSpeedUpgrade",
-                      "nodeToUpgradeId": "NodeShotgunTurret",
+                      "nodeToUpgradeId": "BasicTurret",
                       "IsActive": false,
                       "nextSaveNodes": [
                         {
-                          "$id": "23",
-                          "currentNodeId": "DamageUpgrade",
-                          "nodeToUpgradeId": "NodeShotgunTurret",
+                          "$id": "24",
+                          "currentNodeId": "AmmoUpgrade",
+                          "nodeToUpgradeId": "BasicTurret",
                           "IsActive": false,
                           "nextSaveNodes": [
                             {
-                              "$id": "24",
-                              "currentNodeId": "ProjectileSpeed",
-                              "nodeToUpgradeId": "NodeShotgunTurret",
+                              "$id": "25",
+                              "currentNodeId": "AmmoUpgrade",
+                              "nodeToUpgradeId": "BasicTurret",
                               "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
-                                {
-                                  "$ref": "18"
-                                },
                                 {
                                   "$ref": "19"
                                 },
@@ -411,14 +404,14 @@
                                 },
                                 {
                                   "$ref": "23"
+                                },
+                                {
+                                  "$ref": "24"
                                 }
                               ]
                             }
                           ],
                           "visitedNodes": [
-                            {
-                              "$ref": "18"
-                            },
                             {
                               "$ref": "19"
                             },
@@ -430,14 +423,66 @@
                             },
                             {
                               "$ref": "22"
+                            },
+                            {
+                              "$ref": "23"
+                            }
+                          ]
+                        },
+                        {
+                          "$id": "26",
+                          "currentNodeId": "AttackSpeedUpgrade",
+                          "nodeToUpgradeId": "BasicTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "27",
+                              "currentNodeId": "DamageUpgrade",
+                              "nodeToUpgradeId": "BasicTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "19"
+                                },
+                                {
+                                  "$ref": "20"
+                                },
+                                {
+                                  "$ref": "21"
+                                },
+                                {
+                                  "$ref": "22"
+                                },
+                                {
+                                  "$ref": "23"
+                                },
+                                {
+                                  "$ref": "26"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "19"
+                            },
+                            {
+                              "$ref": "20"
+                            },
+                            {
+                              "$ref": "21"
+                            },
+                            {
+                              "$ref": "22"
+                            },
+                            {
+                              "$ref": "23"
                             }
                           ]
                         }
                       ],
                       "visitedNodes": [
-                        {
-                          "$ref": "18"
-                        },
                         {
                           "$ref": "19"
                         },
@@ -446,222 +491,154 @@
                         },
                         {
                           "$ref": "21"
+                        },
+                        {
+                          "$ref": "22"
                         }
                       ]
                     }
                   ],
                   "visitedNodes": [
                     {
-                      "$ref": "18"
-                    },
-                    {
                       "$ref": "19"
                     },
                     {
                       "$ref": "20"
+                    },
+                    {
+                      "$ref": "21"
                     }
                   ]
                 }
               ],
               "visitedNodes": [
                 {
-                  "$ref": "18"
+                  "$ref": "19"
                 },
                 {
-                  "$ref": "19"
+                  "$ref": "20"
                 }
               ]
             },
             {
-              "$id": "25",
+              "$id": "28",
               "currentNodeId": "RangeUpgrade",
-              "nodeToUpgradeId": "NodeShotgunTurret",
-              "IsActive": true,
+              "nodeToUpgradeId": "BasicTurret",
+              "IsActive": false,
               "nextSaveNodes": [
                 {
-                  "$id": "26",
+                  "$id": "29",
                   "currentNodeId": "AmmoUpgrade",
-                  "nodeToUpgradeId": "NodeShotgunTurret",
-                  "IsActive": true,
+                  "nodeToUpgradeId": "BasicTurret",
+                  "IsActive": false,
                   "nextSaveNodes": [
                     {
-                      "$id": "27",
-                      "currentNodeId": "RangeUpgrade",
-                      "nodeToUpgradeId": "NodeShotgunTurret",
-                      "IsActive": true,
+                      "$id": "30",
+                      "currentNodeId": "DamageUpgrade",
+                      "nodeToUpgradeId": "BasicTurret",
+                      "IsActive": false,
                       "nextSaveNodes": [
                         {
-                          "$id": "28",
-                          "currentNodeId": "AttackSpeedUpgrade",
-                          "nodeToUpgradeId": "NodeShotgunTurret",
-                          "IsActive": true,
+                          "$id": "31",
+                          "currentNodeId": "ProjectileSpeed",
+                          "nodeToUpgradeId": "BasicTurret",
+                          "IsActive": false,
                           "nextSaveNodes": [
                             {
-                              "$id": "29",
-                              "currentNodeId": "AttackSpeedUpgrade",
-                              "nodeToUpgradeId": "NodeShotgunTurret",
-                              "IsActive": true,
+                              "$id": "32",
+                              "currentNodeId": "RangeUpgrade",
+                              "nodeToUpgradeId": "BasicTurret",
+                              "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
-                                {
-                                  "$ref": "18"
-                                },
                                 {
                                   "$ref": "19"
                                 },
                                 {
-                                  "$ref": "25"
-                                },
-                                {
-                                  "$ref": "26"
-                                },
-                                {
-                                  "$ref": "27"
+                                  "$ref": "20"
                                 },
                                 {
                                   "$ref": "28"
+                                },
+                                {
+                                  "$ref": "29"
+                                },
+                                {
+                                  "$ref": "30"
+                                },
+                                {
+                                  "$ref": "31"
                                 }
                               ]
                             }
                           ],
                           "visitedNodes": [
                             {
-                              "$ref": "18"
-                            },
-                            {
                               "$ref": "19"
                             },
                             {
-                              "$ref": "25"
+                              "$ref": "20"
                             },
                             {
-                              "$ref": "26"
+                              "$ref": "28"
                             },
                             {
-                              "$ref": "27"
+                              "$ref": "29"
+                            },
+                            {
+                              "$ref": "30"
                             }
                           ]
                         }
                       ],
                       "visitedNodes": [
                         {
-                          "$ref": "18"
-                        },
-                        {
                           "$ref": "19"
                         },
                         {
-                          "$ref": "25"
+                          "$ref": "20"
                         },
                         {
-                          "$ref": "26"
+                          "$ref": "28"
+                        },
+                        {
+                          "$ref": "29"
                         }
                       ]
-                    }
-                  ],
-                  "visitedNodes": [
-                    {
-                      "$ref": "18"
                     },
                     {
-                      "$ref": "19"
-                    },
-                    {
-                      "$ref": "25"
-                    }
-                  ]
-                },
-                {
-                  "$id": "30",
-                  "currentNodeId": "RangeUpgrade",
-                  "nodeToUpgradeId": "NodeShotgunTurret",
-                  "IsActive": true,
-                  "nextSaveNodes": [
-                    {
-                      "$id": "31",
+                      "$id": "33",
                       "currentNodeId": "AttackSpeedUpgrade",
-                      "nodeToUpgradeId": "NodeShotgunTurret",
-                      "IsActive": true,
+                      "nodeToUpgradeId": "BasicTurret",
+                      "IsActive": false,
                       "nextSaveNodes": [
                         {
-                          "$id": "32",
-                          "currentNodeId": "RangeUpgrade",
-                          "nodeToUpgradeId": "NodeShotgunTurret",
-                          "IsActive": true,
-                          "nextSaveNodes": [
-                            {
-                              "$id": "33",
-                              "currentNodeId": "ProjectileSpeed",
-                              "nodeToUpgradeId": "NodeShotgunTurret",
-                              "IsActive": true,
-                              "nextSaveNodes": [],
-                              "visitedNodes": [
-                                {
-                                  "$ref": "18"
-                                },
-                                {
-                                  "$ref": "19"
-                                },
-                                {
-                                  "$ref": "25"
-                                },
-                                {
-                                  "$ref": "30"
-                                },
-                                {
-                                  "$ref": "31"
-                                },
-                                {
-                                  "$ref": "32"
-                                }
-                              ]
-                            }
-                          ],
-                          "visitedNodes": [
-                            {
-                              "$ref": "18"
-                            },
-                            {
-                              "$ref": "19"
-                            },
-                            {
-                              "$ref": "25"
-                            },
-                            {
-                              "$ref": "30"
-                            },
-                            {
-                              "$ref": "31"
-                            }
-                          ]
-                        },
-                        {
                           "$id": "34",
-                          "currentNodeId": "AmmoUpgrade",
-                          "nodeToUpgradeId": "NodeShotgunTurret",
-                          "IsActive": true,
+                          "currentNodeId": "DamageUpgrade",
+                          "nodeToUpgradeId": "BasicTurret",
+                          "IsActive": false,
                           "nextSaveNodes": [
                             {
                               "$id": "35",
-                              "currentNodeId": "AmmoUpgrade",
-                              "nodeToUpgradeId": "NodeShotgunTurret",
-                              "IsActive": true,
+                              "currentNodeId": "ProjectileSpeed",
+                              "nodeToUpgradeId": "BasicTurret",
+                              "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
-                                {
-                                  "$ref": "18"
-                                },
                                 {
                                   "$ref": "19"
                                 },
                                 {
-                                  "$ref": "25"
+                                  "$ref": "20"
                                 },
                                 {
-                                  "$ref": "30"
+                                  "$ref": "28"
                                 },
                                 {
-                                  "$ref": "31"
+                                  "$ref": "29"
+                                },
+                                {
+                                  "$ref": "33"
                                 },
                                 {
                                   "$ref": "34"
@@ -671,191 +648,65 @@
                           ],
                           "visitedNodes": [
                             {
-                              "$ref": "18"
-                            },
-                            {
                               "$ref": "19"
                             },
                             {
-                              "$ref": "25"
+                              "$ref": "20"
                             },
                             {
-                              "$ref": "30"
+                              "$ref": "28"
                             },
                             {
-                              "$ref": "31"
+                              "$ref": "29"
+                            },
+                            {
+                              "$ref": "33"
                             }
                           ]
                         }
                       ],
                       "visitedNodes": [
                         {
-                          "$ref": "18"
-                        },
-                        {
                           "$ref": "19"
                         },
                         {
-                          "$ref": "25"
+                          "$ref": "20"
                         },
                         {
-                          "$ref": "30"
-                        }
-                      ]
-                    },
-                    {
-                      "$id": "36",
-                      "currentNodeId": "AttackSpeedUpgrade",
-                      "nodeToUpgradeId": "NodeShotgunTurret",
-                      "IsActive": true,
-                      "nextSaveNodes": [
-                        {
-                          "$id": "37",
-                          "currentNodeId": "RangeUpgrade",
-                          "nodeToUpgradeId": "NodeShotgunTurret",
-                          "IsActive": true,
-                          "nextSaveNodes": [
-                            {
-                              "$id": "38",
-                              "currentNodeId": "DamageUpgrade",
-                              "nodeToUpgradeId": "NodeShotgunTurret",
-                              "IsActive": true,
-                              "nextSaveNodes": [],
-                              "visitedNodes": [
-                                {
-                                  "$ref": "18"
-                                },
-                                {
-                                  "$ref": "19"
-                                },
-                                {
-                                  "$ref": "25"
-                                },
-                                {
-                                  "$ref": "30"
-                                },
-                                {
-                                  "$ref": "36"
-                                },
-                                {
-                                  "$ref": "37"
-                                }
-                              ]
-                            }
-                          ],
-                          "visitedNodes": [
-                            {
-                              "$ref": "18"
-                            },
-                            {
-                              "$ref": "19"
-                            },
-                            {
-                              "$ref": "25"
-                            },
-                            {
-                              "$ref": "30"
-                            },
-                            {
-                              "$ref": "36"
-                            }
-                          ]
+                          "$ref": "28"
                         },
                         {
-                          "$id": "39",
-                          "currentNodeId": "ProjectileSpeed",
-                          "nodeToUpgradeId": "NodeShotgunTurret",
-                          "IsActive": true,
-                          "nextSaveNodes": [
-                            {
-                              "$id": "40",
-                              "currentNodeId": "RangeUpgrade",
-                              "nodeToUpgradeId": "NodeShotgunTurret",
-                              "IsActive": true,
-                              "nextSaveNodes": [],
-                              "visitedNodes": [
-                                {
-                                  "$ref": "18"
-                                },
-                                {
-                                  "$ref": "19"
-                                },
-                                {
-                                  "$ref": "25"
-                                },
-                                {
-                                  "$ref": "30"
-                                },
-                                {
-                                  "$ref": "36"
-                                },
-                                {
-                                  "$ref": "39"
-                                }
-                              ]
-                            }
-                          ],
-                          "visitedNodes": [
-                            {
-                              "$ref": "18"
-                            },
-                            {
-                              "$ref": "19"
-                            },
-                            {
-                              "$ref": "25"
-                            },
-                            {
-                              "$ref": "30"
-                            },
-                            {
-                              "$ref": "36"
-                            }
-                          ]
-                        }
-                      ],
-                      "visitedNodes": [
-                        {
-                          "$ref": "18"
-                        },
-                        {
-                          "$ref": "19"
-                        },
-                        {
-                          "$ref": "25"
-                        },
-                        {
-                          "$ref": "30"
+                          "$ref": "29"
                         }
                       ]
                     }
                   ],
                   "visitedNodes": [
                     {
-                      "$ref": "18"
-                    },
-                    {
                       "$ref": "19"
                     },
                     {
-                      "$ref": "25"
+                      "$ref": "20"
+                    },
+                    {
+                      "$ref": "28"
                     }
                   ]
                 }
               ],
               "visitedNodes": [
                 {
-                  "$ref": "18"
+                  "$ref": "19"
                 },
                 {
-                  "$ref": "19"
+                  "$ref": "20"
                 }
               ]
             }
           ],
           "visitedNodes": [
             {
-              "$ref": "18"
+              "$ref": "19"
             }
           ]
         }
@@ -863,83 +714,176 @@
       "visitedNodes": []
     },
     {
-      "$id": "41",
-      "currentNodeId": "NodeSniperTurret",
+      "$id": "36",
+      "currentNodeId": "NodeShotgunTurret",
       "nodeToUpgradeId": "",
       "IsActive": false,
       "nextSaveNodes": [
         {
-          "$id": "42",
-          "currentNodeId": "ProjectileSpeed",
-          "nodeToUpgradeId": "NodeSniperTurret",
+          "$id": "37",
+          "currentNodeId": "DamageUpgrade",
+          "nodeToUpgradeId": "NodeShotgunTurret",
           "IsActive": false,
           "nextSaveNodes": [
             {
-              "$id": "43",
+              "$id": "38",
               "currentNodeId": "RangeUpgrade",
-              "nodeToUpgradeId": "NodeSniperTurret",
+              "nodeToUpgradeId": "NodeShotgunTurret",
               "IsActive": false,
               "nextSaveNodes": [
                 {
-                  "$id": "44",
-                  "currentNodeId": "ProjectileSpeed",
-                  "nodeToUpgradeId": "NodeSniperTurret",
+                  "$id": "39",
+                  "currentNodeId": "DamageUpgrade",
+                  "nodeToUpgradeId": "NodeShotgunTurret",
                   "IsActive": false,
                   "nextSaveNodes": [
                     {
-                      "$id": "45",
-                      "currentNodeId": "AmmoUpgrade",
-                      "nodeToUpgradeId": "NodeSniperTurret",
+                      "$id": "40",
+                      "currentNodeId": "RangeUpgrade",
+                      "nodeToUpgradeId": "NodeShotgunTurret",
                       "IsActive": false,
                       "nextSaveNodes": [
                         {
-                          "$id": "46",
-                          "currentNodeId": "DamageUpgrade",
-                          "nodeToUpgradeId": "NodeSniperTurret",
+                          "$id": "41",
+                          "currentNodeId": "ProjectileSpeed",
+                          "nodeToUpgradeId": "NodeShotgunTurret",
                           "IsActive": false,
                           "nextSaveNodes": [
                             {
-                              "$id": "47",
-                              "currentNodeId": "ProjectileSpeed",
-                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "$id": "42",
+                              "currentNodeId": "AmmoUpgrade",
+                              "nodeToUpgradeId": "NodeShotgunTurret",
                               "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
                                 {
+                                  "$ref": "36"
+                                },
+                                {
+                                  "$ref": "37"
+                                },
+                                {
+                                  "$ref": "38"
+                                },
+                                {
+                                  "$ref": "39"
+                                },
+                                {
+                                  "$ref": "40"
+                                },
+                                {
                                   "$ref": "41"
-                                },
-                                {
-                                  "$ref": "42"
-                                },
-                                {
-                                  "$ref": "43"
-                                },
-                                {
-                                  "$ref": "44"
-                                },
-                                {
-                                  "$ref": "45"
-                                },
-                                {
-                                  "$ref": "46"
                                 }
                               ]
                             },
                             {
-                              "$id": "48",
-                              "currentNodeId": "AttackSpeedUpgrade",
-                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "$id": "43",
+                              "currentNodeId": "RangeUpgrade",
+                              "nodeToUpgradeId": "NodeShotgunTurret",
                               "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
                                 {
+                                  "$ref": "36"
+                                },
+                                {
+                                  "$ref": "37"
+                                },
+                                {
+                                  "$ref": "38"
+                                },
+                                {
+                                  "$ref": "39"
+                                },
+                                {
+                                  "$ref": "40"
+                                },
+                                {
                                   "$ref": "41"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "36"
+                            },
+                            {
+                              "$ref": "37"
+                            },
+                            {
+                              "$ref": "38"
+                            },
+                            {
+                              "$ref": "39"
+                            },
+                            {
+                              "$ref": "40"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "36"
+                        },
+                        {
+                          "$ref": "37"
+                        },
+                        {
+                          "$ref": "38"
+                        },
+                        {
+                          "$ref": "39"
+                        }
+                      ]
+                    }
+                  ],
+                  "visitedNodes": [
+                    {
+                      "$ref": "36"
+                    },
+                    {
+                      "$ref": "37"
+                    },
+                    {
+                      "$ref": "38"
+                    }
+                  ]
+                },
+                {
+                  "$id": "44",
+                  "currentNodeId": "ProjectileSpeed",
+                  "nodeToUpgradeId": "NodeShotgunTurret",
+                  "IsActive": false,
+                  "nextSaveNodes": [
+                    {
+                      "$id": "45",
+                      "currentNodeId": "DamageUpgrade",
+                      "nodeToUpgradeId": "NodeShotgunTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "46",
+                          "currentNodeId": "RangeUpgrade",
+                          "nodeToUpgradeId": "NodeShotgunTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "47",
+                              "currentNodeId": "RangeUpgrade",
+                              "nodeToUpgradeId": "NodeShotgunTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "36"
                                 },
                                 {
-                                  "$ref": "42"
+                                  "$ref": "37"
                                 },
                                 {
-                                  "$ref": "43"
+                                  "$ref": "38"
                                 },
                                 {
                                   "$ref": "44"
@@ -955,13 +899,13 @@
                           ],
                           "visitedNodes": [
                             {
-                              "$ref": "41"
+                              "$ref": "36"
                             },
                             {
-                              "$ref": "42"
+                              "$ref": "37"
                             },
                             {
-                              "$ref": "43"
+                              "$ref": "38"
                             },
                             {
                               "$ref": "44"
@@ -974,87 +918,13 @@
                       ],
                       "visitedNodes": [
                         {
-                          "$ref": "41"
+                          "$ref": "36"
                         },
                         {
-                          "$ref": "42"
+                          "$ref": "37"
                         },
                         {
-                          "$ref": "43"
-                        },
-                        {
-                          "$ref": "44"
-                        }
-                      ]
-                    },
-                    {
-                      "$id": "49",
-                      "currentNodeId": "ProjectileSpeed",
-                      "nodeToUpgradeId": "NodeSniperTurret",
-                      "IsActive": false,
-                      "nextSaveNodes": [
-                        {
-                          "$id": "50",
-                          "currentNodeId": "RangeUpgrade",
-                          "nodeToUpgradeId": "NodeSniperTurret",
-                          "IsActive": false,
-                          "nextSaveNodes": [
-                            {
-                              "$id": "51",
-                              "currentNodeId": "RangeUpgrade",
-                              "nodeToUpgradeId": "NodeSniperTurret",
-                              "IsActive": false,
-                              "nextSaveNodes": [],
-                              "visitedNodes": [
-                                {
-                                  "$ref": "41"
-                                },
-                                {
-                                  "$ref": "42"
-                                },
-                                {
-                                  "$ref": "43"
-                                },
-                                {
-                                  "$ref": "44"
-                                },
-                                {
-                                  "$ref": "49"
-                                },
-                                {
-                                  "$ref": "50"
-                                }
-                              ]
-                            }
-                          ],
-                          "visitedNodes": [
-                            {
-                              "$ref": "41"
-                            },
-                            {
-                              "$ref": "42"
-                            },
-                            {
-                              "$ref": "43"
-                            },
-                            {
-                              "$ref": "44"
-                            },
-                            {
-                              "$ref": "49"
-                            }
-                          ]
-                        }
-                      ],
-                      "visitedNodes": [
-                        {
-                          "$ref": "41"
-                        },
-                        {
-                          "$ref": "42"
-                        },
-                        {
-                          "$ref": "43"
+                          "$ref": "38"
                         },
                         {
                           "$ref": "44"
@@ -1064,78 +934,184 @@
                   ],
                   "visitedNodes": [
                     {
-                      "$ref": "41"
+                      "$ref": "36"
                     },
                     {
-                      "$ref": "42"
+                      "$ref": "37"
                     },
                     {
-                      "$ref": "43"
+                      "$ref": "38"
                     }
                   ]
                 }
               ],
               "visitedNodes": [
                 {
-                  "$ref": "41"
+                  "$ref": "36"
                 },
                 {
-                  "$ref": "42"
+                  "$ref": "37"
                 }
               ]
             }
           ],
           "visitedNodes": [
             {
-              "$ref": "41"
+              "$ref": "36"
             }
           ]
         },
         {
-          "$id": "52",
-          "currentNodeId": "ProjectileSpeed",
-          "nodeToUpgradeId": "NodeSniperTurret",
+          "$id": "48",
+          "currentNodeId": "AttackSpeedUpgrade",
+          "nodeToUpgradeId": "NodeShotgunTurret",
           "IsActive": false,
           "nextSaveNodes": [
             {
-              "$id": "53",
-              "currentNodeId": "DamageUpgrade",
-              "nodeToUpgradeId": "NodeSniperTurret",
+              "$id": "49",
+              "currentNodeId": "AmmoUpgrade",
+              "nodeToUpgradeId": "NodeShotgunTurret",
               "IsActive": false,
               "nextSaveNodes": [
                 {
-                  "$id": "54",
-                  "currentNodeId": "AttackSpeedUpgrade",
-                  "nodeToUpgradeId": "NodeSniperTurret",
+                  "$id": "50",
+                  "currentNodeId": "ProjectileSpeed",
+                  "nodeToUpgradeId": "NodeShotgunTurret",
                   "IsActive": false,
                   "nextSaveNodes": [
                     {
-                      "$id": "55",
-                      "currentNodeId": "RangeUpgrade",
-                      "nodeToUpgradeId": "NodeSniperTurret",
+                      "$id": "51",
+                      "currentNodeId": "ProjectileSpeed",
+                      "nodeToUpgradeId": "NodeShotgunTurret",
                       "IsActive": false,
                       "nextSaveNodes": [
                         {
-                          "$id": "56",
-                          "currentNodeId": "AmmoUpgrade",
-                          "nodeToUpgradeId": "NodeSniperTurret",
+                          "$id": "52",
+                          "currentNodeId": "ProjectileSpeed",
+                          "nodeToUpgradeId": "NodeShotgunTurret",
                           "IsActive": false,
                           "nextSaveNodes": [
                             {
-                              "$id": "57",
-                              "currentNodeId": "AmmoUpgrade",
-                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "$id": "53",
+                              "currentNodeId": "RangeUpgrade",
+                              "nodeToUpgradeId": "NodeShotgunTurret",
                               "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
                                 {
-                                  "$ref": "41"
+                                  "$ref": "36"
+                                },
+                                {
+                                  "$ref": "48"
+                                },
+                                {
+                                  "$ref": "49"
+                                },
+                                {
+                                  "$ref": "50"
+                                },
+                                {
+                                  "$ref": "51"
                                 },
                                 {
                                   "$ref": "52"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "36"
+                            },
+                            {
+                              "$ref": "48"
+                            },
+                            {
+                              "$ref": "49"
+                            },
+                            {
+                              "$ref": "50"
+                            },
+                            {
+                              "$ref": "51"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "36"
+                        },
+                        {
+                          "$ref": "48"
+                        },
+                        {
+                          "$ref": "49"
+                        },
+                        {
+                          "$ref": "50"
+                        }
+                      ]
+                    }
+                  ],
+                  "visitedNodes": [
+                    {
+                      "$ref": "36"
+                    },
+                    {
+                      "$ref": "48"
+                    },
+                    {
+                      "$ref": "49"
+                    }
+                  ]
+                }
+              ],
+              "visitedNodes": [
+                {
+                  "$ref": "36"
+                },
+                {
+                  "$ref": "48"
+                }
+              ]
+            },
+            {
+              "$id": "54",
+              "currentNodeId": "AttackSpeedUpgrade",
+              "nodeToUpgradeId": "NodeShotgunTurret",
+              "IsActive": false,
+              "nextSaveNodes": [
+                {
+                  "$id": "55",
+                  "currentNodeId": "ProjectileSpeed",
+                  "nodeToUpgradeId": "NodeShotgunTurret",
+                  "IsActive": false,
+                  "nextSaveNodes": [
+                    {
+                      "$id": "56",
+                      "currentNodeId": "AttackSpeedUpgrade",
+                      "nodeToUpgradeId": "NodeShotgunTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "57",
+                          "currentNodeId": "RangeUpgrade",
+                          "nodeToUpgradeId": "NodeShotgunTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "58",
+                              "currentNodeId": "AmmoUpgrade",
+                              "nodeToUpgradeId": "NodeShotgunTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "36"
                                 },
                                 {
-                                  "$ref": "53"
+                                  "$ref": "48"
                                 },
                                 {
                                   "$ref": "54"
@@ -1145,145 +1121,167 @@
                                 },
                                 {
                                   "$ref": "56"
+                                },
+                                {
+                                  "$ref": "57"
                                 }
                               ]
                             }
                           ],
                           "visitedNodes": [
                             {
-                              "$ref": "41"
+                              "$ref": "36"
                             },
                             {
-                              "$ref": "52"
-                            },
-                            {
-                              "$ref": "53"
+                              "$ref": "48"
                             },
                             {
                               "$ref": "54"
                             },
                             {
                               "$ref": "55"
+                            },
+                            {
+                              "$ref": "56"
                             }
                           ]
                         }
                       ],
                       "visitedNodes": [
                         {
-                          "$ref": "41"
+                          "$ref": "36"
                         },
                         {
-                          "$ref": "52"
-                        },
-                        {
-                          "$ref": "53"
+                          "$ref": "48"
                         },
                         {
                           "$ref": "54"
-                        }
-                      ]
-                    },
-                    {
-                      "$id": "58",
-                      "currentNodeId": "RangeUpgrade",
-                      "nodeToUpgradeId": "NodeSniperTurret",
-                      "IsActive": false,
-                      "nextSaveNodes": [
-                        {
-                          "$id": "59",
-                          "currentNodeId": "RangeUpgrade",
-                          "nodeToUpgradeId": "NodeSniperTurret",
-                          "IsActive": false,
-                          "nextSaveNodes": [
-                            {
-                              "$id": "60",
-                              "currentNodeId": "ProjectileSpeed",
-                              "nodeToUpgradeId": "NodeSniperTurret",
-                              "IsActive": false,
-                              "nextSaveNodes": [],
-                              "visitedNodes": [
-                                {
-                                  "$ref": "41"
-                                },
-                                {
-                                  "$ref": "52"
-                                },
-                                {
-                                  "$ref": "53"
-                                },
-                                {
-                                  "$ref": "54"
-                                },
-                                {
-                                  "$ref": "58"
-                                },
-                                {
-                                  "$ref": "59"
-                                }
-                              ]
-                            }
-                          ],
-                          "visitedNodes": [
-                            {
-                              "$ref": "41"
-                            },
-                            {
-                              "$ref": "52"
-                            },
-                            {
-                              "$ref": "53"
-                            },
-                            {
-                              "$ref": "54"
-                            },
-                            {
-                              "$ref": "58"
-                            }
-                          ]
-                        }
-                      ],
-                      "visitedNodes": [
-                        {
-                          "$ref": "41"
                         },
                         {
-                          "$ref": "52"
-                        },
-                        {
-                          "$ref": "53"
-                        },
-                        {
-                          "$ref": "54"
+                          "$ref": "55"
                         }
                       ]
                     }
                   ],
                   "visitedNodes": [
                     {
-                      "$ref": "41"
+                      "$ref": "36"
                     },
                     {
-                      "$ref": "52"
+                      "$ref": "48"
                     },
                     {
-                      "$ref": "53"
+                      "$ref": "54"
+                    }
+                  ]
+                },
+                {
+                  "$id": "59",
+                  "currentNodeId": "RangeUpgrade",
+                  "nodeToUpgradeId": "NodeShotgunTurret",
+                  "IsActive": false,
+                  "nextSaveNodes": [
+                    {
+                      "$id": "60",
+                      "currentNodeId": "ProjectileSpeed",
+                      "nodeToUpgradeId": "NodeShotgunTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "61",
+                          "currentNodeId": "RangeUpgrade",
+                          "nodeToUpgradeId": "NodeShotgunTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "62",
+                              "currentNodeId": "RangeUpgrade",
+                              "nodeToUpgradeId": "NodeShotgunTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "36"
+                                },
+                                {
+                                  "$ref": "48"
+                                },
+                                {
+                                  "$ref": "54"
+                                },
+                                {
+                                  "$ref": "59"
+                                },
+                                {
+                                  "$ref": "60"
+                                },
+                                {
+                                  "$ref": "61"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "36"
+                            },
+                            {
+                              "$ref": "48"
+                            },
+                            {
+                              "$ref": "54"
+                            },
+                            {
+                              "$ref": "59"
+                            },
+                            {
+                              "$ref": "60"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "36"
+                        },
+                        {
+                          "$ref": "48"
+                        },
+                        {
+                          "$ref": "54"
+                        },
+                        {
+                          "$ref": "59"
+                        }
+                      ]
+                    }
+                  ],
+                  "visitedNodes": [
+                    {
+                      "$ref": "36"
+                    },
+                    {
+                      "$ref": "48"
+                    },
+                    {
+                      "$ref": "54"
                     }
                   ]
                 }
               ],
               "visitedNodes": [
                 {
-                  "$ref": "41"
+                  "$ref": "36"
                 },
                 {
-                  "$ref": "52"
+                  "$ref": "48"
                 }
               ]
             }
           ],
           "visitedNodes": [
             {
-              "$ref": "41"
+              "$ref": "36"
             }
           ]
         }
@@ -1291,54 +1289,48 @@
       "visitedNodes": []
     },
     {
-      "$id": "61",
-      "currentNodeId": "NodeRapidFireTurret",
+      "$id": "63",
+      "currentNodeId": "NodeSniperTurret",
       "nodeToUpgradeId": "",
       "IsActive": false,
       "nextSaveNodes": [
         {
-          "$id": "62",
-          "currentNodeId": "ProjectileSpeed",
-          "nodeToUpgradeId": "NodeRapidFireTurret",
+          "$id": "64",
+          "currentNodeId": "AmmoUpgrade",
+          "nodeToUpgradeId": "NodeSniperTurret",
           "IsActive": false,
           "nextSaveNodes": [
             {
-              "$id": "63",
-              "currentNodeId": "AmmoUpgrade",
-              "nodeToUpgradeId": "NodeRapidFireTurret",
+              "$id": "65",
+              "currentNodeId": "AttackSpeedUpgrade",
+              "nodeToUpgradeId": "NodeSniperTurret",
               "IsActive": false,
               "nextSaveNodes": [
                 {
-                  "$id": "64",
+                  "$id": "66",
                   "currentNodeId": "AmmoUpgrade",
-                  "nodeToUpgradeId": "NodeRapidFireTurret",
+                  "nodeToUpgradeId": "NodeSniperTurret",
                   "IsActive": false,
                   "nextSaveNodes": [
                     {
-                      "$id": "65",
-                      "currentNodeId": "RangeUpgrade",
-                      "nodeToUpgradeId": "NodeRapidFireTurret",
+                      "$id": "67",
+                      "currentNodeId": "DamageUpgrade",
+                      "nodeToUpgradeId": "NodeSniperTurret",
                       "IsActive": false,
                       "nextSaveNodes": [
                         {
-                          "$id": "66",
-                          "currentNodeId": "AmmoUpgrade",
-                          "nodeToUpgradeId": "NodeRapidFireTurret",
+                          "$id": "68",
+                          "currentNodeId": "DamageUpgrade",
+                          "nodeToUpgradeId": "NodeSniperTurret",
                           "IsActive": false,
                           "nextSaveNodes": [
                             {
-                              "$id": "67",
-                              "currentNodeId": "DamageUpgrade",
-                              "nodeToUpgradeId": "NodeRapidFireTurret",
+                              "$id": "69",
+                              "currentNodeId": "AttackSpeedUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
                               "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
-                                {
-                                  "$ref": "61"
-                                },
-                                {
-                                  "$ref": "62"
-                                },
                                 {
                                   "$ref": "63"
                                 },
@@ -1350,17 +1342,44 @@
                                 },
                                 {
                                   "$ref": "66"
+                                },
+                                {
+                                  "$ref": "67"
+                                },
+                                {
+                                  "$ref": "68"
+                                }
+                              ]
+                            },
+                            {
+                              "$id": "70",
+                              "currentNodeId": "AttackSpeedUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "63"
+                                },
+                                {
+                                  "$ref": "64"
+                                },
+                                {
+                                  "$ref": "65"
+                                },
+                                {
+                                  "$ref": "66"
+                                },
+                                {
+                                  "$ref": "67"
+                                },
+                                {
+                                  "$ref": "68"
                                 }
                               ]
                             }
                           ],
                           "visitedNodes": [
-                            {
-                              "$ref": "61"
-                            },
-                            {
-                              "$ref": "62"
-                            },
                             {
                               "$ref": "63"
                             },
@@ -1369,174 +1388,712 @@
                             },
                             {
                               "$ref": "65"
+                            },
+                            {
+                              "$ref": "66"
+                            },
+                            {
+                              "$ref": "67"
                             }
                           ]
                         }
                       ],
                       "visitedNodes": [
                         {
-                          "$ref": "61"
-                        },
-                        {
-                          "$ref": "62"
-                        },
-                        {
                           "$ref": "63"
                         },
                         {
                           "$ref": "64"
+                        },
+                        {
+                          "$ref": "65"
+                        },
+                        {
+                          "$ref": "66"
                         }
                       ]
                     }
                   ],
                   "visitedNodes": [
                     {
-                      "$ref": "61"
-                    },
-                    {
-                      "$ref": "62"
-                    },
-                    {
                       "$ref": "63"
+                    },
+                    {
+                      "$ref": "64"
+                    },
+                    {
+                      "$ref": "65"
                     }
                   ]
                 }
               ],
               "visitedNodes": [
                 {
-                  "$ref": "61"
+                  "$ref": "63"
                 },
                 {
-                  "$ref": "62"
+                  "$ref": "64"
                 }
               ]
-            }
-          ],
-          "visitedNodes": [
+            },
             {
-              "$ref": "61"
-            }
-          ]
-        },
-        {
-          "$id": "68",
-          "currentNodeId": "ProjectileSpeed",
-          "nodeToUpgradeId": "NodeRapidFireTurret",
-          "IsActive": false,
-          "nextSaveNodes": [
-            {
-              "$id": "69",
-              "currentNodeId": "AmmoUpgrade",
-              "nodeToUpgradeId": "NodeRapidFireTurret",
+              "$id": "71",
+              "currentNodeId": "RangeUpgrade",
+              "nodeToUpgradeId": "NodeSniperTurret",
               "IsActive": false,
               "nextSaveNodes": [
                 {
-                  "$id": "70",
+                  "$id": "72",
                   "currentNodeId": "DamageUpgrade",
-                  "nodeToUpgradeId": "NodeRapidFireTurret",
+                  "nodeToUpgradeId": "NodeSniperTurret",
                   "IsActive": false,
                   "nextSaveNodes": [
                     {
-                      "$id": "71",
-                      "currentNodeId": "ProjectileSpeed",
-                      "nodeToUpgradeId": "NodeRapidFireTurret",
+                      "$id": "73",
+                      "currentNodeId": "RangeUpgrade",
+                      "nodeToUpgradeId": "NodeSniperTurret",
                       "IsActive": false,
                       "nextSaveNodes": [
                         {
-                          "$id": "72",
-                          "currentNodeId": "AttackSpeedUpgrade",
-                          "nodeToUpgradeId": "NodeRapidFireTurret",
+                          "$id": "74",
+                          "currentNodeId": "RangeUpgrade",
+                          "nodeToUpgradeId": "NodeSniperTurret",
                           "IsActive": false,
                           "nextSaveNodes": [
                             {
-                              "$id": "73",
-                              "currentNodeId": "ProjectileSpeed",
-                              "nodeToUpgradeId": "NodeRapidFireTurret",
+                              "$id": "75",
+                              "currentNodeId": "RangeUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
                               "IsActive": false,
                               "nextSaveNodes": [],
                               "visitedNodes": [
                                 {
-                                  "$ref": "61"
+                                  "$ref": "63"
                                 },
                                 {
-                                  "$ref": "68"
-                                },
-                                {
-                                  "$ref": "69"
-                                },
-                                {
-                                  "$ref": "70"
+                                  "$ref": "64"
                                 },
                                 {
                                   "$ref": "71"
                                 },
                                 {
                                   "$ref": "72"
+                                },
+                                {
+                                  "$ref": "73"
+                                },
+                                {
+                                  "$ref": "74"
+                                }
+                              ]
+                            },
+                            {
+                              "$id": "76",
+                              "currentNodeId": "AttackSpeedUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "63"
+                                },
+                                {
+                                  "$ref": "64"
+                                },
+                                {
+                                  "$ref": "71"
+                                },
+                                {
+                                  "$ref": "72"
+                                },
+                                {
+                                  "$ref": "73"
+                                },
+                                {
+                                  "$ref": "74"
                                 }
                               ]
                             }
                           ],
                           "visitedNodes": [
                             {
-                              "$ref": "61"
+                              "$ref": "63"
                             },
                             {
-                              "$ref": "68"
-                            },
-                            {
-                              "$ref": "69"
-                            },
-                            {
-                              "$ref": "70"
+                              "$ref": "64"
                             },
                             {
                               "$ref": "71"
+                            },
+                            {
+                              "$ref": "72"
+                            },
+                            {
+                              "$ref": "73"
                             }
                           ]
                         }
                       ],
                       "visitedNodes": [
                         {
-                          "$ref": "61"
+                          "$ref": "63"
                         },
                         {
-                          "$ref": "68"
+                          "$ref": "64"
                         },
                         {
-                          "$ref": "69"
+                          "$ref": "71"
                         },
                         {
-                          "$ref": "70"
+                          "$ref": "72"
                         }
                       ]
                     }
                   ],
                   "visitedNodes": [
                     {
-                      "$ref": "61"
+                      "$ref": "63"
                     },
                     {
-                      "$ref": "68"
+                      "$ref": "64"
                     },
                     {
-                      "$ref": "69"
+                      "$ref": "71"
+                    }
+                  ]
+                },
+                {
+                  "$id": "77",
+                  "currentNodeId": "RangeUpgrade",
+                  "nodeToUpgradeId": "NodeSniperTurret",
+                  "IsActive": false,
+                  "nextSaveNodes": [
+                    {
+                      "$id": "78",
+                      "currentNodeId": "AttackSpeedUpgrade",
+                      "nodeToUpgradeId": "NodeSniperTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "79",
+                          "currentNodeId": "AmmoUpgrade",
+                          "nodeToUpgradeId": "NodeSniperTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "80",
+                              "currentNodeId": "AttackSpeedUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "63"
+                                },
+                                {
+                                  "$ref": "64"
+                                },
+                                {
+                                  "$ref": "71"
+                                },
+                                {
+                                  "$ref": "77"
+                                },
+                                {
+                                  "$ref": "78"
+                                },
+                                {
+                                  "$ref": "79"
+                                }
+                              ]
+                            },
+                            {
+                              "$id": "81",
+                              "currentNodeId": "AttackSpeedUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "63"
+                                },
+                                {
+                                  "$ref": "64"
+                                },
+                                {
+                                  "$ref": "71"
+                                },
+                                {
+                                  "$ref": "77"
+                                },
+                                {
+                                  "$ref": "78"
+                                },
+                                {
+                                  "$ref": "79"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "63"
+                            },
+                            {
+                              "$ref": "64"
+                            },
+                            {
+                              "$ref": "71"
+                            },
+                            {
+                              "$ref": "77"
+                            },
+                            {
+                              "$ref": "78"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "63"
+                        },
+                        {
+                          "$ref": "64"
+                        },
+                        {
+                          "$ref": "71"
+                        },
+                        {
+                          "$ref": "77"
+                        }
+                      ]
+                    }
+                  ],
+                  "visitedNodes": [
+                    {
+                      "$ref": "63"
+                    },
+                    {
+                      "$ref": "64"
+                    },
+                    {
+                      "$ref": "71"
                     }
                   ]
                 }
               ],
               "visitedNodes": [
                 {
-                  "$ref": "61"
+                  "$ref": "63"
                 },
                 {
-                  "$ref": "68"
+                  "$ref": "64"
                 }
               ]
             }
           ],
           "visitedNodes": [
             {
-              "$ref": "61"
+              "$ref": "63"
+            }
+          ]
+        },
+        {
+          "$id": "82",
+          "currentNodeId": "AmmoUpgrade",
+          "nodeToUpgradeId": "NodeSniperTurret",
+          "IsActive": false,
+          "nextSaveNodes": [
+            {
+              "$id": "83",
+              "currentNodeId": "RangeUpgrade",
+              "nodeToUpgradeId": "NodeSniperTurret",
+              "IsActive": false,
+              "nextSaveNodes": [
+                {
+                  "$id": "84",
+                  "currentNodeId": "AttackSpeedUpgrade",
+                  "nodeToUpgradeId": "NodeSniperTurret",
+                  "IsActive": false,
+                  "nextSaveNodes": [
+                    {
+                      "$id": "85",
+                      "currentNodeId": "AmmoUpgrade",
+                      "nodeToUpgradeId": "NodeSniperTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "86",
+                          "currentNodeId": "AmmoUpgrade",
+                          "nodeToUpgradeId": "NodeSniperTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "87",
+                              "currentNodeId": "AmmoUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "63"
+                                },
+                                {
+                                  "$ref": "82"
+                                },
+                                {
+                                  "$ref": "83"
+                                },
+                                {
+                                  "$ref": "84"
+                                },
+                                {
+                                  "$ref": "85"
+                                },
+                                {
+                                  "$ref": "86"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "63"
+                            },
+                            {
+                              "$ref": "82"
+                            },
+                            {
+                              "$ref": "83"
+                            },
+                            {
+                              "$ref": "84"
+                            },
+                            {
+                              "$ref": "85"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "63"
+                        },
+                        {
+                          "$ref": "82"
+                        },
+                        {
+                          "$ref": "83"
+                        },
+                        {
+                          "$ref": "84"
+                        }
+                      ]
+                    }
+                  ],
+                  "visitedNodes": [
+                    {
+                      "$ref": "63"
+                    },
+                    {
+                      "$ref": "82"
+                    },
+                    {
+                      "$ref": "83"
+                    }
+                  ]
+                },
+                {
+                  "$id": "88",
+                  "currentNodeId": "AmmoUpgrade",
+                  "nodeToUpgradeId": "NodeSniperTurret",
+                  "IsActive": false,
+                  "nextSaveNodes": [
+                    {
+                      "$id": "89",
+                      "currentNodeId": "ProjectileSpeed",
+                      "nodeToUpgradeId": "NodeSniperTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "90",
+                          "currentNodeId": "RangeUpgrade",
+                          "nodeToUpgradeId": "NodeSniperTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "91",
+                              "currentNodeId": "RangeUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "63"
+                                },
+                                {
+                                  "$ref": "82"
+                                },
+                                {
+                                  "$ref": "83"
+                                },
+                                {
+                                  "$ref": "88"
+                                },
+                                {
+                                  "$ref": "89"
+                                },
+                                {
+                                  "$ref": "90"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "63"
+                            },
+                            {
+                              "$ref": "82"
+                            },
+                            {
+                              "$ref": "83"
+                            },
+                            {
+                              "$ref": "88"
+                            },
+                            {
+                              "$ref": "89"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "63"
+                        },
+                        {
+                          "$ref": "82"
+                        },
+                        {
+                          "$ref": "83"
+                        },
+                        {
+                          "$ref": "88"
+                        }
+                      ]
+                    }
+                  ],
+                  "visitedNodes": [
+                    {
+                      "$ref": "63"
+                    },
+                    {
+                      "$ref": "82"
+                    },
+                    {
+                      "$ref": "83"
+                    }
+                  ]
+                }
+              ],
+              "visitedNodes": [
+                {
+                  "$ref": "63"
+                },
+                {
+                  "$ref": "82"
+                }
+              ]
+            },
+            {
+              "$id": "92",
+              "currentNodeId": "RangeUpgrade",
+              "nodeToUpgradeId": "NodeSniperTurret",
+              "IsActive": false,
+              "nextSaveNodes": [
+                {
+                  "$id": "93",
+                  "currentNodeId": "AttackSpeedUpgrade",
+                  "nodeToUpgradeId": "NodeSniperTurret",
+                  "IsActive": false,
+                  "nextSaveNodes": [
+                    {
+                      "$id": "94",
+                      "currentNodeId": "AttackSpeedUpgrade",
+                      "nodeToUpgradeId": "NodeSniperTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "95",
+                          "currentNodeId": "RangeUpgrade",
+                          "nodeToUpgradeId": "NodeSniperTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "96",
+                              "currentNodeId": "DamageUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "63"
+                                },
+                                {
+                                  "$ref": "82"
+                                },
+                                {
+                                  "$ref": "92"
+                                },
+                                {
+                                  "$ref": "93"
+                                },
+                                {
+                                  "$ref": "94"
+                                },
+                                {
+                                  "$ref": "95"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "63"
+                            },
+                            {
+                              "$ref": "82"
+                            },
+                            {
+                              "$ref": "92"
+                            },
+                            {
+                              "$ref": "93"
+                            },
+                            {
+                              "$ref": "94"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "63"
+                        },
+                        {
+                          "$ref": "82"
+                        },
+                        {
+                          "$ref": "92"
+                        },
+                        {
+                          "$ref": "93"
+                        }
+                      ]
+                    },
+                    {
+                      "$id": "97",
+                      "currentNodeId": "RangeUpgrade",
+                      "nodeToUpgradeId": "NodeSniperTurret",
+                      "IsActive": false,
+                      "nextSaveNodes": [
+                        {
+                          "$id": "98",
+                          "currentNodeId": "ProjectileSpeed",
+                          "nodeToUpgradeId": "NodeSniperTurret",
+                          "IsActive": false,
+                          "nextSaveNodes": [
+                            {
+                              "$id": "99",
+                              "currentNodeId": "DamageUpgrade",
+                              "nodeToUpgradeId": "NodeSniperTurret",
+                              "IsActive": false,
+                              "nextSaveNodes": [],
+                              "visitedNodes": [
+                                {
+                                  "$ref": "63"
+                                },
+                                {
+                                  "$ref": "82"
+                                },
+                                {
+                                  "$ref": "92"
+                                },
+                                {
+                                  "$ref": "93"
+                                },
+                                {
+                                  "$ref": "97"
+                                },
+                                {
+                                  "$ref": "98"
+                                }
+                              ]
+                            }
+                          ],
+                          "visitedNodes": [
+                            {
+                              "$ref": "63"
+                            },
+                            {
+                              "$ref": "82"
+                            },
+                            {
+                              "$ref": "92"
+                            },
+                            {
+                              "$ref": "93"
+                            },
+                            {
+                              "$ref": "97"
+                            }
+                          ]
+                        }
+                      ],
+                      "visitedNodes": [
+                        {
+                          "$ref": "63"
+                        },
+                        {
+                          "$ref": "82"
+                        },
+                        {
+                          "$ref": "92"
+                        },
+                        {
+                          "$ref": "93"
+                        }
+                      ]
+                    }
+                  ],
+                  "visitedNodes": [
+                    {
+                      "$ref": "63"
+                    },
+                    {
+                      "$ref": "82"
+                    },
+                    {
+                      "$ref": "92"
+                    }
+                  ]
+                }
+              ],
+              "visitedNodes": [
+                {
+                  "$ref": "63"
+                },
+                {
+                  "$ref": "82"
+                }
+              ]
+            }
+          ],
+          "visitedNodes": [
+            {
+              "$ref": "63"
             }
           ]
         }

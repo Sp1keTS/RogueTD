@@ -14,7 +14,7 @@ public class OpenPauseMenueButton : MonoBehaviour
         _gameInput = GameInputManager.Instance.GameInput;
         if (pauseButton == null)
             pauseButton = GetComponent<Button>();
-            
+        
         pauseButton.onClick.AddListener(OnButtonClick);
     }
 
