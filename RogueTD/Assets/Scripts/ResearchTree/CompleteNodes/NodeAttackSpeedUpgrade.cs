@@ -10,7 +10,7 @@ public class NodeAttackSpeedUpgrade : ProjectileTowerUpgradeTreeNode
     {
         float totalMultiplier = baseSpeedMultiplier + (rank * rankBonusPerLevel);
         blueprint.AttackSpeed *= totalMultiplier;
-        
+        BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
     public override void LoadDependencies()

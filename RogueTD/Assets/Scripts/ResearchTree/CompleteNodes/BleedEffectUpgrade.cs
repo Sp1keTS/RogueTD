@@ -43,7 +43,7 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
                 blueprint.StatusEffects = newEffects;
             }
         }
-        
+        BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
         Debug.Log($"Bleed effect '{bleedEffect.name}' added to blueprint '{blueprint.buildingName}'");
     }
 

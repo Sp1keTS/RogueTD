@@ -11,6 +11,7 @@ public class NodePTProjectileSpeedUpgrade : ProjectileTowerUpgradeTreeNode
     {
         float totalMultiplier = baseRangeMultiplier + (rank * rankBonusPerLevel);
         blueprint.ProjectileSpeed *= totalMultiplier;
+        BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
     public override void LoadDependencies()

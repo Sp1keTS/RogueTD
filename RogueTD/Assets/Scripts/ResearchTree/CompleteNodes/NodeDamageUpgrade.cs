@@ -11,7 +11,7 @@ public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
         float totalMultiplier = baseDamageMultiplier + (rank * rankBonusPerLevel);
         blueprint.Damage = Mathf.RoundToInt(blueprint.Damage * totalMultiplier);
         blueprint.DamageMult *= totalMultiplier;
-        
+        BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
         Debug.Log($"Damage upgraded to {totalMultiplier:F1}x! New damage: {blueprint.Damage}");
     }
 
