@@ -1,4 +1,5 @@
 using UnityEngine;
+
 [CreateAssetMenu(fileName = "NodeShotgunTurret", menuName = "Research Tree/Turrets/Shotgun Turret Node")]
 public class NodeShotgunTurret : ProjectileTowerNode
 {
@@ -8,24 +9,25 @@ public class NodeShotgunTurret : ProjectileTowerNode
         "Devastating at short range but ineffective at distance.\n" +
         "Ideal for choke points and dealing with tightly packed enemies.";
     
-    public override string TooltipText
+    public override string TooltipText => description;
+    
+    public override string GetStats(int rank)
     {
-        get
+        if (towerBlueprint != null)
         {
-            if (towerBlueprint != null)
-            {
-                return $"SHOTGUN TURRET (Rank {CurrentRank})\n\n" +
-                       $"{description}\n\n" +
-                       $"Tower Stats:\n" +
-                       $"{towerBlueprint.GetTowerStats()}\n\n" +
-                       $"Specialization:\n" +
-                       $"• Multiple projectiles per shot (4-8)\n" +
-                       $"• Wide spread pattern\n" +
-                       $"• Short range, high close-quarters damage\n" +
-                       $"• Fast projectile speed";
-            }
-            return $"SHOTGUN TURRET\n\n{description}";
+            return $"Cost: {Cost}\n" +
+                   $"{description}\n\n" +
+                   $"Tower Stats (Rank {rank}):\n" +
+                   $"{towerBlueprint.GetTowerStats()}\n\n" +
+                   $"Specialization:\n" +
+                   $"• Multiple projectiles per shot (4-8+)\n" +
+                   $"• Wide spread pattern (10-20°)\n" +
+                   $"• Short effective range\n" +
+                   $"• High close-quarters damage\n" +
+                   $"• Fast projectile velocity\n" +
+                   $"• Perfect for corridor defense";
         }
+        return $"FAILED TO LOAD\n\n{description}";
     }
     
     public override void Initialize(int rank)
@@ -41,7 +43,7 @@ public class NodeShotgunTurret : ProjectileTowerNode
             towerBlueprint.ProjectileScale = 1;
             towerBlueprint.ProjectileSpeed = Random.Range(30f, 40f) + (rank * 1f);
             towerBlueprint.ProjectileLifetime = Random.Range(0.25f, 0.5f) + (rank * 0.1f);
-            towerBlueprint.Spread = Random.Range(10f, 20f); // Большой разброс
+            towerBlueprint.Spread = Random.Range(10f, 20f);
             towerBlueprint.ProjectileFragile = Random.value > 0.5f;
             
             towerBlueprint.ProjectileCount = Random.Range(4, 8) + Mathf.RoundToInt(rank * 0.5f);

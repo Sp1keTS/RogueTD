@@ -12,7 +12,6 @@ public abstract class TreeNode : ScriptableObject
     [SerializeField] protected int minRank = 0;
     [SerializeField] protected TreeNode directUpgradeOf;
     [SerializeField] protected int cost;
-    [SerializeField] protected float baseCost;
     [SerializeField] protected Sprite icon;
     
     [SerializeField] protected string tooltipText = "Description failed to load properly";
@@ -28,4 +27,5 @@ public abstract class TreeNode : ScriptableObject
     abstract public void OnActivate();
     abstract public void Initialize(int rank);
     abstract public void LoadDependencies();
+    abstract public string GetStats(int rank);
 }

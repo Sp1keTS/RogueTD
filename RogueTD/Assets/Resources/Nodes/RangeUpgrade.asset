@@ -14,10 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tags: []
   maxRank: 9
-  minRank: 0
+  minRank: 1
   directUpgradeOf: {fileID: 0}
   cost: 10
+  baseCost: 0
   icon: {fileID: 7661768812488301925, guid: 31c544e7d7fc39648ae08b4ebb3c0fca, type: 3}
+  tooltipText: Description failed to load properly
   baseRangeMultiplier: 1.2
   rankBonusPerLevel: 0.05
-  projectileSpeedBonus: 0.08
+  description: 'Extends your tower''s targeting and attack range.
+
+    Allows your
+    tower to engage enemies from further away.
+
+    Strategic positioning with increased
+    range can cover more of the battlefield.'

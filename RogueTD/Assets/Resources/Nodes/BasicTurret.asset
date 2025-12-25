@@ -19,6 +19,15 @@ MonoBehaviour:
   minRank: 0
   directUpgradeOf: {fileID: 0}
   cost: 0
+  baseCost: 0
   icon: {fileID: -9180517479017280612, guid: 3cca47f418604d3409801b683c232770, type: 3}
+  tooltipText: Description failed to load properly
   towerBlueprint: {fileID: 11400000, guid: a921d4ad8c6c4fe41a75fe0ffca1b0ab, type: 2}
   basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
+  description: 'The standard projectile tower with balanced stats.
+
+    Versatile
+    and reliable, this tower excels in most situations.
+
+    Good damage, range,
+    and fire rate make it an excellent all-rounder.'

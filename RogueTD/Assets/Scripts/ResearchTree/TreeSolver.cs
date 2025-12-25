@@ -57,6 +57,7 @@ public class TreeSolver : MonoBehaviour
             var rootNode = Instantiate(uiTreeNodePrefab, canvas.transform);
             rootNode.transform.localPosition = position;
             rootNode.TreeSaveNode = root;
+            rootNode.Rank = 0; 
             rootNode.SetImage();
             if (rootNode.TreeSaveNode.IsActive)
             {
@@ -64,16 +65,21 @@ public class TreeSolver : MonoBehaviour
             }
             nodeToUI[root] = rootNode;
 
-            ProcessNodeBranchBFS(root, position, currentAngle);
+            ProcessNodeBranchBFS(root, position, currentAngle, 1); 
 
             currentAngle += angleStep;
         }
     }
 
-    private void ProcessNodeBranchBFS(ResearchTree.TreeSaveData.TreeSaveNode startNode, Vector2 startPosition, float startAngle)
+    private void ProcessNodeBranchBFS(ResearchTree.TreeSaveData.TreeSaveNode startNode, Vector2 startPosition, float startAngle, int startDepth)
     {
         var queue = new Queue<BranchNode>();
-        queue.Enqueue(new BranchNode { node = startNode, position = startPosition, angle = startAngle, depth = 0 });
+        queue.Enqueue(new BranchNode { 
+            node = startNode, 
+            position = startPosition, 
+            angle = startAngle, 
+            depth = startDepth 
+        });
 
         var maxDepth = 10;
         var processedCount = 0;
@@ -124,8 +130,9 @@ public class TreeSolver : MonoBehaviour
                 var uiNode = Instantiate(uiTreeNodePrefab, canvas.transform);
                 uiNode.transform.localPosition = childPosition;
                 uiNode.TreeSaveNode = nextSaveNode;
+                uiNode.Rank = current.depth; 
                 uiNode.SetImage();
-                if (nextSaveNode.nodeToUpgrade != null)
+                if (nextSaveNode.nodeToUpgrade)
                 {
                     uiNode.towerToUpgrade = nextSaveNode.nodeToUpgrade;
                 }
@@ -179,11 +186,12 @@ public class TreeSolver : MonoBehaviour
             }
         }
     }
+    
     private struct BranchNode
     {
         public ResearchTree.TreeSaveData.TreeSaveNode node;
         public Vector2 position;
         public float angle;
-        public int depth;
+        public int depth; // Эта переменная теперь используется для хранения глубины/ранга
     }
 }

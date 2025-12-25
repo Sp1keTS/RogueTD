@@ -15,24 +15,27 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
         "Inflicts damage over time to enemies, causing them to bleed.\n" +
         "Higher ranks increase bleed damage and duration.";
     
+    
     public override string TooltipText
     {
-        get
+        get => description;
+    }
+    public override string GetStats(int rank)
+    {
+        
+        if (bleedEffect)
         {
-            if (bleedEffect != null)
-            {
-                return $"BLEED EFFECT UPGRADE (Rank {CurrentRank})\n\n" +
-                       $"{description}\n\n" +
-                       $"Current Effect (Rank {CurrentRank}):\n" +
-                       $"• Total Bleed Damage: {15 + (CurrentRank * totalDamageIncreasePerRank):F0}\n" +
-                       $"• Duration: {2 + (CurrentRank * durationIncreasePerRank):F1} seconds\n" +
-                       $"• Damage per Tick: {(15 + (CurrentRank * totalDamageIncreasePerRank)) / ((2 + (CurrentRank * durationIncreasePerRank)) / 0.5f):F1}\n\n" +
-                       $"Rank Bonus:\n" +
-                       $"• +{totalDamageIncreasePerRank:F0} total damage per rank\n" +
-                       $"• +{durationIncreasePerRank:F1}s duration per rank";
-            }
-            return $"BLEED EFFECT UPGRADE\n\n{description}";
+            return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}" +
+                   $"{description}\n\n" +
+                   $"Current Effect (Rank {rank}):\n" +
+                   $"• Total Bleed Damage: {15 + (rank * totalDamageIncreasePerRank):F0}\n" + 
+                   $"• Duration: {2 + (rank * durationIncreasePerRank):F1} seconds\n" +
+                   $"• Damage per Tick: {(15 + (rank * totalDamageIncreasePerRank)) / ((2 + (rank * durationIncreasePerRank)) / 0.5f):F1}\n\n" +
+                   $"Rank Bonus:\n" + 
+                   $"• +{totalDamageIncreasePerRank:F0} total damage per rank\n" + 
+                   $"• +{durationIncreasePerRank:F1}s duration per rank";
         }
+        return $"FAILED TO LOAD\n\n{description}";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
@@ -42,7 +45,8 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
             Debug.LogError("BleedEffect is not assigned in BleedEffectUpgrade!");
             return;
         }
-        
+
+        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
         ResourceManager.RegisterStatusEffect(bleedEffect.name, bleedEffect);
         
         bleedEffect.TotalDamage = (int)(blueprint.Damage * (rank  * 0.17));

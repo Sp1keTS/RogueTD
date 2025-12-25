@@ -9,24 +9,23 @@ public class NodeRapidFireTurret : ProjectileTowerNode
         "Sacrifices damage per shot for overwhelming projectile volume.\n" +
         "Perfect for suppressing groups of light enemies and fast-moving targets.";
     
-    public override string TooltipText
+    public override string TooltipText => description;
+    
+    public override string GetStats(int rank)
     {
-        get
+        if (towerBlueprint != null)
         {
-            if (towerBlueprint != null)
-            {
-                return $"RAPID FIRE TURRET (Rank {CurrentRank})\n\n" +
-                       $"{description}\n\n" +
-                       $"Tower Stats:\n" +
-                       $"{towerBlueprint.GetTowerStats()}\n\n" +
-                       $"Specialization:\n" +
-                       $"• Extreme attack speed (10-20 shots/sec)\n" +
-                       $"• Fast rotation speed\n" +
-                       $"• High ammo regeneration\n" +
-                       $"• Lower damage per shot";
-            }
-            return $"RAPID FIRE TURRET\n\n{description}";
+            return $"Cost: {Cost}\n" +
+                   $"{description}\n\n" +
+                   $"Tower Stats (Rank {rank}):\n" +
+                   $"{towerBlueprint.GetTowerStats()}\n\n" +
+                   $"Specialization:\n" +
+                   $"• Extreme attack speed\n" +
+                   $"• Fast rotation speed\n" +
+                   $"• High ammo regeneration\n" +
+                   $"• Lower damage per shot";
         }
+        return $"FAILED TO LOAD\n\n{description}";
     }
     
     public override void Initialize(int rank)

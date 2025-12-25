@@ -12,27 +12,26 @@ public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
         "Boosts both base damage and damage multiplier for devastating attacks.\n" +
         "Essential for dealing with armored or high-health enemies.";
     
-    public override string TooltipText
+    public override string TooltipText => description;
+    
+    public override string GetStats(int rank)
     {
-        get
-        {
-            return $"DAMAGE UPGRADE\n\n" +
-                   $"{description}\n\n" +
-                   $"Upgrade Effects (Rank {CurrentRank}):\n" +
-                   $"• Base Damage Multiplier: {baseDamageMultiplier:F1}x\n" +
-                   $"• Per-Rank Bonus: +{rankBonusPerLevel:F2}x\n" +
-                   $"• Total Multiplier at Rank {CurrentRank}: {baseDamageMultiplier + (CurrentRank * rankBonusPerLevel):F2}x\n" +
-                   $"• Increases both base damage and damage multiplier";
-        }
+        return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}\n" +
+               $"{description}\n\n" +
+               $"Current Effect (Rank {rank}):\n" +
+               $"• Damage Multiplier: {baseDamageMultiplier + (rank * rankBonusPerLevel):F2}x\n\n" +
+               $"Rank Bonus:\n" +
+               $"• +{rankBonusPerLevel:F2}x multiplier per rank";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
+        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
+        
         float totalMultiplier = baseDamageMultiplier + (rank * rankBonusPerLevel);
         blueprint.Damage = Mathf.RoundToInt(blueprint.Damage * totalMultiplier);
         blueprint.DamageMult *= totalMultiplier;
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
-        Debug.Log($"Damage upgraded to {totalMultiplier:F1}x! New damage: {blueprint.Damage}");
     }
 
     public override void LoadDependencies()

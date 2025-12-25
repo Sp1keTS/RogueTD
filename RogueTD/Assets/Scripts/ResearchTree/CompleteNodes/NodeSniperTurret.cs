@@ -9,25 +9,27 @@ public class NodeSniperTurret : ProjectileTowerNode
         "Slow rate of fire but devastating impact per shot.\n" +
         "Excellent for picking off high-value targets and armored enemies from a safe distance.";
     
-    public override string TooltipText
+    public override string TooltipText => description;
+    
+    public override string GetStats(int rank)
     {
-        get
+        if (towerBlueprint != null)
         {
-            if (towerBlueprint != null)
-            {
-                return $"SNIPER TURRET (Rank {CurrentRank})\n\n" +
-                       $"{description}\n\n" +
-                       $"Tower Stats:\n" +
-                       $"{towerBlueprint.GetTowerStats()}\n\n" +
-                       $"Specialization:\n" +
-                       $"• Extreme single-shot damage (20-30+)\n" +
-                       $"• Very long range (8-12+)\n" +
-                       $"• High damage multiplier (1.3-1.8x)\n" +
-                       $"• Slow attack speed\n" +
-                       $"• Pinpoint accuracy";
-            }
-            return $"SNIPER TURRET\n\n{description}";
+            return $"Cost: {Cost}\n" +
+                   $"{description}\n\n" +
+                   $"Tower Stats (Rank {rank}):\n" +
+                   $"{towerBlueprint.GetTowerStats()}\n\n" +
+                   $"Specialization:\n" +
+                   $"• Extreme single-shot damage (20-30+)\n" +
+                   $"• Very long range (8-12+ tiles)\n" +
+                   $"• High damage multiplier (1.3-1.8x)\n" +
+                   $"• Pinpoint accuracy (0-1° spread)\n" +
+                   $"• Durable projectiles\n" +
+                   $"• Slow attack speed\n" +
+                   $"• Excellent for boss elimination\n" +
+                   $"• Projectiles travel at extreme velocity";
         }
+        return $"FAILED TO LOAD\n\n{description}";
     }
     
     public override void Initialize(int rank)
@@ -43,8 +45,8 @@ public class NodeSniperTurret : ProjectileTowerNode
             towerBlueprint.ProjectileScale = 1;
             towerBlueprint.ProjectileSpeed = Random.Range(50f, 100f) + (rank * 2f);
             towerBlueprint.ProjectileLifetime = Random.Range(2.5f, 4f) + (rank * 0.2f);
-            towerBlueprint.Spread = Random.Range(0f, 1f); 
-            towerBlueprint.ProjectileFragile = false; 
+            towerBlueprint.Spread = Random.Range(0f, 1f);
+            towerBlueprint.ProjectileFragile = false;
             
             towerBlueprint.ProjectileCount = 1;
             

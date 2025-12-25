@@ -13,10 +13,19 @@ MonoBehaviour:
   m_Name: DamageUpgrade
   m_EditorClassIdentifier: 
   tags: []
-  maxRank: 10
-  minRank: 0
+  maxRank: 9
+  minRank: 1
   directUpgradeOf: {fileID: 0}
   cost: 0
+  baseCost: 0
   icon: {fileID: -2237252792072170878, guid: aa7d8b4c0bb24b5448f7ab61499633c5, type: 3}
+  tooltipText: Description failed to load properly
   baseDamageMultiplier: 1.3
   rankBonusPerLevel: 0.1
+  description: 'Massively increases your tower''s damage output.
+
+    Boosts both
+    base damage and damage multiplier for devastating attacks.
+
+    Essential for
+    dealing with armored or high-health enemies.'

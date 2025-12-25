@@ -9,19 +9,18 @@ public class NodeBasicTurret : ProjectileTowerNode
         "Versatile and reliable, this tower excels in most situations.\n" +
         "Good damage, range, and fire rate make it an excellent all-rounder.";
     
-    public override string TooltipText
+    public override string TooltipText => description;
+    
+    public override string GetStats(int rank)
     {
-        get
+        if (towerBlueprint != null)
         {
-            if (towerBlueprint != null)
-            {
-                return $"BASIC TURRET (Rank {CurrentRank})\n\n" +
-                       $"{description}\n\n" +
-                       $"Tower Stats:\n" +
-                       $"{towerBlueprint.GetTowerStats()}";
-            }
-            return $"BASIC TURRET\n\n{description}";
+            return $"Cost: {Cost}\n" +
+                   $"{description}\n\n" +
+                   $"Tower Stats (Rank {rank}):\n" +
+                   $"{towerBlueprint.GetTowerStats()}";
         }
+        return $"FAILED TO LOAD\n\n{description}";
     }
     
     public override void Initialize(int rank)

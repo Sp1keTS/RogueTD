@@ -12,6 +12,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     ResearchTree.TreeSaveData.TreeSaveNode treeSaveNode;
     public ResearchTree.TreeSaveData.TreeSaveNode  TreeSaveNode {get => treeSaveNode; set => treeSaveNode = value; }
     public ProjectileTowerNode towerToUpgrade {get; set;}
+    public int Rank {get; set;} 
     public Button Button => button;
     private void Awake()
     {
@@ -78,7 +79,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNode.name, TreeSaveNode.currentNode.TooltipText, 
+        UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNode.name, TreeSaveNode.currentNode.TooltipText + treeSaveNode.currentNode.GetStats(Rank), 
             new Vector2(transform.position.x, transform.position.y) );
     }
     

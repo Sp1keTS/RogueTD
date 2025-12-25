@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ProjectileSpeedUpgrade", menuName = "Research Tree/Upgrades/ProjectileSpeed Upgrade")]
 public class NodePTProjectileSpeedUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [SerializeField] private float baseRangeMultiplier = 1.2f;
+    [SerializeField] private float baseSpeedMultiplier = 1.2f;
     [SerializeField] private float rankBonusPerLevel = 0.05f;
     
     [Header("Description")]
@@ -12,23 +12,23 @@ public class NodePTProjectileSpeedUpgrade : ProjectileTowerUpgradeTreeNode
         "Faster projectiles are harder for enemies to dodge and reach targets quicker.\n" +
         "Essential for hitting fast-moving enemies at long range.";
     
-    public override string TooltipText
+    public override string TooltipText => description;
+    
+    public override string GetStats(int rank)
     {
-        get
-        {
-            return $"PROJECTILE SPEED UPGRADE\n\n" +
-                   $"{description}\n\n" +
-                   $"Upgrade Effects (Rank {CurrentRank}):\n" +
-                   $"• Base Speed Multiplier: {baseRangeMultiplier:F1}x\n" +
-                   $"• Per-Rank Bonus: +{rankBonusPerLevel:F2}x\n" +
-                   $"• Total Multiplier at Rank {CurrentRank}: {baseRangeMultiplier + (CurrentRank * rankBonusPerLevel):F2}x\n" +
-                   $"• Reduces time-to-impact significantly";
-        }
+        return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}\n" +
+               $"{description}\n\n" +
+               $"Current Effect (Rank {rank}):\n" +
+               $"• Speed Multiplier: {baseSpeedMultiplier + (rank * rankBonusPerLevel):F2}x\n\n" +
+               $"Rank Bonus:\n" +
+               $"• +{rankBonusPerLevel:F2}x multiplier per rank";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        float totalMultiplier = baseRangeMultiplier + (rank * rankBonusPerLevel);
+        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
+        
+        float totalMultiplier = baseSpeedMultiplier + (rank * rankBonusPerLevel);
         blueprint.ProjectileSpeed *= totalMultiplier;
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }

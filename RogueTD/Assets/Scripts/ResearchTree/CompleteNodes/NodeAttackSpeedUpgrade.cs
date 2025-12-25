@@ -9,24 +9,24 @@ public class NodeAttackSpeedUpgrade : ProjectileTowerUpgradeTreeNode
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
         "Significantly increases your tower's rate of fire.\n" +
-        "Improves attack speed  with additional bonuses per rank.\n";
+        "Improves attack speed with additional bonuses per rank.";
     
-    public override string TooltipText
+    public override string TooltipText => description;
+    
+    public override string GetStats(int rank)
     {
-        get
-        {
-            return $"ATTACK SPEED UPGRADE\n\n" +
-                   $"{description}\n\n" +
-                   $"Upgrade Effects (Rank {CurrentRank}):\n" +
-                   $"• Base Speed Multiplier: {baseSpeedMultiplier:F1}x\n" +
-                   $"• Per-Rank Bonus: +{rankBonusPerLevel:F2}x\n" +
-                   $"• Total Multiplier at Rank {CurrentRank}: {baseSpeedMultiplier + (CurrentRank * rankBonusPerLevel):F2}x\n" +
-                   $"• Increases DPS significantly";
-        }
+        return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}\n" +
+               $"{description}\n\n" +
+               $"Current Effect (Rank {rank}):\n" +
+               $"• Speed Multiplier: {baseSpeedMultiplier + (rank * rankBonusPerLevel):F2}x\n\n" +
+               $"Rank Bonus:\n" +
+               $"• +{rankBonusPerLevel:F2}x multiplier per rank";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
+        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
+        
         float totalMultiplier = baseSpeedMultiplier + (rank * rankBonusPerLevel);
         blueprint.AttackSpeed *= totalMultiplier;
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
@@ -35,7 +35,4 @@ public class NodeAttackSpeedUpgrade : ProjectileTowerUpgradeTreeNode
     public override void LoadDependencies()
     {
     }
-    
-    
-    
 }

@@ -19,6 +19,15 @@ MonoBehaviour:
   minRank: 0
   directUpgradeOf: {fileID: 0}
   cost: 0
+  baseCost: 0
   icon: {fileID: 8008833675835605673, guid: c730c59a9b52c664680814b355b534f9, type: 3}
+  tooltipText: Description failed to load properly
   towerBlueprint: {fileID: 11400000, guid: c8bc9ee49361af945a98b101a1f9e45d, type: 2}
   basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
+  description: 'Close-range powerhouse that fires multiple projectiles in a wide
+    spread.
+
+    Devastating at short range but ineffective at distance.
+
+    Ideal
+    for choke points and dealing with tightly packed enemies.'

@@ -12,22 +12,22 @@ public class NodeRangeUpgrade : ProjectileTowerUpgradeTreeNode
         "Allows your tower to engage enemies from further away.\n" +
         "Strategic positioning with increased range can cover more of the battlefield.";
     
-    public override string TooltipText
+    public override string TooltipText => description;
+    
+    public override string GetStats(int rank)
     {
-        get
-        {
-            return $"RANGE UPGRADE\n\n" +
-                   $"{description}\n\n" +
-                   $"Upgrade Effects (Rank {CurrentRank}):\n" +
-                   $"• Base Range Multiplier: {baseRangeMultiplier:F1}x\n" +
-                   $"• Per-Rank Bonus: +{rankBonusPerLevel:F2}x\n" +
-                   $"• Total Multiplier at Rank {CurrentRank}: {baseRangeMultiplier + (CurrentRank * rankBonusPerLevel):F2}x\n" +
-                   $"• Increases tower's effective coverage area";
-        }
+        return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}\n" +
+               $"{description}\n\n" +
+               $"Current Effect (Rank {rank}):\n" +
+               $"• Range Multiplier: {baseRangeMultiplier + (rank * rankBonusPerLevel):F2}x\n\n" +
+               $"Rank Bonus:\n" +
+               $"• +{rankBonusPerLevel:F2}x multiplier per rank";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
+        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
+        
         float totalMultiplier = baseRangeMultiplier + (rank * rankBonusPerLevel);
         blueprint.TargetingRange *= totalMultiplier;
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
@@ -36,5 +36,4 @@ public class NodeRangeUpgrade : ProjectileTowerUpgradeTreeNode
     public override void LoadDependencies()
     {
     }
-    
 }

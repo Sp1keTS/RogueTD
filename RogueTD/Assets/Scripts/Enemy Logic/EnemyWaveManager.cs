@@ -42,7 +42,11 @@ public class EnemyWaveManager : MonoBehaviour
     
     public void StartWave()
     {
-       
+        if (currentWaveNumber >= 11)
+        {
+            UIEndScreen.Instance.EndGame("You won");
+            return;
+        }
         if (isWaveActive) return;
         
         if (GameState.Instance.CurrentWave != null)
