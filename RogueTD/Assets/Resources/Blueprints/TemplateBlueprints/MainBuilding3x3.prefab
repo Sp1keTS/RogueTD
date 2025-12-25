@@ -107,7 +107,8 @@ MonoBehaviour:
   buildingName: MainBuilding
   healthComponent: {fileID: 3323953919622414167}
   size: {x: 0, y: 0}
-  buildingCollider: {fileID: 0}
+  buildingCollider: {fileID: 3127956477132776331}
+  healthBar: {fileID: 1454759931143097500}
 --- !u!61 &3127956477132776331
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -180,7 +181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5baf2cfb63caebe4bb506210e2c718cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 3451898158513402287}
 --- !u!1001 &6770665606944420675
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -237,6 +237,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Healthbar
       objectReference: {fileID: 0}
+    - target: {fileID: 5316046413323435999, guid: 351baf954590df348a71254a311227b1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -245,5 +249,10 @@ PrefabInstance:
 --- !u!4 &1454759931143097491 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5316046413323435984, guid: 351baf954590df348a71254a311227b1, type: 3}
+  m_PrefabInstance: {fileID: 6770665606944420675}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1454759931143097500 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5316046413323435999, guid: 351baf954590df348a71254a311227b1, type: 3}
   m_PrefabInstance: {fileID: 6770665606944420675}
   m_PrefabAsset: {fileID: 0}

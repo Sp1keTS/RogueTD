@@ -1,12 +1,16 @@
 using System;
 using UnityEngine;
 using Ilumisoft.HealthSystem;
-public class Building : MonoBehaviour
+using Unity.VisualScripting;
+using UnityEngine.EventSystems;
+
+public class Building : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public string buildingName;
     [SerializeField] private HealthComponent healthComponent;
     [SerializeField] private Vector2Int size;
     [SerializeField] private Collider2D buildingCollider;
+    [SerializeField] private GameObject healthBar;
     static public Action<Vector2Int> onBuildingDestroyed;
     public float CurrentHealthPoints
     {
@@ -58,8 +62,6 @@ public class Building : MonoBehaviour
         return Vector2.zero;
     }
     
-    
-    
     public void Initialize(int maxHP, float currentHP = -1)
     {
         healthComponent.MaxHealth = maxHP;
@@ -69,5 +71,15 @@ public class Building : MonoBehaviour
     public void InitializeFromBlueprint(BuildingBlueprint buildingBlueprint, float currentHP = -1)
     {
         Initialize(buildingBlueprint.MaxHealthPoints, currentHP);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        healthBar.SetActive(true);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        healthBar.SetActive(false);
     }
 }

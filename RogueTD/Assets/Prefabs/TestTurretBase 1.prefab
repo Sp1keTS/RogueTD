@@ -106,7 +106,8 @@ MonoBehaviour:
   buildingName: 
   healthComponent: {fileID: -8970231158791612102}
   size: {x: 0, y: 0}
-  buildingCollider: {fileID: 0}
+  buildingCollider: {fileID: 6082800028625744019}
+  healthBar: {fileID: 452902782573218350}
 --- !u!61 &6082800028625744019
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -223,6 +224,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Healthbar
       objectReference: {fileID: 0}
+    - target: {fileID: 5316046413323435999, guid: 351baf954590df348a71254a311227b1, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5316046414844214689, guid: 351baf954590df348a71254a311227b1, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
@@ -235,5 +240,10 @@ PrefabInstance:
 --- !u!4 &452902782573218337 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5316046413323435984, guid: 351baf954590df348a71254a311227b1, type: 3}
+  m_PrefabInstance: {fileID: 5732920295764915697}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &452902782573218350 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5316046413323435999, guid: 351baf954590df348a71254a311227b1, type: 3}
   m_PrefabInstance: {fileID: 5732920295764915697}
   m_PrefabAsset: {fileID: 0}
