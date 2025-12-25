@@ -63,7 +63,30 @@ public static class BlueprintManager
         
         InvokeBuildingChanged(blueprint, blueprint.buildingName);
     }
-    
+
+    public static void InsertBuildingBlueprint(BuildingBlueprint blueprint)
+    {
+        if (blueprints == null)
+        {
+            blueprints = new Dictionary<string, BuildingBlueprint>();
+        }
+
+        if (blueprint == null || string.IsNullOrEmpty(blueprint.buildingName))
+        {
+            Debug.LogError("Cannot insert null blueprint or blueprint with empty name");
+            return;
+        }
+
+        if (blueprints.ContainsKey(blueprint.buildingName))
+        {
+            blueprints[blueprint.buildingName] = blueprint;
+        }
+        else
+        {
+            blueprints.Add(blueprint.buildingName, blueprint);
+        }
+        
+    }
 
     private static ResourceReference<T>[] ConvertToResourceReferences<T>(T[] items) where T : ScriptableObject
     {

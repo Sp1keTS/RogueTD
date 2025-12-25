@@ -17,6 +17,7 @@ public class GameHandler : MonoBehaviour
 
     void Start()
     {
+        BlueprintManager.InsertBuildingBlueprint(mainBuildingBlueprint);
         ConstructionGridManager.ConstructionGrid = constructionGrid;
         Debug.Log(GameState.Instance.IsANewRun);
         if (GameState.Instance.IsANewRun)
@@ -24,6 +25,7 @@ public class GameHandler : MonoBehaviour
             GameState.Instance.ResetGameState();
             GenerateResearchTree();
             LoadUITree();
+            CreateMainBuilding();
             GameState.Instance.Initialize(300, 1);
             GameState.Instance.Wave = 1;
             GameState.Instance.SaveToJson();
@@ -42,7 +44,6 @@ public class GameHandler : MonoBehaviour
         instance = this;
         
         mapManager.CreateMap();
-        CreateMainBuilding();
     }
 
     private void LoadUITree()
@@ -66,8 +67,8 @@ public class GameHandler : MonoBehaviour
         if (mainBuildingBlueprint == null) return;
 
         var gridPosition = Vector2Int.zero;
+        BlueprintManager.InsertBuildingBlueprint(mainBuildingBlueprint);
         Building mainBuilding = BuildingFactory.CreateBuilding(gridPosition, mainBuildingBlueprint);
-        BlueprintManager.RemoveBlueprint("MainBuilding");
         GameState.Instance.SaveBuildingsToJson();
     }
 

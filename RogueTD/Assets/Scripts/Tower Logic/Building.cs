@@ -8,7 +8,10 @@ public class Building : MonoBehaviour
     [SerializeField] private Vector2Int size;
     [SerializeField] private Collider2D buildingCollider;
     static public Action<Vector2Int> onBuildingDestroyed;
-    public float CurrentHealthPoints => healthComponent.CurrentHealth;
+    public float CurrentHealthPoints
+    {
+        get => healthComponent.CurrentHealth; set => healthComponent.CurrentHealth = value;
+    }
     public Vector2Int GridPosition {get; set; }
     public Vector2Int Size => size;
     
@@ -57,15 +60,14 @@ public class Building : MonoBehaviour
     
     
     
-    public void Initialize(int maxHP)
+    public void Initialize(int maxHP, float currentHP = -1)
     {
         healthComponent.MaxHealth = maxHP;
-        healthComponent.CurrentHealth = healthComponent.MaxHealth;
+        CurrentHealthPoints = (currentHP >= 0) ? currentHP : maxHP;
     }
 
-    public void InitializeFromBlueprint(BuildingBlueprint buildingBlueprint)
+    public void InitializeFromBlueprint(BuildingBlueprint buildingBlueprint, float currentHP = -1)
     {
-        healthComponent.MaxHealth = buildingBlueprint.MaxHealthPoints;
-        healthComponent.CurrentHealth = healthComponent.MaxHealth;
+        Initialize(buildingBlueprint.MaxHealthPoints, currentHP);
     }
 }

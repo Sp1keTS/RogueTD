@@ -225,6 +225,8 @@ public class GameState
     {
         try
         {
+            UpdateBuildingsHealth();
+        
             var saveData = new BuildingsSaveData
             {
                 Buildings = buildings
@@ -232,10 +234,22 @@ public class GameState
 
             string json = JsonConvert.SerializeObject(saveData, GetJsonSettings());
             File.WriteAllText(BUILDINGS_SAVE_PATH, json);
+            Debug.Log("Постройки сохранены");
         }
         catch (Exception e)
         {
             Debug.Log(e);
+        }
+    }
+
+    private void UpdateBuildingsHealth()
+    {
+        foreach (var saveData in buildings)
+        {
+            if (ConstructionGridManager.BuildingsPos.TryGetValue(saveData.Position, out Building building))
+            {
+                saveData.CurrentHealth = building.CurrentHealthPoints;
+            }
         }
     }
 

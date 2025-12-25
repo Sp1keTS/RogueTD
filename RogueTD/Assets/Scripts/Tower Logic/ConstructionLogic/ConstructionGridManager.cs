@@ -14,7 +14,12 @@ public class ConstructionGridManager : MonoBehaviour
     private bool isRecreatingBuildings = false; 
     
     static public Dictionary<Vector2, Building> BuildingsSpace => buildingsSpace;
-    static public Dictionary<Vector2, Building> BuildingsPos {get => buildingsPos;set => buildingsPos = value; }
+    static public Dictionary<Vector2, Building> BuildingsPos
+    {
+        get{ return buildingsPos; }
+        set => buildingsPos = value;
+    }
+
     public static List<BuildingSaveData> SavePoses { get => savePoses; set => savePoses = value; }
 
     private void Awake()
@@ -41,7 +46,6 @@ public class ConstructionGridManager : MonoBehaviour
     private void OnBuildingDestroyed(Vector2Int gridPos)
     {
         RemoveSavedBuilding(gridPos);
-        GameState.Instance.SaveBuildingsToJson();
     }
 
     static public void RemoveBuilding(Building buildingToRemove)
@@ -56,16 +60,16 @@ public class ConstructionGridManager : MonoBehaviour
         }
     }
 
-    public void OnBuildingCreated(Vector2Int gridPos, BuildingBlueprint buildingBlueprint)
+    public void OnBuildingCreated(Vector2Int gridPos, BuildingBlueprint buildingBlueprint, Building building = null)
     {
         if (isRecreatingBuildings) return;
-        
+    
         bool alreadyExists = savePoses.Any(data => data.Position == gridPos);
-        
+    
         if (!alreadyExists)
         {
-            savePoses.Add(new BuildingSaveData(gridPos, buildingBlueprint));
-            
+            savePoses.Add(new BuildingSaveData(gridPos, buildingBlueprint, building));
+        
             if (GameState.Instance != null)
             {
                 GameState.Instance.Buildings = new List<BuildingSaveData>(savePoses); 
@@ -89,35 +93,37 @@ public class ConstructionGridManager : MonoBehaviour
     
     public void RecreateBuildings()
     {
-    
         if (GameState.Instance == null || GameState.Instance.Buildings == null || GameState.Instance.Buildings.Count == 0)
         {
             return;
         }
-    
+
         isRecreatingBuildings = true;
-    
+
         try
         {
             var buildingsToRecreate = new List<BuildingSaveData>(GameState.Instance.Buildings);
         
-        
             foreach (var saveData in buildingsToRecreate)
             {
-                if (saveData.BlueprintName == "MainBuildingBlueprint")
-                {
-                    continue;
-                }
-            
                 var blueprint = saveData.Blueprint;
                 if (blueprint == null)
                 {
                     continue;
                 }
             
-                TryCreateBlueprint(blueprint, saveData.Position);
+                // Используем сохраненное здоровье
+                float healthToUse = saveData.CurrentHealth > 0 ? saveData.CurrentHealth : blueprint.MaxHealthPoints;
+            
+                if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
+                {
+                    BuildingFactory.CreateProjectileTower(saveData.Position, projectileBlueprint, healthToUse);
+                }
+                else
+                {
+                    BuildingFactory.CreateBuilding(saveData.Position, blueprint, healthToUse);
+                }
             }
-        
         }
         finally
         {

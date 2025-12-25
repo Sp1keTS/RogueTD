@@ -7,17 +7,22 @@ public class BuildingSaveData
 {
     public Vector2Int Position;
     public string BlueprintName;
+    public float CurrentHealth;
     
-    public BuildingSaveData(Vector2Int position, BuildingBlueprint blueprint)
+    public BuildingSaveData(Vector2Int position, BuildingBlueprint blueprint, Building building = null)
     {
         Position = position;
         BlueprintName = blueprint.buildingName;
+        CurrentHealth = building != null ? building.CurrentHealthPoints : blueprint.MaxHealthPoints;
     }
+    
     public BuildingSaveData()
     {
         Position = Vector2Int.zero;
         BlueprintName = string.Empty;
+        CurrentHealth = 0f;
     }
+    
     [JsonIgnore] 
     public BuildingBlueprint Blueprint
     {
@@ -34,17 +39,6 @@ public class BuildingSaveData
             
             Debug.LogWarning($"Blueprint '{BlueprintName}' not found in BlueprintManager!");
             return null;
-        }
-        set
-        {
-            if (value != null)
-            {
-                BlueprintName = value.buildingName;
-                if (BlueprintManager.blueprints != null)
-                {
-                    BlueprintManager.blueprints[BlueprintName] = value;
-                }
-            }
         }
     }
 }

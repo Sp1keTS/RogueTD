@@ -75,7 +75,6 @@ public class EnemyWaveManager : MonoBehaviour
         
         Debug.Log($"Начата волна {currentWaveNumber}");
         GameState.Instance.CurrentWave = currentWave;
-        GameState.Instance.SaveToJson();
     }
     
     private IEnumerator WaveSequence()
@@ -235,6 +234,7 @@ public class EnemyWaveManager : MonoBehaviour
         spawnQueues.Clear();
         GameState.Instance.CurrentWave = null;
         GameState.Instance.SaveToJson();
+        GameState.Instance.SaveBuildingsToJson();
     }
     
     private int CalculateWaveReward(int waveNumber)

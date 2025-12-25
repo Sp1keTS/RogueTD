@@ -72,7 +72,7 @@ public class Tower : MonoBehaviour
     
     protected virtual void RotateTowardsTarget()
     {
-        if (target != null)
+        if (target)
         {
             Vector2 directionToTarget = (target.transform.position - transform.position).normalized;
             float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
@@ -89,14 +89,11 @@ public class Tower : MonoBehaviour
     }
     protected virtual void Update()
     {
-        // Базовая логика обновления для всех башен
-        
         RestoreAmmo();
         GetTarget();
         RotateTowardsTarget();
     }
     
-    // Вспомогательные методы для преобразования ResourceReference[] в T[]
     protected T[] ConvertResourceReferencesToValues<T>(ResourceReference<T>[] references) where T : ScriptableObject
     {
         if (references == null || references.Length == 0)
@@ -111,5 +108,16 @@ public class Tower : MonoBehaviour
             }
         }
         return result.ToArray();
+    }
+    
+    public virtual string GetTowerStats()
+    {
+        return $"▸ Damage: {damage} (x{damageMult:F1})\n" +
+               $"▸ Attack Speed: {attackSpeed:F1}/sec\n" +
+               $"▸ Range: {targetingRange:F1}\n" +
+               $"▸ Rotation Speed: {rotatingSpeed}°/sec\n" +
+               $"▸ Ammo: {currentAmmo:F0}/{maxAmmo}\n" +
+               $"▸ Regeneration: {ammoRegeneration:F1}/sec\n" +
+               $"▸ Status Effects: {statusEffects?.Length ?? 0}";
     }
 }

@@ -127,7 +127,7 @@ public class ProjectileTower : Tower
 
     public TowerProjectile CreateProjectile(Vector2 position)
     {
-        if (projectilePrefab == null) return null;
+        if (!projectilePrefab) return null;
         
         GameObject newProjectile = Instantiate(projectilePrefab, position, Quaternion.identity);
         projectile = newProjectile.GetComponent<TowerProjectile>();
@@ -135,5 +135,19 @@ public class ProjectileTower : Tower
         projectile.Initialize(this);
         return projectile;
     }
+    public override string GetTowerStats()
+    {
+        string baseStats = base.GetTowerStats();
     
+        return $"{baseStats}\n" +
+               $"Projectile:\n" +
+               $"▸ Count: {projectileCount}\n" +
+               $"▸ Speed: {projectileSpeed}\n" +
+               $"▸ Spread: {spread}°\n" +
+               $"▸ Lifetime: {projectileLifetime}sec\n" +
+               $"▸ Fragile: {(projectileFragile ? "Yes" : "No")}\n" +
+               $"▸ Projectile Effects: {effects?.Length ?? 0}\n" +
+               $"▸ Projectile Behaviors: {movements?.Length ?? 0}\n" +
+               $"▸ Secondary Shots: {secondaryShots?.Length ?? 0}";
+    }
 }

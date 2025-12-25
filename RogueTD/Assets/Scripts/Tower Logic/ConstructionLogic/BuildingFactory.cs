@@ -4,53 +4,59 @@ using System.Collections.Generic;
 
 public class BuildingFactory : MonoBehaviour
 {
-    static public Action<Vector2Int,BuildingBlueprint> OnBuildingCreated;
-    public static Building CreateProjectileTower(Vector2Int gridPos, ProjectileTowerBlueprint blueprint)
+    static public Action<Vector2Int, BuildingBlueprint, Building> OnBuildingCreated;
+    public static Building CreateProjectileTower(Vector2Int gridPos, ProjectileTowerBlueprint blueprint, float customHealth = -1)
     {
-
-        // можно ли разместить постройку
         if (!CanPlaceBuilding(gridPos, blueprint))
         {
             Debug.LogWarning($"Cannot place building at position {gridPos} - not enough space");
             return null;
         }
-        
+    
         // Рассчет мировой позиции
         Vector3 worldPosition = GetWorldPosition(gridPos);
-        
+    
         // создание объекта
         GameObject buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
         Building building = buildingObj.GetComponent<Building>();
-        
+    
         building.buildingName = blueprint.buildingName;
-        
-        // Инициализация Building
-        building.Initialize(blueprint.MaxHealthPoints);
-        
+        building.GridPosition = gridPos; // Добавляем установку GridPosition
+    
+        // Инициализация Building с кастомным здоровьем если указано
+        building.Initialize(blueprint.MaxHealthPoints, customHealth);
+    
         // дочерний объект башни
         var tower = CreateProjectileTowerChild(buildingObj, blueprint, worldPosition);
-        
+    
         // Обновление сетки с ссылкой на созданное здание
         UpdateGridWithBuilding(gridPos, building, blueprint);
-        OnBuildingCreated.Invoke(gridPos, blueprint);
+    
+        // Передаем здание в событие
+        OnBuildingCreated?.Invoke(gridPos, blueprint, building);
+    
         return building;
     }
 
-    public static Building CreateBuilding(Vector2Int gridPos, BuildingBlueprint blueprint)
+    public static Building CreateBuilding(Vector2Int gridPos, BuildingBlueprint blueprint, float customHealth = -1)
     {
         if (!CanPlaceBuilding(gridPos, blueprint))
         {
             Debug.LogWarning($"Cannot place building at position {gridPos} - not enough space");
             return null;
         }
+    
         Vector3 worldPosition = GetWorldPosition(gridPos);
         GameObject buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
         Building building = buildingObj.GetComponent<Building>();
         building.buildingName = blueprint.buildingName;
-        building.Initialize(blueprint.MaxHealthPoints);
         building.GridPosition = gridPos;
-        OnBuildingCreated.Invoke(gridPos, blueprint);
+    
+        building.Initialize(blueprint.MaxHealthPoints, customHealth);
+    
+        OnBuildingCreated?.Invoke(gridPos, blueprint, building);
         UpdateGridWithBuilding(gridPos, building, blueprint);
+    
         return building;
     }
     
