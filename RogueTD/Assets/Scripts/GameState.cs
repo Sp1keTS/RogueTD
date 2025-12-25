@@ -30,7 +30,6 @@ public class GameState
     private int _currency;
     private int _wave;
     private EnemyWave currentWave;
-
     private GameState() 
     {
         isANewRun = true;

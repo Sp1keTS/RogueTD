@@ -5,8 +5,8 @@ using UnityEngine.Serialization;
 public class TowerProjectile : MonoBehaviour
 {
     [SerializeField] public Rigidbody2D rb;
-    [FormerlySerializedAs("buildings")] [SerializeField] ProjectileTower projectileTower;
-
+    [SerializeField] ProjectileTower projectileTower;
+    [SerializeField] SpriteRenderer spriteRenderer;
     private Queue<ProjectileEffect> effectsToProcess; 
     private float lifeTime;
     private GameObject enemy;
@@ -15,6 +15,7 @@ public class TowerProjectile : MonoBehaviour
     public Queue<ProjectileEffect> EffectsToProcess  {get => effectsToProcess; set => effectsToProcess = value;}
     public void Initialize(ProjectileTower tower)
     {
+        transform.localScale = Vector3.one * tower.ProjectileScale;
         projectileTower = tower;
         lifeTime = tower.ProjectileLifetime;
         effectsToProcess = new Queue<ProjectileEffect>();
@@ -22,7 +23,7 @@ public class TowerProjectile : MonoBehaviour
         {
             foreach (var effect in tower.effects)
             {
-                if (effect != null)
+                if (effect)
                     effectsToProcess.Enqueue(effect);
             }
         }
@@ -72,7 +73,7 @@ public class TowerProjectile : MonoBehaviour
                 //{
                 //    effect.OnCollision(enemyBase,this, projectileTower);
                 //}
-                _enemyBase.TakeDamage(projectileTower.Damage, projectileTower.statusEffects);
+                _enemyBase.TakeDamage(projectileTower.Damage, projectileTower);
                 if(projectileTower.ProjectileFragile)
                 {
                     Destroy(gameObject);

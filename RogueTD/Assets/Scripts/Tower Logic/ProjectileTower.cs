@@ -8,6 +8,7 @@ public class ProjectileTower : Tower
     [SerializeField] protected float spread = 0f;
     [SerializeField] protected float projectileLifetime = 3f;
     [SerializeField] protected int projectileCount = 1;
+    [SerializeField] protected float projectileScale = 1;
     [SerializeField] protected bool projectileFragile = true;
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected GameObject barrel;
@@ -18,7 +19,7 @@ public class ProjectileTower : Tower
     public ProjectileTowerBehavior towerBehavior;
     
     public Action<ShotData> ShootChain;
-    
+    public float ProjectileScale {get => projectileScale; }
     public Vector2 BarrelPosition => barrel.transform.position;
     public int ProjectileDamage => (int)(damage * damageMult);
     public float ProjectileSpeed => projectileSpeed;
@@ -75,7 +76,7 @@ public class ProjectileTower : Tower
         projectileCount = blueprint.ProjectileCount;
         projectileFragile = blueprint.ProjectileFragile;
         projectilePrefab = blueprint.ProjectilePrefab;
-        
+        projectileScale = blueprint.ProjectileScale;
         effects = ConvertResourceReferencesToValues(blueprint.ProjectileEffects);
         movements = ConvertResourceReferencesToValues(blueprint.ProjectileBehaviors);
         towerBehavior = blueprint.ShotBehavior?.Value;
@@ -121,8 +122,11 @@ public class ProjectileTower : Tower
     
     public void ExecuteShootChain()
     {
-        var shotData = GetShotData();
-        ShootChain?.Invoke(shotData);
+        if (EnemyInAttackCone())
+        {
+            var shotData = GetShotData();
+            ShootChain?.Invoke(shotData);
+        }
     }
 
     public TowerProjectile CreateProjectile(Vector2 position)

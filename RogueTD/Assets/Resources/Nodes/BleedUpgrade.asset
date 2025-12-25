@@ -15,8 +15,19 @@ MonoBehaviour:
   tags:
   - Unique
   maxRank: 9
-  minRank: 0
+  minRank: 1
   directUpgradeOf: {fileID: 0}
   cost: 0
+  baseCost: 0
   icon: {fileID: -8134998098725940710, guid: b6d97687d6dbdaf4da604f435838a110, type: 3}
+  tooltipText: Description failed to load properly
   bleedEffect: {fileID: 11400000, guid: 37eed557799c33f49a02bb52a1e87e1d, type: 2}
+  totalDamageIncreasePerRank: 5
+  durationIncreasePerRank: 0.5
+  description: 'Adds a powerful bleeding effect to your tower''s projectiles.
+
+    Inflicts
+    damage over time to enemies, causing them to bleed.
+
+    Higher ranks increase
+    bleed damage and duration.'

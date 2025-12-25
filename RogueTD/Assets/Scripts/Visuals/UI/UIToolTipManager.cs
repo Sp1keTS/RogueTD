@@ -7,14 +7,14 @@ public class UIToolTipManager : MonoBehaviour
     
     public void ShowTooltip(string header, string content, Vector2 tTPosition)
     {
-        tooltipWindow.transform.position =  tTPosition;
+        tooltipWindow.transform.position =  tTPosition - new Vector2(0, tooltipWindow.Size.y / 2);
         tooltipWindow.Header = header;
         tooltipWindow.Content = content;
         tooltipWindow.SetActive(true);
     }
     private void Awake()
     {
-        if (Instance == null)
+        if (!Instance)
         {
             Instance = this;
         }

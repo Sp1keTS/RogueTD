@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3451898158513402287}
   - component: {fileID: 3127956477132776331}
   - component: {fileID: 3323953919622414167}
+  - component: {fileID: 4657783310556573863}
   m_Layer: 0
   m_Name: MainBuilding3x3
   m_TagString: MainBuilding
@@ -167,6 +168,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   initialRatio: 1
+--- !u!114 &4657783310556573863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1354005030858788285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5baf2cfb63caebe4bb506210e2c718cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  building: {fileID: 3451898158513402287}
 --- !u!1001 &6770665606944420675
 PrefabInstance:
   m_ObjectHideFlags: 0

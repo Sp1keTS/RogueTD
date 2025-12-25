@@ -4,8 +4,8 @@ using System.Collections;
 [CreateAssetMenu(fileName = "PoisonStatusEffect", menuName = "Tower Defense/Effects/Poison Status Effect")]
 public class BleedEffect : StatusEffect
 {
-    [SerializeField] private int totalDamage = 15;
     [SerializeField] private Color bleedColor = Color.red;
+    public int TotalDamage { get; set; }
     
     public override IEnumerator ApplyEffect(Enemy enemy)
     {
@@ -16,7 +16,7 @@ public class BleedEffect : StatusEffect
         
         renderer.material.color += bleedColor/2;
         
-        float damagePerTick = totalDamage / (duration / 0.5f);
+        float damagePerTick = TotalDamage / (duration / 0.5f);
         float endTime = Time.time + duration;
         
         while (Time.time < endTime && enemy)

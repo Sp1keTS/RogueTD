@@ -20,7 +20,7 @@ public class UIBlueprintHolderScript : MonoBehaviour
 
     private void AddUiBlueprint(BuildingBlueprint blueprint, string name)
     {
-        if (blueprint == null) return;
+        if (!blueprint || blueprint.buildingName == "MainBuilding") return;
         
         
         if (!blueprints.ContainsKey(name))

@@ -17,7 +17,6 @@ public class MainMenuScript : MonoBehaviour
     void Start()
     {
         GameState.Instance.LoadGameState();
-        
         newGameButton = newGameButton.GetComponent<Button>();
         continueButton = continueButton.GetComponent<Button>();
         settingsButton = settingsButton.GetComponent<Button>();
@@ -27,7 +26,7 @@ public class MainMenuScript : MonoBehaviour
         continueButton.onClick.AddListener(OnContinueButtonClick);
         settingsButton.onClick.AddListener(OnSettingsButtonClick);
         
-        continueButton.interactable = GameState.Instance.HasSavedData();
+        continueButton.interactable = GameState.Instance.IsANewRun;
     }
 
     private void OnNewGameButtonClick()

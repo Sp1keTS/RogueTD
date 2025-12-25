@@ -79,7 +79,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
         UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNode.name, TreeSaveNode.currentNode.TooltipText, 
-            new Vector2(transform.position.x, transform.position.y - GetComponent<RectTransform>().sizeDelta.y) );
+            new Vector2(transform.position.x, transform.position.y) );
     }
     
     public void OnPointerExit(PointerEventData eventData)

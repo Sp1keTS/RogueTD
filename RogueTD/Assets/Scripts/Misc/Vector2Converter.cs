@@ -49,11 +49,16 @@ public class Vector2Converter : JsonConverter
         {
             str = str.Trim('(', ')', ' ');
             var parts = str.Split(',');
-            
-            if (parts.Length == 2)
+        
+            if (parts.Length >= 2)
             {
-                if (float.TryParse(parts[0].Trim(), out float x) && 
-                    float.TryParse(parts[1].Trim(), out float y))
+                var xStr = parts[0].Trim().Replace(",", ".");
+                var yStr = parts[1].Trim().Replace(",", ".");
+            
+                if (float.TryParse(xStr, System.Globalization.NumberStyles.Float, 
+                        System.Globalization.CultureInfo.InvariantCulture, out float x) && 
+                    float.TryParse(yStr, System.Globalization.NumberStyles.Float, 
+                        System.Globalization.CultureInfo.InvariantCulture, out float y))
                 {
                     return new Vector2(x, y);
                 }
@@ -61,8 +66,9 @@ public class Vector2Converter : JsonConverter
         }
         catch
         {
+            Debug.LogError($"Failed to parse Vector2 from string: {str}");
         }
-        
+    
         return Vector2.zero;
     }
 }

@@ -48,7 +48,7 @@ public static class EnemyManager
         }
     }
     
-    private static void HandleEnemyDeath(Enemy enemy)
+    private static void HandleEnemyDeath(Enemy enemy, Tower tower)
     {
         OnEnemyDied?.Invoke(enemy);
         UnregisterEnemy(enemy);

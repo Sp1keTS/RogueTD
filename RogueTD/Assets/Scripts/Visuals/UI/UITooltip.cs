@@ -10,11 +10,24 @@ public class UITooltip : MonoBehaviour
     [SerializeField] private LayoutElement layoutElement;
     [SerializeField] private int charCountLimit;
     
-    public string Header {get => headerText.text; set => headerText.text = value;}
-    public string Content {get => contentText.text; set => contentText.text = value;}
+    private RectTransform rectTransform;
+    
+    public Vector2 Size => rectTransform ? rectTransform.sizeDelta : Vector2.zero;
+    
+    public string Header { get => headerText.text; set => headerText.text = value; }
+    public string Content { get => contentText.text; set => contentText.text = value; }
     
     private int headerLength;
     private int contentLength;
+
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        if (rectTransform == null)
+        {
+            rectTransform = gameObject.AddComponent<RectTransform>();
+        }
+    }
 
     private void Update()
     {

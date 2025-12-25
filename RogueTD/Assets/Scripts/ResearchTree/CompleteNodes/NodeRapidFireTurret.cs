@@ -3,6 +3,32 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NodeRapidFireTurret", menuName = "Research Tree/Upgrades/Rapid Fire Turret Node")]
 public class NodeRapidFireTurret : ProjectileTowerNode
 {
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] private string description = 
+        "High-speed projectile tower with incredible rate of fire.\n" +
+        "Sacrifices damage per shot for overwhelming projectile volume.\n" +
+        "Perfect for suppressing groups of light enemies and fast-moving targets.";
+    
+    public override string TooltipText
+    {
+        get
+        {
+            if (towerBlueprint != null)
+            {
+                return $"RAPID FIRE TURRET (Rank {CurrentRank})\n\n" +
+                       $"{description}\n\n" +
+                       $"Tower Stats:\n" +
+                       $"{towerBlueprint.GetTowerStats()}\n\n" +
+                       $"Specialization:\n" +
+                       $"• Extreme attack speed (10-20 shots/sec)\n" +
+                       $"• Fast rotation speed\n" +
+                       $"• High ammo regeneration\n" +
+                       $"• Lower damage per shot";
+            }
+            return $"RAPID FIRE TURRET\n\n{description}";
+        }
+    }
+    
     public override void Initialize(int rank)
     {
         if (towerBlueprint != null)
@@ -18,7 +44,7 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             towerBlueprint.ProjectileLifetime = Random.Range(1.5f, 2.5f) + (rank * 0.1f);
             towerBlueprint.Spread = Random.Range(3f, 8f);
             towerBlueprint.ProjectileFragile = Random.value > 0.7f;
-            
+            towerBlueprint.ProjectileScale = 1;
             towerBlueprint.ProjectileCount = 1;
             
             towerBlueprint.MaxAmmo = Random.Range(40, 60) + (rank * 6);
@@ -34,9 +60,9 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             towerBlueprint.SecondaryShots = null;
             towerBlueprint.StatusEffects = null;
             towerBlueprint.TowerBehaviours = null;
-            
         }
     }
+    
     public override void LoadDependencies()
     {
         LoadBasicShot();

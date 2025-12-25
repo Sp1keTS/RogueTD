@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "HomingMovement", menuName = "Tower Defense/Movement/Homing Movement")]
 public class HomingMovement : ProjectileBehavior
 {
-    [SerializeField] private float homingRadius = 5f;
+    [SerializeField] private float homingRadius = 1f;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private bool findNearestTarget = true;
     

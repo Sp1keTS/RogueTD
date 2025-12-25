@@ -22,6 +22,7 @@ public class GameHandler : MonoBehaviour
         Debug.Log(GameState.Instance.IsANewRun);
         if (GameState.Instance.IsANewRun)
         {
+            GameState.Instance.IsANewRun = false;
             GameState.Instance.ResetGameState();
             GenerateResearchTree();
             LoadUITree();
@@ -29,7 +30,7 @@ public class GameHandler : MonoBehaviour
             GameState.Instance.Initialize(300, 1);
             GameState.Instance.Wave = 1;
             GameState.Instance.SaveToJson();
-            GameState.Instance.IsANewRun = false;
+            GameState.Instance.LoadGameState();
         }
         else
         {

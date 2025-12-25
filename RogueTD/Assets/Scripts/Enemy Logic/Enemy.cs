@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
     [Header("Attack Stats")]
     [SerializeField] private float attackRange = 1f;
     [SerializeField] private int attackDamage = 10;
-    [SerializeField] private float attackSpeed = 1f; // Атак в секунду
+    [SerializeField] private float attackSpeed = 1f; 
     
     [Header("Components")]
     [SerializeField] private Renderer enemyRenderer;
@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
     private bool isAttacking = false;
     private float attackCooldown => 1f / attackSpeed;
     
-    public event System.Action<Enemy> OnDeath;
+    public event System.Action<Enemy, Tower> OnDeath;
     public event System.Action<Building> OnAttackBuilding;
     
     public string Id => id;
@@ -372,13 +372,13 @@ public class Enemy : MonoBehaviour
         lastAttackTime = Time.time;
     }
     
-    public void TakeDamage(int damage, StatusEffect[] statusEffects)
+    public void TakeDamage(int damage, Tower tower)
     {
         if (currentHealth <= 0) return;
         
-        if (statusEffects != null)
+        if (tower && tower.statusEffects != null)
         {
-            foreach (StatusEffect statusEffect in statusEffects)
+            foreach (StatusEffect statusEffect in tower.statusEffects)
             {
                 ApplyStatusEffect(statusEffect);
             }
@@ -388,7 +388,7 @@ public class Enemy : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            HandleDeath();
+            HandleDeath(tower);
         }
     }
     
@@ -428,7 +428,7 @@ public class Enemy : MonoBehaviour
         }
     }
     
-    private void HandleDeath()
+    private void HandleDeath(Tower tower)
     {
         StopAttack();
         
@@ -437,7 +437,7 @@ public class Enemy : MonoBehaviour
             movementBehavior.Stop(rb);
         }
         
-        OnDeath?.Invoke(this);
+        OnDeath?.Invoke(this, tower);
         
         StopAllEffects();
         
@@ -486,7 +486,7 @@ public class Enemy : MonoBehaviour
         currentHealth = Mathf.Clamp(health, 0, maxHealth);
         if (currentHealth <= 0)
         {
-            HandleDeath();
+            HandleDeath(null);
         }
     }
     

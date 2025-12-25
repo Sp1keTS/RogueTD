@@ -4,39 +4,30 @@ using UnityEngine;
 public class ExplosionEffect : ProjectileEffect
 {
     [SerializeField] private float explosionRadius = 3f;
-    [SerializeField] private GameObject explosionEffectPrefab;
+    [SerializeField] private int damagePercentage = 50;
+    [SerializeField] private GameObject explosionPrefab;
     
     public override bool OnCollision(Enemy target, TowerProjectile projectile, ProjectileTower tower)
     {
-        Explode(projectile, tower, target);
-
+        CreateExplosion(projectile.transform.position, tower);
         return false;
-    }
-
-    private void Explode(TowerProjectile projectile, ProjectileTower tower, Enemy target = null)
-    {
-        // визуальный эффект взрыва
-        if (explosionEffectPrefab)
-        {
-            explosionEffectPrefab.transform.localScale = new Vector3(explosionRadius, explosionRadius, 0);
-            Instantiate(explosionEffectPrefab, projectile.transform.position, Quaternion.identity);
-        }
-        
-        // Находим всех врагов в радиусе взрыва
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(projectile.transform.position, explosionRadius);
-        foreach (var collider in colliders)
-        {
-            Enemy enemy = EnemyManager.Enemies[collider.name];
-            if (enemy && enemy != target)
-            {
-                enemy.TakeDamage(tower.Damage/2, tower.statusEffects);
-            }
-        }
     }
 
     public override bool OnLifeSpanEnd(TowerProjectile projectile, ProjectileTower tower)
     {
-        Explode(projectile, tower);
-        return false; 
+        CreateExplosion(projectile.transform.position, tower);
+        return false;
+    }
+    
+    private void CreateExplosion(Vector3 position, ProjectileTower tower)
+    {
+        int explosionDamage = Mathf.RoundToInt(tower.Damage * (damagePercentage / 100f));
+        
+        if (explosionPrefab)
+        {
+            GameObject explosion = Object.Instantiate(explosionPrefab, position, Quaternion.identity);
+        }
+        
+        ExplosionGenerator.CreateExplosion(position, explosionRadius, explosionDamage, tower);
     }
 }

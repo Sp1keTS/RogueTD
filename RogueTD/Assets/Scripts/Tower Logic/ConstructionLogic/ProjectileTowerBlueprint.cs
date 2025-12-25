@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Text;
 
 [Serializable]
 [CreateAssetMenu(fileName = "ProjectileTowerBlueprint", menuName = "Tower Defense/ProjectileTowerBlueprint")]
@@ -52,4 +53,21 @@ public class ProjectileTowerBlueprint : TowerBlueprint
         set => secondaryShots = value; 
     }
     
+    public override string GetTowerStats()
+    {
+        StringBuilder stats = new StringBuilder();
+        stats.Append(base.GetTowerStats());
+        
+        stats.AppendLine("\nProjectile Stats:");
+        stats.AppendLine($"▸ Projectile Speed: {projectileSpeed:F1}");
+        stats.AppendLine($"▸ Projectile Count: {projectileCount}");
+        stats.AppendLine($"▸ Spread: {spread:F1}°");
+        stats.AppendLine($"▸ Lifetime: {projectileLifetime:F1}sec");
+        stats.AppendLine($"▸ Fragile: {(projectileFragile ? "Yes" : "No")}");
+        stats.AppendLine($"▸ Projectile Effects: {projectileEffects?.Length ?? 0}");
+        stats.AppendLine($"▸ Projectile Behaviors: {projectileBehaviors?.Length ?? 0}");
+        stats.AppendLine($"▸ Secondary Shots: {secondaryShots?.Length ?? 0}");
+        
+        return stats.ToString();
+    }
 }

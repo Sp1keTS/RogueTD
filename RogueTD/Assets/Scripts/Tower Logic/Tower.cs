@@ -13,8 +13,10 @@ public class Tower : MonoBehaviour
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected float currentAmmo;
     [SerializeField] protected float ammoRegeneration;
-    [SerializeField] public StatusEffect[] statusEffects;
+    [SerializeField] public  StatusEffect[] statusEffects;
     [SerializeField] protected TowerBehaviour[] towerBehaviours;
+    [SerializeField] protected GameObject light;
+    [SerializeField] protected float attackAngle = 10;
     
     protected float currentAngle;
     protected Enemy target;
@@ -109,6 +111,37 @@ public class Tower : MonoBehaviour
         }
         return result.ToArray();
     }
+    public bool EnemyInAttackCone()
+    {
+        var position2D = (Vector2)transform.position;
+        var colliders = Physics2D.OverlapCircleAll(position2D, targetingRange);
+    
+        if (colliders.Length == 0)
+            return false;
+    
+        var forwardDirection = (Vector2)transform.right;
+        var halfAttackAngle = attackAngle * 0.5f;
+
+        foreach (var collider in colliders)
+        {
+            if (!collider.CompareTag("Enemy"))
+                continue;
+
+            var enemyPos = (Vector2)collider.transform.position;
+            var direction = enemyPos - position2D;
+        
+            direction.Normalize();
+            var angle = Vector2.Angle(forwardDirection, direction);
+
+            if (angle <= halfAttackAngle)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     
     public virtual string GetTowerStats()
     {

@@ -3,6 +3,27 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "BasicTurret", menuName = "Research Tree/Turrets/Basic Turret node")]
 public class NodeBasicTurret : ProjectileTowerNode
 {
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] private string description = 
+        "The standard projectile tower with balanced stats.\n" +
+        "Versatile and reliable, this tower excels in most situations.\n" +
+        "Good damage, range, and fire rate make it an excellent all-rounder.";
+    
+    public override string TooltipText
+    {
+        get
+        {
+            if (towerBlueprint != null)
+            {
+                return $"BASIC TURRET (Rank {CurrentRank})\n\n" +
+                       $"{description}\n\n" +
+                       $"Tower Stats:\n" +
+                       $"{towerBlueprint.GetTowerStats()}";
+            }
+            return $"BASIC TURRET\n\n{description}";
+        }
+    }
+    
     public override void Initialize(int rank)
     {
         if (towerBlueprint != null)
@@ -33,6 +54,7 @@ public class NodeBasicTurret : ProjectileTowerNode
             towerBlueprint.SecondaryShots = null;
             towerBlueprint.StatusEffects = null;
             towerBlueprint.TowerBehaviours = null;
+            towerBlueprint.ProjectileScale = 1;
         }
     }
     
