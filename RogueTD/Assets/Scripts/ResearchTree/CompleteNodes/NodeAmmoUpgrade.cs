@@ -15,7 +15,7 @@ public class NodeAmmoUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = GetDynamicCost(rank);
+        var cost = GetDynamicCost(rank);
         return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
                $"<b>Effect (Rank {rank}):</b>\n" +
                $"• Ammo: <color=#00FF00>{baseAmmoMultiplier + (rank * rankBonusPerLevel):F2}x</color>\n" +
@@ -29,7 +29,7 @@ public class NodeAmmoUpgrade : ProjectileTowerUpgradeTreeNode
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
         
-        float totalMultiplier = baseAmmoMultiplier + (rank * rankBonusPerLevel);
+        var totalMultiplier = baseAmmoMultiplier + (rank * rankBonusPerLevel);
         
         if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
         {

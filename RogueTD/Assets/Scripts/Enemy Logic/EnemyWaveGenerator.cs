@@ -52,8 +52,8 @@ public class EnemyWaveGenerator : MonoBehaviour
             subWave.enemiesPerSpawnpoint[spawnPoint] = new SerializedDictionary<string, int>();
         }
         
-        double remainingBudget = budget;
-        int clusterSize = Random.Range(2, 32);
+        var remainingBudget = budget;
+        var clusterSize = Random.Range(2, 32);
         
         var eligibleEnemyIDs = FilterEnemiesByWaveRank(waveNum);
         if (eligibleEnemyIDs.Count == 0) return subWave;
@@ -129,14 +129,14 @@ public class EnemyWaveGenerator : MonoBehaviour
         if (eligibleEnemyIDs.Count == 0) return null;
         
         var weightedEnemies = new List<(string enemyID, float weight)>();
-        float totalWeight = 0f;
+        var totalWeight = 0f;
         
         foreach (var enemyID in eligibleEnemyIDs)
         {
             var enemyPrefab = enemyRegistry.GetEnemyPrefab(enemyID);
             if (enemyPrefab != null)
             {
-                float weight = CalculateEnemyWeight(waveNum, enemyPrefab);
+                var weight = CalculateEnemyWeight(waveNum, enemyPrefab);
                 weightedEnemies.Add((enemyID, weight));
                 totalWeight += weight;
             }
@@ -145,8 +145,8 @@ public class EnemyWaveGenerator : MonoBehaviour
         if (weightedEnemies.Count == 0) return null;
         if (totalWeight <= 0) return weightedEnemies[Random.Range(0, weightedEnemies.Count)].enemyID;
         
-        float randomValue = Random.Range(0f, totalWeight);
-        float cumulativeWeight = 0f;
+        var randomValue = Random.Range(0f, totalWeight);
+        var cumulativeWeight = 0f;
         
         foreach (var weightedEnemy in weightedEnemies)
         {
@@ -162,7 +162,7 @@ public class EnemyWaveGenerator : MonoBehaviour
 
     private float CalculateEnemyWeight(int waveNum, Enemy enemyPrefab)
     {
-        float weight = 1f;
+        var weight = 1f;
         
         int rankDifference = waveNum - enemyPrefab.Rank + 1;
         
@@ -186,7 +186,7 @@ public class EnemyWaveGenerator : MonoBehaviour
     
     private int GetMinEnemyCost(List<string> enemyIDs)
     {
-        int minCost = int.MaxValue;
+        var minCost = int.MaxValue;
         foreach (var enemyID in enemyIDs)
         {
             var enemyPrefab = enemyRegistry.GetEnemyPrefab(enemyID);
@@ -203,7 +203,7 @@ public class EnemyWaveGenerator : MonoBehaviour
         var spawnpoints = new List<Vector2>();
         var size = mapManager.Size;
         
-        int numberOfPoints = Random.Range(1, 5);
+        var numberOfPoints = Random.Range(1, 5);
         
         for (int i = 0; i < numberOfPoints; i++)
         {
@@ -257,8 +257,8 @@ public class EnemyWaveGenerator : MonoBehaviour
         
         foreach (Vector2 existingPoint in existingPoints)
         {
-            float sqrDistance = (newPoint - existingPoint).sqrMagnitude;
-            float minSqrDistance = minDistance * minDistance;
+            var sqrDistance = (newPoint - existingPoint).sqrMagnitude;
+            var minSqrDistance = minDistance * minDistance;
             
             if (sqrDistance < minSqrDistance)
             {

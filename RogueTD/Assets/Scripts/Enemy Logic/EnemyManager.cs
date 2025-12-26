@@ -27,7 +27,7 @@ public static class EnemyManager
         string uniqueName = GenerateUniqueEnemyName(enemyInstance.EnemyName);
         enemyInstance.gameObject.name = uniqueName;
         
-        enemyInstance.InitializeImmediate();
+        enemyInstance.Initialize();
         RegisterEnemy(enemyInstance);
     
         return enemyInstance;

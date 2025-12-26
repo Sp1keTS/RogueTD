@@ -28,7 +28,6 @@ public class EnemyStraightMovementBehaviour : EnemyMovementBehavior
             rb.linearVelocity = rb.linearVelocity.normalized * enemy.MoveSpeed;
         }
         
-        // Устанавливаем вращение на 0, чтобы текстура всегда была вертикальной
         rb.rotation = 0f;
     }
 }

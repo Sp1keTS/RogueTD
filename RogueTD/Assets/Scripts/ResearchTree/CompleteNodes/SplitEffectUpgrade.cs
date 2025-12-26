@@ -12,9 +12,9 @@ public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = GetDynamicCost(rank);
+        var cost = GetDynamicCost(rank);
         
-        if (splitEffect != null)
+        if (splitEffect)
         {
             int baseSplitCount = 2;
             float baseAngle = 30f;
@@ -35,16 +35,16 @@ public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (splitEffect == null)
+        if (!splitEffect)
         {
             Debug.LogError("SplitEffect is not assigned!");
             return;
         }
 
-        float totalCost = Cost + Cost * Mathf.Pow(rank, 0.5f);
+        var totalCost = Cost + Cost * Mathf.Pow(rank, 0.5f);
         
-        int baseSplitCount = 2;
-        float baseAngle = 30f;
+        var baseSplitCount = 2;
+        var baseAngle = 30f;
         
         splitEffect.SplitCount = (int)Math.Floor(baseSplitCount + (rank * additionalSplitPerRank));
         
@@ -60,7 +60,7 @@ public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void LoadDependencies()
     {
-        if (splitEffect != null)
+        if (splitEffect)
         {
             ResourceManager.RegisterProjectileEffect(splitEffect.name, splitEffect);
         }

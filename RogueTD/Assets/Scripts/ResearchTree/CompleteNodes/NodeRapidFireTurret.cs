@@ -34,7 +34,7 @@ public class NodeRapidFireTurret : ProjectileTowerNode
     {
         if (towerBlueprint)
         {
-            float rankMultiplier = 1f + (rank * 0.12f);
+            var rankMultiplier = 1f + (rank * 0.12f);
             
             towerBlueprint.Damage = Mathf.RoundToInt(Random.Range(1f, 2f) * rankMultiplier);
             towerBlueprint.AttackSpeed = Random.Range(3f, 7f) * (1f + (rank * 0.2f)); 

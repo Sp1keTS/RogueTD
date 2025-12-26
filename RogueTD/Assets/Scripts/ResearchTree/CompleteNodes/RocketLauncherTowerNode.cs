@@ -24,7 +24,7 @@ public class NodeRocketLauncherTurret : ProjectileTowerNode
     {
         if (towerBlueprint)
         {
-            float rankMultiplier = 1f + (rank * 0.2f);
+            var rankMultiplier = 1f + (rank * 0.2f);
             
             towerBlueprint.Damage = Mathf.RoundToInt(Random.Range(10f, 15f) * rankMultiplier);
             towerBlueprint.AttackSpeed = Random.Range(0.5f, 1.2f) * (1f + (rank * 0.05f));

@@ -18,9 +18,9 @@ public class TerrainMap
 
     public void CreateEmptyMap(Vector2Int mapSize)
     {
-        for (int x = -mapSize.x; x < mapSize.x; x++)
+        for (var x = -mapSize.x; x < mapSize.x; x++)
         {
-            for (int y = -mapSize.y; y < mapSize.y; y++)
+            for (var y = -mapSize.y; y < mapSize.y; y++)
             {
                 _tilemap.SetTile(new Vector3Int(x, y, 0), Tiles["Base_tile"]);
             }
@@ -37,11 +37,11 @@ public class TerrainMap
 
     private void CreatePath(Vector2Int mapSize)
     {
-        Vector2Int startDirection = PathDirections.Cardinal[Random.Range(0, PathDirections.Cardinal.Length)];
-        Vector2Int currentPosition = Vector2Int.zero;
-        Vector2Int currentDirection = startDirection;
+        var startDirection = PathDirections.Cardinal[Random.Range(0, PathDirections.Cardinal.Length)];
+        var currentPosition = Vector2Int.zero;
+        var currentDirection = startDirection;
 
-        float mainDirectionChance = 0.85f; 
+        var mainDirectionChance = 0.85f; 
 
         while (Mathf.Abs(currentPosition.x) < mapSize.x && Mathf.Abs(currentPosition.y) < mapSize.y)
         {

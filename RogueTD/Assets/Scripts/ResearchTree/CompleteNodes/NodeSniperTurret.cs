@@ -11,7 +11,7 @@ public class NodeSniperTurret : ProjectileTowerNode
     
     public override string GetStats(int rank)
     {
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
             return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                    $"<b>Stats (Rank {rank}):</b>\n" +
@@ -23,7 +23,7 @@ public class NodeSniperTurret : ProjectileTowerNode
     
     public override void Initialize(int rank)
     {
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
             float rankMultiplier = 1f + (rank * 0.25f);
             
@@ -58,7 +58,7 @@ public class NodeSniperTurret : ProjectileTowerNode
     public override void LoadDependencies()
     {
         LoadBasicShot();
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
             BlueprintManager.InsertProjectileTowerBlueprint(towerBlueprint);
         }

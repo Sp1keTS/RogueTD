@@ -16,7 +16,7 @@ public static class EffectUtils
         }
         else
         {
-            bool effectExists = false;
+            var effectExists = false;
             foreach (var existingEffect in currentArray)
             {
                 if (existingEffect != null && existingEffect.Value != null && 

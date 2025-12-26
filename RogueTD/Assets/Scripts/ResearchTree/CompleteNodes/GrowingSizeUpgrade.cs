@@ -13,8 +13,8 @@ public class GrowingSizeUpgrade : ProjectileTowerUpgradeTreeNode
     {
         if (growingSizeMovement)
         {
-            float baseGrowthRate = 0.5f;
-            float baseMaxSize = 3f;
+            var baseGrowthRate = 0.5f;
+            var baseMaxSize = 3f;
             
             return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank)}</color></size>\n\n" +
                    $"<b>Effect (Rank {rank}):</b>\n" +

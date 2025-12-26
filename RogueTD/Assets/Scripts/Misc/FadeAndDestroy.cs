@@ -19,17 +19,17 @@ public class FadeAndDestroy : MonoBehaviour
             }
         }
 
-        Color startColor = spriteRenderer.color;
+        var startColor = spriteRenderer.color;
         
         yield return null;
         
-        float timer = 0f;
+        var timer = 0f;
         while (timer < fadeDuration)
         {
             timer += Time.deltaTime;
-            float progress = timer / fadeDuration;
+            var progress = timer / fadeDuration;
             
-            Color newColor = startColor;
+            var newColor = startColor;
             newColor.a = Mathf.Lerp(startColor.a, 0f, progress);
             spriteRenderer.color = newColor;
             

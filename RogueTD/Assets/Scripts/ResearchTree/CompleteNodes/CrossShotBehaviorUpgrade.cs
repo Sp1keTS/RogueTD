@@ -9,9 +9,9 @@ public class CrossShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = GetDynamicCost(rank);
+        var cost = GetDynamicCost(rank);
         
-        if (crossShotBehavior != null)
+        if (crossShotBehavior)
         {
             return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
                    $"<b>Effect (Rank {rank}):</b>\n" +
@@ -29,7 +29,7 @@ public class CrossShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (crossShotBehavior == null)
+        if (!crossShotBehavior)
         {
             Debug.LogError("CrossShotBehavior is not assigned!");
             return;
@@ -47,7 +47,7 @@ public class CrossShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void LoadDependencies()
     {
-        if (crossShotBehavior != null)
+        if (crossShotBehavior)
         {
             ResourceManager.RegisterSecondaryBehavior(crossShotBehavior.name, crossShotBehavior);
         }

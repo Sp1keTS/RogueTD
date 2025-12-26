@@ -17,7 +17,7 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = GetDynamicCost(rank);
+        var cost = GetDynamicCost(rank);
         
         if (slowEffect)
         {
@@ -38,7 +38,7 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (slowEffect == null)
+        if (!slowEffect)
         {
             Debug.LogError("SlowEffect is not assigned in SlowEffectUpgrade!");
             return;
@@ -61,7 +61,7 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void LoadDependencies()
     {
-        if (slowEffect != null)
+        if (slowEffect)
         {
             ResourceManager.RegisterStatusEffect(slowEffect.name, slowEffect);
         }

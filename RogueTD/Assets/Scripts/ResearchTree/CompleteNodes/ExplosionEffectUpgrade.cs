@@ -34,15 +34,15 @@ public class ExplosionEffectUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (explosionEffect == null)
+        if (!explosionEffect)
         {
             Debug.LogError("ExplosionEffect is not assigned!");
             return;
         }
 
         
-        float baseRadius = 3f;
-        float baseDamagePercentage = 0.5f;
+        var baseRadius = 3f;
+        var baseDamagePercentage = 0.5f;
         
         explosionEffect.ExplosionRadius = baseRadius + (rank * radiusIncreasePerRank);
         explosionEffect.DamagePercentage = Mathf.RoundToInt((baseDamagePercentage + (rank * damageIncreaseMultiplierPerRank)) * 100);
@@ -59,7 +59,7 @@ public class ExplosionEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void LoadDependencies()
     {
-        if (explosionEffect != null)
+        if (explosionEffect)
         {
             ResourceManager.RegisterProjectileEffect(explosionEffect.name, explosionEffect);
         }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Models;
 using UnityEngine;
 
 public class GameHandler : MonoBehaviour

@@ -26,7 +26,7 @@ public class NodeShotgunTurret : ProjectileTowerNode
     {
         if (towerBlueprint != null)
         {
-            float rankMultiplier = 1f + (rank * 0.15f);
+            var rankMultiplier = 1f + (rank * 0.15f);
             
             towerBlueprint.Damage = Mathf.RoundToInt(Random.Range(6f, 10f) * rankMultiplier);
             towerBlueprint.AttackSpeed = Random.Range(0.8f, 1.5f) * (1f + (rank * 0.1f));
@@ -58,7 +58,7 @@ public class NodeShotgunTurret : ProjectileTowerNode
     public override void LoadDependencies()
     {
         LoadBasicShot();
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
             BlueprintManager.InsertProjectileTowerBlueprint(towerBlueprint);
         }

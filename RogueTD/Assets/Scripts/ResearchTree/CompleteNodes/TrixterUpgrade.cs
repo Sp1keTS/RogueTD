@@ -12,10 +12,10 @@ public class TrixterUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        if (homingRicochetEffect != null)
+        if (homingRicochetEffect)
         {
-            int baseRicochets = 3;
-            float baseRadius = 5f;
+            var baseRicochets = 3;
+            var baseRadius = 5f;
             
             return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank)}</color></size>\n\n" +
                    $"<b>Effect (Rank {rank}):</b>\n" +
@@ -74,7 +74,7 @@ public class TrixterUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void LoadDependencies()
     {
-        if (homingRicochetEffect != null)
+        if (homingRicochetEffect)
         {
             ResourceManager.RegisterProjectileEffect(homingRicochetEffect.name, homingRicochetEffect);
         }

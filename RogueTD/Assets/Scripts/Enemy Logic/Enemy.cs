@@ -139,7 +139,7 @@ public class Enemy : MonoBehaviour
         }
     }
     
-    private void Initialize()
+    public void Initialize()
     {
         id = $"{enemyName}_{GetInstanceID()}";
         currentHealth = maxHealth;
@@ -152,14 +152,6 @@ public class Enemy : MonoBehaviour
         Debug.Log($"{enemyName} spawned with {attackRange} attack range");
     }
     
-    public void InitializeImmediate()
-    {
-        id = $"{enemyName}_{GetInstanceID()}";
-        currentHealth = maxHealth;
-        
-        SetupRigidbody();
-        ApplySettings();
-    }
     
     void Update()
     {
@@ -191,15 +183,6 @@ public class Enemy : MonoBehaviour
     
     private void SetupRigidbody()
     {
-        if (!rb)
-        {
-            rb = GetComponent<Rigidbody2D>();
-            if (!rb)
-            {
-                rb = gameObject.AddComponent<Rigidbody2D>();
-            }
-        }
-        
         rb.gravityScale = 0;
         rb.linearDamping = 0.5f;
         rb.angularDamping = 0.5f;
@@ -219,7 +202,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            Building newTarget = targetingBehavior.SelectTarget(this);
+            var newTarget = targetingBehavior.SelectTarget(this);
             if (newTarget != currentTarget)
             {
                 currentTarget = newTarget;
@@ -274,9 +257,6 @@ public class Enemy : MonoBehaviour
                     closestTarget = building;
                 }
                 
-                #if UNITY_EDITOR
-                Debug.DrawLine(enemyPos, building.GetClosestPoint(enemyPos), Color.red);
-                #endif
             }
         }
         
@@ -304,8 +284,8 @@ public class Enemy : MonoBehaviour
     
     private float GetDistanceToBuilding(Vector2 enemyPosition, Building building)
     {
-        Vector2 closestPoint = building.GetClosestPoint(enemyPosition);
-        float distance = Vector2.Distance(enemyPosition, closestPoint);
+        var closestPoint = building.GetClosestPoint(enemyPosition);
+        var distance = Vector2.Distance(enemyPosition, closestPoint);
         
         
         return distance;
@@ -339,7 +319,7 @@ public class Enemy : MonoBehaviour
         {
             if (currentTarget && currentTarget.gameObject.activeInHierarchy)
             {
-                float distance = GetDistanceToBuilding(transform.position, currentTarget);
+                var distance = GetDistanceToBuilding(transform.position, currentTarget);
                 
                 if (distance <= attackRange)
                 {

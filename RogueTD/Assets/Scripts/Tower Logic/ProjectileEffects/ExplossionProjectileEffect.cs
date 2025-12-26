@@ -33,7 +33,7 @@ public class ExplosionEffect : ProjectileEffect
     
     private void CreateExplosion(Vector3 position, ProjectileTower tower)
     {
-        int explosionDamage = Mathf.RoundToInt(tower.Damage * (damagePercentage / 100f));
+        var explosionDamage = Mathf.RoundToInt(tower.Damage * (damagePercentage / 100f));
         
         if (explosionPrefab)
         {

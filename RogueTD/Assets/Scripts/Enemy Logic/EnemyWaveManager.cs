@@ -133,17 +133,17 @@ public class EnemyWaveManager : MonoBehaviour
     {
         while (HasEnemiesInQueues())
         {
-            bool spawnedThisFrame = false;
+            var spawnedThisFrame = false;
             
             foreach (var spawnPoint in spawnQueues.Keys)
             {
                 if (spawnQueues[spawnPoint].Count > 0)
                 {
                     var enemyData = spawnQueues[spawnPoint].Dequeue();
-                    string enemyId = enemyData.Key;
-                    int count = enemyData.Value;
+                    var enemyId = enemyData.Key;
+                    var count = enemyData.Value;
                     
-                    Enemy enemyPrefab = enemyRegistry.GetEnemyPrefab(enemyId);
+                    var enemyPrefab = enemyRegistry.GetEnemyPrefab(enemyId);
                     
                     if (enemyPrefab)
                     {
@@ -202,9 +202,9 @@ public class EnemyWaveManager : MonoBehaviour
     {
         if (!isWaveActive) return;
         
-        bool allSubWavesSpawned = currentSubWaveIndex >= currentWave.SubWaves.Count;
-        bool noSpawnQueues = !HasEnemiesInQueues();
-        bool noEnemiesAlive = EnemyManager.EnemyCount == 0;
+        var allSubWavesSpawned = currentSubWaveIndex >= currentWave.SubWaves.Count;
+        var noSpawnQueues = !HasEnemiesInQueues();
+        var noEnemiesAlive = EnemyManager.EnemyCount == 0;
         
         if (allSubWavesSpawned && noSpawnQueues && noEnemiesAlive)
         {
@@ -218,7 +218,7 @@ public class EnemyWaveManager : MonoBehaviour
         
         Debug.Log($"Волна {currentWaveNumber} завершена!");
         
-        int waveReward = CalculateWaveReward(currentWaveNumber);
+        var waveReward = CalculateWaveReward(currentWaveNumber);
         GameState.Instance.AddCurrency(waveReward);
         
         GameState.Instance.CurrentWave = currentWave;

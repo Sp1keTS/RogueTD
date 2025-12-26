@@ -11,12 +11,12 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = GetDynamicCost(rank);
+        var cost = GetDynamicCost(rank);
         
-        if (homingMovement != null)
+        if (homingMovement)
         {
-            float baseRadius = 5f;
-            float baseRotationSpeed = 5f;
+            var baseRadius = 5f;
+            var baseRotationSpeed = 5f;
             
             return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
                    $"<b>Effect (Rank {rank}):</b>\n" +
@@ -34,14 +34,14 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (homingMovement == null)
+        if (!homingMovement)
         {
             Debug.LogError("HomingMovement is not assigned!");
             return;
         }
         
-        float baseRadius = 5f;
-        float baseRotationSpeed = 5f;
+        var baseRadius = 5f;
+        var baseRotationSpeed = 5f;
         
         homingMovement.HomingRadius = baseRadius + (rank * radiusIncreasePerRank);
         homingMovement.RotationSpeed = baseRotationSpeed + (rank * rotationSpeedIncreasePerRank);
@@ -58,7 +58,7 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void LoadDependencies()
     {
-        if (homingMovement != null)
+        if (homingMovement)
         {
             ResourceManager.RegisterProjectileBehavior(homingMovement.name, homingMovement);
         }

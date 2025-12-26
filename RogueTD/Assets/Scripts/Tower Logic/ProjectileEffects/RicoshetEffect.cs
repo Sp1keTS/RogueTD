@@ -28,9 +28,9 @@ public class RicochetEffect : ProjectileEffect
         {
             remainingRicochets[projectile]--;
             
-            Vector2 currentDirection = projectile.transform.right;
-            float randomAngle = Random.Range(-angleChange, angleChange);
-            Vector2 newDirection = RotateVector(currentDirection, randomAngle);
+            var currentDirection = projectile.transform.right;
+            var randomAngle = Random.Range(-angleChange, angleChange);
+            var newDirection = RotateVector(currentDirection, randomAngle);
             
             projectile.transform.right = newDirection;
             projectile.rb.linearVelocity = newDirection * projectile.rb.linearVelocity.magnitude;
@@ -57,9 +57,9 @@ public class RicochetEffect : ProjectileEffect
     
     private Vector2 RotateVector(Vector2 vector, float degrees)
     {
-        float radians = degrees * Mathf.Deg2Rad;
-        float cos = Mathf.Cos(radians);
-        float sin = Mathf.Sin(radians);
+        var radians = degrees * Mathf.Deg2Rad;
+        var cos = Mathf.Cos(radians);
+        var sin = Mathf.Sin(radians);
         
         return new Vector2(
             vector.x * cos - vector.y * sin,

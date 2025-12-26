@@ -64,7 +64,7 @@ public class ConstructionGridManager : MonoBehaviour
     {
         if (isRecreatingBuildings) return;
     
-        bool alreadyExists = savePoses.Any(data => data.Position == gridPos);
+        var alreadyExists = savePoses.Any(data => data.Position == gridPos);
     
         if (!alreadyExists)
         {
@@ -79,7 +79,7 @@ public class ConstructionGridManager : MonoBehaviour
 
     static public void TryCreateBlueprint(BuildingBlueprint blueprint, Vector2Int gridPosition)
     {
-        if (blueprint == null) return;
+        if (!blueprint) return;
         
         if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
         { 
@@ -107,13 +107,12 @@ public class ConstructionGridManager : MonoBehaviour
             foreach (var saveData in buildingsToRecreate)
             {
                 var blueprint = saveData.Blueprint;
-                if (blueprint == null)
+                if (!blueprint)
                 {
                     continue;
                 }
             
-                // Используем сохраненное здоровье
-                float healthToUse = saveData.CurrentHealth > 0 ? saveData.CurrentHealth : blueprint.MaxHealthPoints;
+                var healthToUse = saveData.CurrentHealth > 0 ? saveData.CurrentHealth : blueprint.MaxHealthPoints;
             
                 if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
                 {

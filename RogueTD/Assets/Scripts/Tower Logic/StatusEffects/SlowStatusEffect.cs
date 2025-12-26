@@ -13,7 +13,7 @@ public class SlowStatusEffect : StatusEffect
     public override IEnumerator ApplyEffect(Enemy enemy)
     {
         if (!enemy) yield break;
-        float originalSpeed = enemy.MoveSpeed;
+        var originalSpeed = enemy.MoveSpeed;
         enemy.MoveSpeed = originalSpeed * slowPercent;
         yield return new WaitForSeconds(duration);
         if (enemy)

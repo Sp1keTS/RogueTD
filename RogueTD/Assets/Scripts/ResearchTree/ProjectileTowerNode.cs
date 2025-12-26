@@ -13,7 +13,7 @@ public abstract class ProjectileTowerNode : TreeNode
 
     protected void LoadBasicShot()
     {
-        if (basicShotBehavior != null)
+        if (basicShotBehavior)
         {
             towerBlueprint.ShotBehavior = new ResourceReference<ProjectileTowerBehavior> 
             { 

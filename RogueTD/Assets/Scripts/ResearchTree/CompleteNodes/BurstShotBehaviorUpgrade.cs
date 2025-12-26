@@ -12,13 +12,13 @@ public class BurstShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = GetDynamicCost(rank);
+        var cost = GetDynamicCost(rank);
         
-        if (burstShotBehavior != null)
+        if (burstShotBehavior)
         {
-            int baseBurstCount = 3;
-            float baseDelay = 0.1f;
-            float actualDelay = Mathf.Max(0.05f, baseDelay - (rank * delayReductionPerRank));
+            var baseBurstCount = 3;
+            var baseDelay = 0.1f;
+            var actualDelay = Mathf.Max(0.05f, baseDelay - (rank * delayReductionPerRank));
             
             return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
                    $"<b>Effect (Rank {rank}):</b>\n" +
@@ -38,14 +38,14 @@ public class BurstShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (burstShotBehavior == null)
+        if (!burstShotBehavior)
         {
             Debug.LogError("BurstShotBehavior is not assigned!");
             return;
         }
         
-        int baseBurstCount = 2;
-        float baseDelay = 0.5f;
+        var baseBurstCount = 2;
+        var baseDelay = 0.5f;
         
         burstShotBehavior.BurstCount = (int)Math.Floor(baseBurstCount + (rank * additionalBurstPerRank));
         burstShotBehavior.BurstDelay = Mathf.Max(0.05f, baseDelay - (rank * delayReductionPerRank));
@@ -62,7 +62,7 @@ public class BurstShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void LoadDependencies()
     {
-        if (burstShotBehavior != null)
+        if (burstShotBehavior)
         {
             ResourceManager.RegisterSecondaryBehavior(burstShotBehavior.name, burstShotBehavior);
         }

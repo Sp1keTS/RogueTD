@@ -15,8 +15,8 @@ public class GrowingSizeMovement : ProjectileBehavior
     {
         if (projectile.transform.localScale.x < maxSize)
         {
-            float growth = growthRate * Time.deltaTime;
-            float newSize = Mathf.Min(projectile.transform.localScale.x + growth, maxSize);
+            var growth = growthRate * Time.deltaTime;
+            var newSize = Mathf.Min(projectile.transform.localScale.x + growth, maxSize);
             projectile.transform.localScale = new Vector3(newSize, newSize, 1f);
         }
     }

@@ -14,8 +14,8 @@ public class RicochetEffectUpgrade : ProjectileTowerUpgradeTreeNode
     {
         if (ricochetEffect)
         {
-            int baseRicochets = 1;
-            float baseAngle = 15f;
+            var baseRicochets = 1;
+            var baseAngle = 15f;
             
             return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank)}</color></size>\n\n" +
                    $"<b>Effect (Rank {rank}):</b>\n" +

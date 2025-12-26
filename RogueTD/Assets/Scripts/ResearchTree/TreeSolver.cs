@@ -33,8 +33,8 @@ public class TreeSolver : MonoBehaviour
 
         var centralPoint = canvasRect.rect.center;
         
-        float angleStep = (roots.Count > 0) ? 360f / roots.Count : 0f;
-        float currentAngle = 0f;
+        var angleStep = (roots.Count > 0) ? 360f / roots.Count : 0f;
+        var currentAngle = 0f;
             
         foreach (var root in roots)
         {
@@ -164,7 +164,7 @@ public class TreeSolver : MonoBehaviour
         angleDegrees = angleDegrees % 360f;
         if (angleDegrees < 0) angleDegrees += 360f;
         
-        float angleRadians = angleDegrees * Mathf.Deg2Rad;
+        var angleRadians = angleDegrees * Mathf.Deg2Rad;
         return new Vector2(
             Mathf.Sin(angleRadians),
             Mathf.Cos(angleRadians)
@@ -192,6 +192,6 @@ public class TreeSolver : MonoBehaviour
         public ResearchTree.TreeSaveData.TreeSaveNode node;
         public Vector2 position;
         public float angle;
-        public int depth; // Эта переменная теперь используется для хранения глубины/ранга
+        public int depth; 
     }
 }

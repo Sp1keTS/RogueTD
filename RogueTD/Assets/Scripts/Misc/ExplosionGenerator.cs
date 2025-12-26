@@ -12,7 +12,7 @@ public static class ExplosionGenerator
     {
         foreach (var enemyEntry in EnemyManager.Enemies)
         {
-            Enemy enemy = enemyEntry.Value;
+            var enemy = enemyEntry.Value;
             
             if (enemy && enemy.gameObject.activeInHierarchy)
             {
@@ -36,7 +36,7 @@ public static class ExplosionGenerator
     {
         if (distance > maxRadius) return 0f;
         
-        float normalizedDistance = distance / maxRadius;
+        var normalizedDistance = distance / maxRadius;
         
         if (falloffCurve != null && falloffCurve.length > 0)
         {
@@ -49,7 +49,7 @@ public static class ExplosionGenerator
     
     public static List<Enemy> GetEnemiesInRadius(Vector3 position, float radius)
     {
-        List<Enemy> enemiesInRadius = new List<Enemy>();
+        var enemiesInRadius = new List<Enemy>();
         
         foreach (var enemyEntry in EnemyManager.Enemies)
         {

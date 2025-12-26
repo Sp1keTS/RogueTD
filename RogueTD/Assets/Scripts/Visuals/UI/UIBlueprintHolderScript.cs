@@ -31,10 +31,10 @@ public class UIBlueprintHolderScript : MonoBehaviour
             item.Initialize(blueprint); 
             blueprintItems.Add(name, item);
             
-            if (item.NameText != null)
+            if (item.NameText)
                 item.NameText.text = blueprint.buildingName;
             
-            if (item.CostText != null)
+            if (item.CostText)
                 item.CostText.text = blueprint.Cost.ToString();
         }
         else
@@ -45,10 +45,10 @@ public class UIBlueprintHolderScript : MonoBehaviour
             {
                 existingItem.Initialize(blueprint);
                 
-                if (existingItem.NameText != null)
+                if (existingItem.NameText)
                     existingItem.NameText.text = blueprint.buildingName;
                 
-                if (existingItem.CostText != null)
+                if (existingItem.CostText)
                     existingItem.CostText.text = blueprint.Cost.ToString();
             }
         }

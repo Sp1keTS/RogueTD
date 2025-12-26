@@ -131,7 +131,7 @@ public class GameState
 
     public void ChangeCurrency(int amount)
     {
-        int newCurrency = _currency + amount;
+        var newCurrency = _currency + amount;
         _currency = newCurrency;
         OnCurrencyChanged?.Invoke(_currency);
     }
@@ -225,7 +225,7 @@ public class GameState
                 CurrentWaveJson = currentWave != null ? JsonConvert.SerializeObject(currentWave, GetJsonSettings()) : ""
             };
 
-            string json = JsonConvert.SerializeObject(saveData, GetJsonSettings());
+            var json = JsonConvert.SerializeObject(saveData, GetJsonSettings());
             File.WriteAllText(SAVE_FILE_PATH, json);
             Debug.Log($"GameState saved to: {SAVE_FILE_PATH}");
         }
@@ -277,7 +277,7 @@ public class GameState
             
             if (treeSaveData == null) return;
 
-            string json = JsonConvert.SerializeObject(treeSaveData, GetJsonSettings());
+            var json = JsonConvert.SerializeObject(treeSaveData, GetJsonSettings());
             File.WriteAllText(TREE_SAVE_PATH, json);
             Debug.Log($"Research Tree saved to: {TREE_SAVE_PATH}");
         }
@@ -306,7 +306,7 @@ public class GameState
 
         try
         {
-            string json = File.ReadAllText(SAVE_FILE_PATH);
+            var json = File.ReadAllText(SAVE_FILE_PATH);
             var saveData = JsonConvert.DeserializeObject<GameStateSaveData>(json, GetJsonSettings());
             
             if (saveData != null)
@@ -344,7 +344,7 @@ public class GameState
 
         try
         {
-            string json = File.ReadAllText(BUILDINGS_SAVE_PATH);
+            var json = File.ReadAllText(BUILDINGS_SAVE_PATH);
             var saveData = JsonConvert.DeserializeObject<BuildingsSaveData>(json, GetJsonSettings());
             
             if (saveData != null)
@@ -375,7 +375,7 @@ public class GameState
 
         try
         {
-            string json = File.ReadAllText(TREE_SAVE_PATH);
+            var json = File.ReadAllText(TREE_SAVE_PATH);
             treeSaveData = JsonConvert.DeserializeObject<ResearchTree.TreeSaveData>(json, GetJsonSettings());
             
             Debug.Log($"Research Tree loaded from: {TREE_SAVE_PATH}");

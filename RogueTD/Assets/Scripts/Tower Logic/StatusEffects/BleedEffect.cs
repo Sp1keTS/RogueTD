@@ -12,12 +12,12 @@ public class BleedEffect : StatusEffect
         if (!enemy) yield break;
         
         var renderer = enemy.EnemyRenderer;
-        Color originalColor = renderer.material.color;
+        var originalColor = renderer.material.color;
         
         renderer.material.color += bleedColor/2;
         
-        float damagePerTick = TotalDamage / (duration / 0.5f);
-        float endTime = Time.time + duration;
+        var damagePerTick = TotalDamage / (duration / 0.5f);
+        var endTime = Time.time + duration;
         
         while (Time.time < endTime && enemy)
         {

@@ -44,7 +44,7 @@ public class UIEndScreen : MonoBehaviour
         if (!endCanvasGroup && endPanel)
             endCanvasGroup = endPanel.GetComponent<CanvasGroup>();
         
-        if (endPanel != null)
+        if (endPanel)
         {
             endPanel.SetActive(false);
         }
@@ -77,15 +77,15 @@ public class UIEndScreen : MonoBehaviour
     
     private IEnumerator SlowDownTimeRoutine()
     {
-        float timer = 0f;
-        float startTimeScale = Time.timeScale;
+        var timer = 0f;
+        var startTimeScale = Time.timeScale;
         
         while (timer < slowDownDuration)
         {
             timer += Time.unscaledDeltaTime;
-            float progress = Mathf.Clamp01(timer / slowDownDuration);
+            var progress = Mathf.Clamp01(timer / slowDownDuration);
             
-            float curveValue = slowDownCurve.Evaluate(progress);
+            var curveValue = slowDownCurve.Evaluate(progress);
             Time.timeScale = Mathf.Lerp(startTimeScale, 0.5f, curveValue);
             Time.fixedDeltaTime = 0.02f * Time.timeScale;
             

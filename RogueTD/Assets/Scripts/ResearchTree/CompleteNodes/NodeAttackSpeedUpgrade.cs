@@ -14,7 +14,7 @@ public class NodeAttackSpeedUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = GetDynamicCost(rank);
+        var cost = GetDynamicCost(rank);
         return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
                $"<b>Effect (Rank {rank}):</b>\n" +
                $"• Speed: <color=#00FF00>{baseSpeedMultiplier + (rank * rankBonusPerLevel):F2}x</color>\n\n" +
@@ -26,7 +26,7 @@ public class NodeAttackSpeedUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        float totalMultiplier = baseSpeedMultiplier + (rank * rankBonusPerLevel);
+        var totalMultiplier = baseSpeedMultiplier + (rank * rankBonusPerLevel);
         blueprint.AttackSpeed *= totalMultiplier;
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }

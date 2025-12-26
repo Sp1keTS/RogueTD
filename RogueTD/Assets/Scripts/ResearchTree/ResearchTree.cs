@@ -85,7 +85,6 @@ public class ResearchTree : MonoBehaviour
                 rootSaveNodes = new List<TreeSaveData.TreeSaveNode>()
             };
             
-            ClearDependencies();
             LoadAllNodes();
             
             if (allAvailableNodes.Count == 0)
@@ -132,7 +131,7 @@ public class ResearchTree : MonoBehaviour
         
         Debug.Log($"Found {_weightedNodes.Count} potential root nodes");
         
-        for (int i = 0; i < rootCount && _weightedNodes.Count > 0; i++)
+        for (var i = 0; i < rootCount && _weightedNodes.Count > 0; i++)
         {
             var rootNode = GetRandomNode(_weightedNodes);
             if (rootNode != null)
@@ -157,7 +156,7 @@ public class ResearchTree : MonoBehaviour
         var currentRank = GameState.Instance.TreeSaveData.rootSaveNodes;
         var nextRank = new List<TreeSaveData.TreeSaveNode>();
         
-        for (int rank = 1; rank < _maxRank; rank++)
+        for (var rank = 1; rank < _maxRank; rank++)
         {
             var currentRankCopy = new List<TreeSaveData.TreeSaveNode>(currentRank);
             
@@ -165,7 +164,7 @@ public class ResearchTree : MonoBehaviour
             {
                 CreateBranchNode(node, nextRank, rank);
                 
-                bool shouldCreateSideBranch = UnityEngine.Random.value < GetSideBranchProbability(rank);
+                var shouldCreateSideBranch = UnityEngine.Random.value < GetSideBranchProbability(rank);
                 if (shouldCreateSideBranch)
                 {
                     CreateBranchNode(node, nextRank, rank);
@@ -194,7 +193,7 @@ public class ResearchTree : MonoBehaviour
             if (!IsUniqueNodeUsed(treeNode))
             {
                 var tempNode = new TreeSaveData.TreeSaveNode(treeNode, new List<TreeSaveData.TreeSaveNode>(), visited);
-                float weight = CalculateRandomBranchWeight(tempNode, parentNode, allAvailableNodes);
+                var weight = CalculateRandomBranchWeight(tempNode, parentNode, allAvailableNodes);
                 _weightedNodes[treeNode] = weight;
             }
         }
@@ -268,13 +267,13 @@ public class ResearchTree : MonoBehaviour
         if (weightedNodes == null || weightedNodes.Count == 0)
             return null;
 
-        float totalWeight = weightedNodes.Values.Sum();
+        var totalWeight = weightedNodes.Values.Sum();
         
         if (totalWeight <= 0)
             return null;
 
-        float randomValue = UnityEngine.Random.Range(0f, totalWeight);
-        float accumulatedWeight = 0f;
+        var randomValue = UnityEngine.Random.Range(0f, totalWeight);
+        var accumulatedWeight = 0f;
 
         foreach (var kvp in weightedNodes)
         {
@@ -325,20 +324,12 @@ public class ResearchTree : MonoBehaviour
     
     private void LoadAllNodes()
     {
-        TreeNode[] nodes = Resources.LoadAll<TreeNode>("Nodes");
+        var nodes = Resources.LoadAll<TreeNode>("Nodes");
         allAvailableNodes.AddRange(nodes);
         allAvailableNodes.RemoveAll(node => IsUniqueNodeUsed(node));
         Debug.Log($"Loaded {allAvailableNodes.Count} nodes from Resources");
     }
 
-    private void ClearDependencies()
-    {
-        // Очищаем только состояние TreeNode
-        foreach (TreeNode node in allAvailableNodes)
-        {
-            // IsActive теперь управляется через TreeSaveNode
-        }
-    }
     
     private bool IsUniqueNodeUsed(TreeNode node)
     {
@@ -350,13 +341,13 @@ public class ResearchTree : MonoBehaviour
         if (weightedNodes == null || weightedNodes.Count == 0)
             return null;
 
-        float totalWeight = weightedNodes.Values.Sum();
+        var totalWeight = weightedNodes.Values.Sum();
     
         if (totalWeight <= 0)
             return null;
 
-        float randomValue = UnityEngine.Random.Range(0f, totalWeight);
-        float accumulatedWeight = 0f;
+        var randomValue = UnityEngine.Random.Range(0f, totalWeight);
+        var accumulatedWeight = 0f;
 
         foreach (var kvp in weightedNodes)
         {

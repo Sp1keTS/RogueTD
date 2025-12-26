@@ -14,11 +14,11 @@ public class BuildingFactory : MonoBehaviour
         }
     
         // Рассчет мировой позиции
-        Vector3 worldPosition = GetWorldPosition(gridPos);
+        var worldPosition = GetWorldPosition(gridPos);
     
         // создание объекта
-        GameObject buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
-        Building building = buildingObj.GetComponent<Building>();
+        var buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
+        var building = buildingObj.GetComponent<Building>();
     
         building.buildingName = blueprint.buildingName;
         building.GridPosition = gridPos; // Добавляем установку GridPosition
@@ -46,9 +46,9 @@ public class BuildingFactory : MonoBehaviour
             return null;
         }
     
-        Vector3 worldPosition = GetWorldPosition(gridPos);
-        GameObject buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
-        Building building = buildingObj.GetComponent<Building>();
+        var worldPosition = GetWorldPosition(gridPos);
+        var buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
+        var building = buildingObj.GetComponent<Building>();
         building.buildingName = blueprint.buildingName;
         building.GridPosition = gridPos;
     
@@ -71,11 +71,11 @@ public class BuildingFactory : MonoBehaviour
     
     public static bool  CanPlaceBuilding(Vector2 gridPos, BuildingBlueprint buildingBlueprint)
     {
-        for (int x = 1; x < buildingBlueprint.Size.x +1; x++)
+        for (var x = 1; x < buildingBlueprint.Size.x +1; x++)
         {
-            for (int y = 1; y < buildingBlueprint.Size.y +1; y++)
+            for (var y = 1; y < buildingBlueprint.Size.y +1; y++)
             {
-                Vector2 checkPos = gridPos + new Vector2(x, y);
+                var checkPos = gridPos + new Vector2(x, y);
                 if (ConstructionGridManager.BuildingsSpace.ContainsKey(checkPos) && ConstructionGridManager.BuildingsSpace[checkPos] != null)
                 {
                     return false; 
@@ -87,10 +87,10 @@ public class BuildingFactory : MonoBehaviour
     
     public static Vector3 GetWorldPosition(Vector2 gridPos)
     {
-        Vector3 baseWorldPos = ConstructionGridManager.ConstructionGrid.CellToWorld(new Vector3Int((int)gridPos.x, (int)gridPos.y, 0));
+        var baseWorldPos = ConstructionGridManager.ConstructionGrid.CellToWorld(new Vector3Int((int)gridPos.x, (int)gridPos.y, 0));
         
-        float offsetX = ConstructionGridManager.ConstructionGrid.cellSize.x * 0.5f;
-        float offsetY = ConstructionGridManager.ConstructionGrid.cellSize.y * 0.5f;
+        var offsetX = ConstructionGridManager.ConstructionGrid.cellSize.x * 0.5f;
+        var offsetY = ConstructionGridManager.ConstructionGrid.cellSize.y * 0.5f;
         
         return new Vector3(baseWorldPos.x + offsetX, baseWorldPos.y + offsetY, baseWorldPos.z);
     }
@@ -98,12 +98,12 @@ public class BuildingFactory : MonoBehaviour
     private static ProjectileTower CreateProjectileTowerChild(GameObject buildingObj, ProjectileTowerBlueprint blueprint, Vector3 position)
     {
         position.z = -1;
-        if (blueprint.TowerPrefab != null)
+        if (blueprint.TowerPrefab)
         {
-            GameObject towerObj = Instantiate(blueprint.TowerPrefab, position, Quaternion.identity, buildingObj.transform);
-            ProjectileTower projectileTower = towerObj.GetComponent<ProjectileTower>();
+            var towerObj = Instantiate(blueprint.TowerPrefab, position, Quaternion.identity, buildingObj.transform);
+            var projectileTower = towerObj.GetComponent<ProjectileTower>();
             Debug.Log(projectileTower);
-            if (projectileTower != null)
+            if (projectileTower)
             {
                 projectileTower.InitializeFromBlueprint(blueprint);
                 return projectileTower;
@@ -120,9 +120,9 @@ public class BuildingFactory : MonoBehaviour
     private static void UpdateGridWithBuilding(Vector2 gridPos, Building building, BuildingBlueprint buildingBlueprint)
     {
         ConstructionGridManager.BuildingsPos[gridPos] = building;
-        for (int x = 0; x < buildingBlueprint.Size.x; x++)
+        for (var x = 0; x < buildingBlueprint.Size.x; x++)
         {
-            for (int y = 0; y < buildingBlueprint.Size.y; y++)
+            for (var y = 0; y < buildingBlueprint.Size.y; y++)
             {
                 Vector2 occupiedPos = gridPos + new Vector2(x, y);
                 ConstructionGridManager.BuildingsSpace[occupiedPos] = building;
@@ -139,7 +139,7 @@ public class BuildingFactory : MonoBehaviour
             Debug.Log(building.buildingName);
             if (building.buildingName == name)
             {
-                ProjectileTower projectileTower = building.transform.GetComponentInChildren<ProjectileTower>();
+                var projectileTower = building.transform.GetComponentInChildren<ProjectileTower>();
                 Debug.Log(projectileTower);
                 projectileTower.InitializeFromBlueprint(blueprint);
             }

@@ -97,9 +97,9 @@ public class HomingRicochetEffect : ProjectileEffect
     
     private Vector2 RotateVector(Vector2 vector, float degrees)
     {
-        float radians = degrees * Mathf.Deg2Rad;
-        float cos = Mathf.Cos(radians);
-        float sin = Mathf.Sin(radians);
+        var radians = degrees * Mathf.Deg2Rad;
+        var cos = Mathf.Cos(radians);
+        var sin = Mathf.Sin(radians);
         
         return new Vector2(
             vector.x * cos - vector.y * sin,

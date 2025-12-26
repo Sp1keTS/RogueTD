@@ -27,8 +27,8 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void OnButtonClick()
     {
-        bool isRootNode = treeSaveNode.visitedNodes == null || treeSaveNode.visitedNodes.Count == 0;
-        bool isChildNodeAvailable = IsParentActive();
+        var isRootNode = treeSaveNode.visitedNodes == null || treeSaveNode.visitedNodes.Count == 0;
+        var isChildNodeAvailable = IsParentActive();
 
         if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable))
         {
@@ -36,7 +36,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             {
                 if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
                 {
-                    if (towerToUpgrade != null && towerToUpgrade.TowerBlueprint != null)
+                    if (towerToUpgrade && towerToUpgrade.TowerBlueprint != null)
                     {
                         upgradeNode.ApplyUpgrade(towerToUpgrade.TowerBlueprint, upgradeNode.CurrentRank);
                     }
