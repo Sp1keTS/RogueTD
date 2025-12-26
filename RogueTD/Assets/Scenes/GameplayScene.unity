@@ -3774,6 +3774,7 @@ MonoBehaviour:
   mapManager: {fileID: 1355944169}
   uiBlueprintHolder: {fileID: 1845572264}
   gridManager: {fileID: 598903012}
+  currencyUI: {fileID: 1173795255}
 --- !u!1 &1845572259
 GameObject:
   m_ObjectHideFlags: 0

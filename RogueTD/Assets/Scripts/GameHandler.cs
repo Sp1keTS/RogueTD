@@ -12,6 +12,7 @@ public class GameHandler : MonoBehaviour
     [SerializeField] private MapManager mapManager;
     [SerializeField] private UIBlueprintHolderScript uiBlueprintHolder;
     [SerializeField] private ConstructionGridManager gridManager;
+    [SerializeField] private CurrencyUI currencyUI;
     
 
     void Start()
@@ -29,6 +30,7 @@ public class GameHandler : MonoBehaviour
             LoadUITree();
             uiBlueprintHolder.LoadExistingBlueprints();
             gridManager.RecreateBuildings();
+            currencyUI.Text.text = GameState.Instance.Currency.ToString();
         }
         else
         {

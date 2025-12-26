@@ -4,6 +4,7 @@ using UnityEngine;
 public class CurrencyUI : MonoBehaviour
 {
     [SerializeField] private TMPro.TMP_Text text;
+    public TMPro.TMP_Text Text => text;
 
     private void Awake()
     {
