@@ -39,9 +39,6 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
             Debug.LogError("HomingMovement is not assigned!");
             return;
         }
-
-        float totalCost = Cost + Cost * Mathf.Pow(rank, 0.5f);
-        GameState.Instance.SpendCurrency((int)totalCost);
         
         float baseRadius = 5f;
         float baseRotationSpeed = 5f;

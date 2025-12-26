@@ -15,29 +15,31 @@ MonoBehaviour:
   buildingName: Flamethrower
   buildingPrefab: {fileID: 1747688676340181099, guid: 18e277a5e113425449ea0f0a4b70a283, type: 3}
   maxHealthPoints: 50
-  cost: 0
+  cost: 50
   size: {x: 1, y: 1}
   towerPrefab: {fileID: 6033480094796136511, guid: 49cd59ed480057e4d95ada4adbdd9da9, type: 3}
-  rotatingSpeed: 10
-  targetingRange: 5
-  damageMult: 1
-  attackSpeed: 1
-  damage: 1
-  maxAmmo: 0
-  currentAmmo: 0
-  ammoRegeneration: 0
-  projectileScale: 0
-  statusEffects: []
+  rotatingSpeed: 143.18954
+  targetingRange: 6.973082
+  damageMult: 1.8999004
+  attackSpeed: 3.4999428
+  damage: 12
+  maxAmmo: 46
+  currentAmmo: 46
+  ammoRegeneration: 4.4061513
+  projectileScale: 0.6563798
+  statusEffects:
+  - resourceName: FlametfrowerBurn
+    directReference: {fileID: 11400000, guid: d16c9007b2a2a504aadc2842d9a9c575, type: 2}
   towerBehaviours: []
   projectilePrefab: {fileID: 4533395616768101319, guid: a3d00ef9bffb35d449a82d03726b4639, type: 3}
-  projectileSpeed: 10
-  spread: 0
-  projectileLifetime: 3
-  projectileFragile: 1
-  projectileCount: 0
+  projectileSpeed: 12.367286
+  spread: 10.964981
+  projectileLifetime: 2.3842993
+  projectileFragile: 0
+  projectileCount: 1
   projectileBehaviors: []
   projectileEffects: []
   shotBehavior:
-    resourceName: 
-    directReference: {fileID: 0}
+    resourceName: BasicShot
+    directReference: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
   secondaryShots: []

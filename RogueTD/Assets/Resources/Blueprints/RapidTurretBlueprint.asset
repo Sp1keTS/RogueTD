@@ -18,22 +18,23 @@ MonoBehaviour:
   cost: 50
   size: {x: 1, y: 1}
   towerPrefab: {fileID: 5395733983055984843, guid: b5368084c0296e84d93bb7f068b0b8bc, type: 3}
-  rotatingSpeed: 170.14795
-  targetingRange: 5.203475
-  damageMult: 0.7190192
-  attackSpeed: 12.556387
-  damage: 2
-  projectileCount: 1
-  maxAmmo: 48
-  currentAmmo: 48
-  ammoRegeneration: 2.7446344
+  rotatingSpeed: 150.52914
+  targetingRange: 4.017606
+  damageMult: 0.76733804
+  attackSpeed: 3.928143
+  damage: 1
+  maxAmmo: 75
+  currentAmmo: 75
+  ammoRegeneration: 2.622309
+  projectileScale: 1
   statusEffects: []
   towerBehaviours: []
   projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
-  projectileSpeed: 22.029829
-  spread: 7.3785143
-  projectileLifetime: 1.9143314
-  projectileFragile: 0
+  projectileSpeed: 27.307638
+  spread: 7.388317
+  projectileLifetime: 2.2179518
+  projectileFragile: 1
+  projectileCount: 1
   projectileBehaviors: []
   projectileEffects: []
   shotBehavior:

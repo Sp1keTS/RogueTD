@@ -17,8 +17,7 @@ MonoBehaviour:
   maxRank: 9
   minRank: 1
   directUpgradeOf: {fileID: 0}
-  cost: 50
-  baseCost: 0
+  cost: 25
   icon: {fileID: 5764705586594759823, guid: 671dc504aa16e7b468948ae16bad1774, type: 3}
   tooltipText: Description failed to load properly
   slowEffect: {fileID: 11400000, guid: 276afb0d44cbd294d876045d2d47f58a, type: 2}

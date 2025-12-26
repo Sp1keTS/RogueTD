@@ -32,7 +32,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable))
         {
-            if (GameState.Instance.SpendCurrency(treeSaveNode.currentNode.Cost + treeSaveNode.currentNode.GetDynamicCost(Rank)))
+            if (GameState.Instance.SpendCurrency(treeSaveNode.currentNode.GetDynamicCost(Rank)))
             {
                 if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
                 {
@@ -45,7 +45,6 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 treeSaveNode.currentNode.OnActivate();
                 treeSaveNode.IsActive = true;
                 button.interactable = false;
-                GameState.Instance.SaveTreeToJson();
             }
         }
     }
@@ -82,7 +81,6 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNode.name, TreeSaveNode.currentNode.TooltipText +"/n" + treeSaveNode.currentNode.GetStats(Rank), 
             new Vector2(transform.position.x, transform.position.y) );
     }
-    
     public void OnPointerExit(PointerEventData eventData)
     {
         UIToolTipManager.Instance.HideTooltip();

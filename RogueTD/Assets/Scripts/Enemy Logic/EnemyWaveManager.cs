@@ -237,8 +237,7 @@ public class EnemyWaveManager : MonoBehaviour
         
         spawnQueues.Clear();
         GameState.Instance.CurrentWave = null;
-        GameState.Instance.SaveToJson();
-        GameState.Instance.SaveBuildingsToJson();
+        GameState.Instance.SaveAll();
     }
     
     private int CalculateWaveReward(int waveNumber)

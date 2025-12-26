@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: explosion
   m_EditorClassIdentifier: 
   explosionRadius: 3
-  explosionEffectPrefab: {fileID: 0}
+  damagePercentage: 50
+  explosionPrefab: {fileID: 9006349419235368062, guid: 83e2463d646293a438661076b8b5c342, type: 3}

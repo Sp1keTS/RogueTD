@@ -7,7 +7,7 @@ public class TowerProjectile : MonoBehaviour
     [SerializeField] public Rigidbody2D rb;
     [SerializeField] ProjectileTower projectileTower;
     [SerializeField] SpriteRenderer spriteRenderer;
-    private Queue<ProjectileEffect> effectsToProcess; 
+    private Queue<ProjectileEffect> effectsToProcess;
     private float lifeTime;
     private GameObject enemy;
     private Enemy _enemyBase;
@@ -60,7 +60,7 @@ public class TowerProjectile : MonoBehaviour
         _enemyBase = enemy.GetComponent<Enemy>();
         if (enemy.CompareTag("Enemy"))
         {
-            if (_enemyBase != null)
+            if (_enemyBase)
             {
                 while (effectsToProcess.Count > 0)
                 {
@@ -77,6 +77,7 @@ public class TowerProjectile : MonoBehaviour
                 if(projectileTower.ProjectileFragile)
                 {
                     Destroy(gameObject);
+                    
                 }
             }
         }

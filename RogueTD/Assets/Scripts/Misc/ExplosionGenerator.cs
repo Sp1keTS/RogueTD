@@ -46,28 +46,6 @@ public static class ExplosionGenerator
         return 1f - normalizedDistance;
     }
     
-    public static int CalculateDamageWithFalloff(float distance, float maxRadius, int baseDamage, AnimationCurve falloffCurve = null)
-    {
-        float multiplier = CalculateDamageMultiplier(distance, maxRadius, falloffCurve);
-        return Mathf.RoundToInt(baseDamage * multiplier);
-    }
-    
-    public static bool AreEnemiesInRadius(Vector3 position, float radius)
-    {
-        foreach (var enemyEntry in EnemyManager.Enemies)
-        {
-            Enemy enemy = enemyEntry.Value;
-            if (enemy != null && enemy.gameObject.activeInHierarchy)
-            {
-                float distance = Vector3.Distance(position, enemy.transform.position);
-                if (distance <= radius)
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
     
     public static List<Enemy> GetEnemiesInRadius(Vector3 position, float radius)
     {
@@ -76,7 +54,7 @@ public static class ExplosionGenerator
         foreach (var enemyEntry in EnemyManager.Enemies)
         {
             Enemy enemy = enemyEntry.Value;
-            if (enemy != null && enemy.gameObject.activeInHierarchy)
+            if (enemy && enemy.gameObject.activeInHierarchy)
             {
                 float distance = Vector3.Distance(position, enemy.transform.position);
                 if (distance <= radius)

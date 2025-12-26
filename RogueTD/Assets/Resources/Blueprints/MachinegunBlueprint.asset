@@ -15,29 +15,33 @@ MonoBehaviour:
   buildingName: machinegun
   buildingPrefab: {fileID: 1747688676340181099, guid: 9917dcd66edf4d746ab86cd5fd1a030c, type: 3}
   maxHealthPoints: 100
-  cost: 0
+  cost: 50
   size: {x: 2, y: 2}
   towerPrefab: {fileID: 6033480094796136511, guid: 883e67259c323cb41aa906a20d391604, type: 3}
-  rotatingSpeed: 10
-  targetingRange: 5
-  damageMult: 1
-  attackSpeed: 1
-  damage: 1
-  maxAmmo: 0
-  currentAmmo: 0
-  ammoRegeneration: 0
-  projectileScale: 0
+  rotatingSpeed: 176.8185
+  targetingRange: 7.626704
+  damageMult: 0.9144331
+  attackSpeed: 12.143937
+  damage: 2
+  maxAmmo: 87
+  currentAmmo: 87
+  ammoRegeneration: 4.8383174
+  projectileScale: 1
   statusEffects: []
   towerBehaviours: []
   projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
-  projectileSpeed: 10
-  spread: 0
-  projectileLifetime: 3
+  projectileSpeed: 32.998592
+  spread: 5.766706
+  projectileLifetime: 1.5872372
   projectileFragile: 1
-  projectileCount: 0
+  projectileCount: 1
   projectileBehaviors: []
   projectileEffects: []
   shotBehavior:
     resourceName: BasicShot
     directReference: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
-  secondaryShots: []
+  secondaryShots:
+  - resourceName: MachinegunRamping
+    directReference: {fileID: 11400000, guid: d0bdcd5d261987a41a4e587997b77195, type: 2}
+  - resourceName: MachinegunAmmo
+    directReference: {fileID: 11400000, guid: 63dcee1c6873aeb4fbf1befbb7ed322f, type: 2}

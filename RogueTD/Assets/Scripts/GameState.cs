@@ -6,10 +6,12 @@ using UnityEngine;
 
 public class GameState
 {
-    private static string SAVE_FOLDER = Path.Combine(Application.dataPath, "Saves");
-    private static string SAVE_FILE_PATH = Path.Combine(SAVE_FOLDER, "gamestate.json");
-    private static string BUILDINGS_SAVE_PATH = Path.Combine(SAVE_FOLDER, "buildings.json");
-    private static string TREE_SAVE_PATH = Path.Combine(SAVE_FOLDER, "research_tree.json");
+    private static string SAVE_FOLDER;
+    private static string SAVE_FILE_PATH;
+    private static string BUILDINGS_SAVE_PATH;
+    private static string TREE_SAVE_PATH;
+
+    private static bool pathsInitialized = false;
 
     public static GameState Instance
     {
@@ -18,6 +20,7 @@ public class GameState
             if (_instance == null)
             {
                 _instance = new GameState();
+                InitializePaths();
             }
             return _instance;
         }
@@ -30,47 +33,56 @@ public class GameState
     private int _currency;
     private int _wave;
     private EnemyWave currentWave;
+    
     private GameState() 
     {
         isANewRun = true;
     }
     
+    private static void InitializePaths()
+    {
+        if (pathsInitialized) return;
+        
+        #if UNITY_EDITOR
+            SAVE_FOLDER = Path.Combine(Application.dataPath, "Saves");
+        #else
+            SAVE_FOLDER = Path.Combine(Application.persistentDataPath, "Saves");
+        #endif
+        
+        SAVE_FILE_PATH = Path.Combine(SAVE_FOLDER, "gamestate.json");
+        BUILDINGS_SAVE_PATH = Path.Combine(SAVE_FOLDER, "buildings.json");
+        TREE_SAVE_PATH = Path.Combine(SAVE_FOLDER, "research_tree.json");
+        
+        if (!Directory.Exists(SAVE_FOLDER))
+        {
+            Directory.CreateDirectory(SAVE_FOLDER);
+        }
+        
+        pathsInitialized = true;
+    }
+    
     public bool IsANewRun 
     { 
         get => isANewRun; 
-        set  
-        {
-            isANewRun = value;
-            SaveToJson();
-        }
+        set => isANewRun = value;
     }
     
     public ResearchTree.TreeSaveData TreeSaveData 
     { 
         get => treeSaveData; 
-        set  
-        {
-            treeSaveData = value;
-            SaveTreeToJson();
-        }
+        set => treeSaveData = value;
     }
     
     public EnemyWave CurrentWave
     {
         get => currentWave;
-        set
-        {
-            currentWave = value;
-        }
+        set => currentWave = value;
     }
     
     public List<BuildingSaveData> Buildings 
     { 
         get => buildings; 
-        set 
-        {
-            buildings = value ?? new List<BuildingSaveData>(); 
-        }
+        set => buildings = value ?? new List<BuildingSaveData>(); 
     }
 
     public int Wave
@@ -155,7 +167,7 @@ public class GameState
         Buildings = new List<BuildingSaveData>();
         CurrentWave = null;
         _currency = 0;
-        _wave = 0;
+        _wave = 1;
         isANewRun = true;
         treeSaveData = null;
         
@@ -199,31 +211,36 @@ public class GameState
         };
     }
 
-    public void SaveToJson()
+    public void SaveGameState()
     {
         try
         {
+            InitializePaths();
+            
             var saveData = new GameStateSaveData
             {
                 Currency = _currency,
                 Wave = _wave,
+                IsANewRun = isANewRun,
                 CurrentWaveJson = currentWave != null ? JsonConvert.SerializeObject(currentWave, GetJsonSettings()) : ""
             };
 
             string json = JsonConvert.SerializeObject(saveData, GetJsonSettings());
             File.WriteAllText(SAVE_FILE_PATH, json);
-            Debug.Log($"GameState сохранен в: {SAVE_FILE_PATH}");
+            Debug.Log($"GameState saved to: {SAVE_FILE_PATH}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"Ошибка сохранения GameState: {e.Message}");
+            Debug.LogError($"Error saving GameState: {e.Message}");
         }
     }
 
-    public void SaveBuildingsToJson()
+    public void SaveBuildings()
     {
         try
         {
+            InitializePaths();
+            
             UpdateBuildingsHealth();
         
             var saveData = new BuildingsSaveData
@@ -233,11 +250,11 @@ public class GameState
 
             string json = JsonConvert.SerializeObject(saveData, GetJsonSettings());
             File.WriteAllText(BUILDINGS_SAVE_PATH, json);
-            Debug.Log("Постройки сохранены");
+            Debug.Log($"Buildings saved to: {BUILDINGS_SAVE_PATH}");
         }
         catch (Exception e)
         {
-            Debug.Log(e);
+            Debug.LogError($"Error saving buildings: {e.Message}");
         }
     }
 
@@ -252,34 +269,38 @@ public class GameState
         }
     }
 
-    public void SaveTreeToJson()
+    public void SaveResearchTree()
     {
         try
         {
+            InitializePaths();
+            
             if (treeSaveData == null) return;
 
             string json = JsonConvert.SerializeObject(treeSaveData, GetJsonSettings());
             File.WriteAllText(TREE_SAVE_PATH, json);
-            Debug.Log($"Research Tree сохранен в: {TREE_SAVE_PATH}");
+            Debug.Log($"Research Tree saved to: {TREE_SAVE_PATH}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"Ошибка сохранения Research Tree: {e.Message}");
+            Debug.LogError($"Error saving Research Tree: {e.Message}");
         }
     }
 
     public void SaveAll()
     {
-        SaveToJson();
-        SaveBuildingsToJson();
-        SaveTreeToJson();
+        SaveGameState();
+        SaveBuildings();
+        SaveResearchTree();
     }
 
     public bool LoadGameState()
     {
+        InitializePaths();
+        
         if (!File.Exists(SAVE_FILE_PATH))
         {
-            Debug.Log($"Файл GameState не найден: {SAVE_FILE_PATH}");
+            Debug.Log($"GameState file not found: {SAVE_FILE_PATH}");
             return false;
         }
 
@@ -292,19 +313,20 @@ public class GameState
             {
                 _currency = saveData.Currency;
                 _wave = saveData.Wave;
+                isANewRun = saveData.IsANewRun;
                 
                 if (!string.IsNullOrEmpty(saveData.CurrentWaveJson))
                 {
                     currentWave = JsonConvert.DeserializeObject<EnemyWave>(saveData.CurrentWaveJson, GetJsonSettings());
                 }
                 
-                Debug.Log($"GameState загружен из: {SAVE_FILE_PATH}");
+                Debug.Log($"GameState loaded from: {SAVE_FILE_PATH}");
                 return true;
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"Ошибка загрузки GameState: {e.Message}");
+            Debug.LogError($"Error loading GameState: {e.Message}");
         }
         
         return false;
@@ -312,9 +334,11 @@ public class GameState
 
     public bool LoadBuildings()
     {
+        InitializePaths();
+        
         if (!File.Exists(BUILDINGS_SAVE_PATH))
         {
-            Debug.Log($"Файл Buildings не найден: {BUILDINGS_SAVE_PATH}");
+            Debug.Log($"Buildings file not found: {BUILDINGS_SAVE_PATH}");
             return false;
         }
 
@@ -327,14 +351,13 @@ public class GameState
             {
                 buildings = saveData.Buildings ?? new List<BuildingSaveData>();
                 ConstructionGridManager.SavePoses = Buildings;
-                SaveBuildingsToJson();
                 return true;
             }
             
         }
         catch (Exception e)
         {
-            Debug.LogError($"Ошибка загрузки Buildings: {e.Message}");
+            Debug.LogError($"Error loading Buildings: {e.Message}");
         }
         
         return false;
@@ -342,9 +365,11 @@ public class GameState
 
     public bool LoadResearchTree()
     {
+        InitializePaths();
+        
         if (!File.Exists(TREE_SAVE_PATH))
         {
-            Debug.Log($"Файл Research Tree не найден: {TREE_SAVE_PATH}");
+            Debug.Log($"Research Tree file not found: {TREE_SAVE_PATH}");
             return false;
         }
 
@@ -353,12 +378,12 @@ public class GameState
             string json = File.ReadAllText(TREE_SAVE_PATH);
             treeSaveData = JsonConvert.DeserializeObject<ResearchTree.TreeSaveData>(json, GetJsonSettings());
             
-            Debug.Log($"Research Tree загружен из: {TREE_SAVE_PATH}");
+            Debug.Log($"Research Tree loaded from: {TREE_SAVE_PATH}");
             return true;
         }
         catch (Exception e)
         {
-            Debug.LogError($"Ошибка загрузки Research Tree: {e.Message}");
+            Debug.LogError($"Error loading Research Tree: {e.Message}");
         }
         
         return false;
@@ -375,10 +400,12 @@ public class GameState
 
     public void DeleteAllSaveFiles()
     {
+        InitializePaths();
+        
         TryDeleteFile(SAVE_FILE_PATH);
         TryDeleteFile(BUILDINGS_SAVE_PATH);
         TryDeleteFile(TREE_SAVE_PATH);
-        Debug.Log("Все файлы сохранения удалены");
+        Debug.Log("All save files deleted");
     }
 
     private void TryDeleteFile(string path)
@@ -388,20 +415,27 @@ public class GameState
             if (File.Exists(path))
             {
                 File.Delete(path);
-                Debug.Log($"Файл удален: {path}");
+                Debug.Log($"File deleted: {path}");
             }
         }
         catch (Exception e)
         {
-            Debug.LogError($"Ошибка удаления файла {path}: {e.Message}");
+            Debug.LogError($"Error deleting file {path}: {e.Message}");
         }
     }
 
     public bool HasSavedData()
     {
+        InitializePaths();
+        
         return File.Exists(SAVE_FILE_PATH) || 
                File.Exists(BUILDINGS_SAVE_PATH) || 
                File.Exists(TREE_SAVE_PATH);
     }
 
+    public string GetSaveFolderPath()
+    {
+        InitializePaths();
+        return SAVE_FOLDER;
+    }
 }

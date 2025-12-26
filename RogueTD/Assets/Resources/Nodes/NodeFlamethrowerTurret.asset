@@ -18,7 +18,7 @@ MonoBehaviour:
   maxRank: 9
   minRank: 1
   directUpgradeOf: {fileID: 0}
-  cost: 0
+  cost: 10
   icon: {fileID: 5189364983115794057, guid: b29cac61716777b4eb9c50f19c675258, type: 3}
   tooltipText: Description failed to load properly
   towerBlueprint: {fileID: 11400000, guid: 75760156214c8f44ba0369d7ad2d3f33, type: 2}

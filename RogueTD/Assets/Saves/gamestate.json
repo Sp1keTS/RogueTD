@@ -1,7 +1,7 @@
 {
   "$id": "1",
-  "Currency": 155,
-  "Wave": 2,
-  "IsANewRun": false,
+  "Currency": 300,
+  "Wave": 1,
+  "IsANewRun": true,
   "CurrentWaveJson": ""
 }

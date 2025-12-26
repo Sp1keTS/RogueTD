@@ -38,6 +38,7 @@ public class ExplosionEffect : ProjectileEffect
         if (explosionPrefab)
         {
             GameObject explosion = Object.Instantiate(explosionPrefab, position, Quaternion.identity);
+            explosion.transform.localScale = Vector3.one * explosionRadius;
         }
         
         ExplosionGenerator.CreateExplosion(position, explosionRadius, explosionDamage, tower);

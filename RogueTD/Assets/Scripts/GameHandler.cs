@@ -19,37 +19,38 @@ public class GameHandler : MonoBehaviour
     {
         BlueprintManager.InsertBuildingBlueprint(mainBuildingBlueprint);
         ConstructionGridManager.ConstructionGrid = constructionGrid;
-        Debug.Log(GameState.Instance.IsANewRun);
-        if (GameState.Instance.IsANewRun)
+        
+        
+        if (!GameState.Instance.IsANewRun && GameState.Instance.HasSavedData())
         {
-            GameState.Instance.IsANewRun = false;
-            GameState.Instance.ResetGameState();
-            GenerateResearchTree();
-            LoadUITree();
-            CreateMainBuilding();
-            GameState.Instance.Initialize(300, 1);
-            GameState.Instance.Wave = 1;
-            GameState.Instance.SaveToJson();
-            GameState.Instance.LoadGameState();
-        }
-        else
-        {
+            GameState.Instance.LoadAll();
+            
             GameState.Instance.LoadBuildings();
             GameState.Instance.LoadResearchTree();
             LoadUITree();
             uiBlueprintHolder.LoadExistingBlueprints();
             gridManager.RecreateBuildings();
         }
-        
+        else
+        {
+            GameState.Instance.Wave = 1;
+            GameState.Instance.IsANewRun = true;
+            GameState.Instance.ResetGameState();
+            GenerateResearchTree();
+            LoadUITree();
+            CreateMainBuilding();
+            GameState.Instance.Initialize(300, 1);
+            GameState.Instance.SaveGameState();
+            GameState.Instance.LoadGameState();
+        }
         
         instance = this;
-        
         mapManager.CreateMap();
     }
 
     private void LoadUITree()
     {
-        if (treeSolver != null)
+        if (treeSolver)
         {
             treeSolver.LoadAndSolveTree();
         }
@@ -57,7 +58,7 @@ public class GameHandler : MonoBehaviour
 
     private void GenerateResearchTree()
     {
-        if (researchTree != null)
+        if (researchTree)
         {
             researchTree.GenerateATree();
         }
@@ -70,7 +71,7 @@ public class GameHandler : MonoBehaviour
         var gridPosition = Vector2Int.zero;
         BlueprintManager.InsertBuildingBlueprint(mainBuildingBlueprint);
         Building mainBuilding = BuildingFactory.CreateBuilding(gridPosition, mainBuildingBlueprint);
-        GameState.Instance.SaveBuildingsToJson();
+        GameState.Instance.SaveBuildings();
     }
 
     void OnDestroy()

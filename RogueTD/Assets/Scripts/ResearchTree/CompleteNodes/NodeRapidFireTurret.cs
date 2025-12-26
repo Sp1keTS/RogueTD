@@ -32,7 +32,7 @@ public class NodeRapidFireTurret : ProjectileTowerNode
     
     public override void Initialize(int rank)
     {
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
             float rankMultiplier = 1f + (rank * 0.12f);
             
@@ -44,7 +44,7 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             towerBlueprint.ProjectileSpeed = Random.Range(20f, 30f) + (rank * 1.5f);
             towerBlueprint.ProjectileLifetime = Random.Range(1.5f, 2.5f) + (rank * 0.1f);
             towerBlueprint.Spread = Random.Range(3f, 8f);
-            towerBlueprint.ProjectileFragile = Random.value > 0.7f;
+            towerBlueprint.ProjectileFragile = true;
             towerBlueprint.ProjectileScale = 1;
             towerBlueprint.ProjectileCount = 1;
             
@@ -56,7 +56,7 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             
             LoadBasicShot();
             
-            if (ammoBehavior != null)
+            if (ammoBehavior)
             {
                 towerBlueprint.SecondaryShots = new ResourceReference<SecondaryProjectileTowerBehavior>[]
                 {
@@ -74,11 +74,11 @@ public class NodeRapidFireTurret : ProjectileTowerNode
     public override void LoadDependencies()
     {
         LoadBasicShot();
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
             BlueprintManager.InsertProjectileTowerBlueprint(towerBlueprint);
         }
-        if (ammoBehavior != null)
+        if (ammoBehavior)
         {
             ResourceManager.RegisterSecondaryBehavior(ammoBehavior.name, ammoBehavior);
         }

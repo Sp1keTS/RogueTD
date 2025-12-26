@@ -105,7 +105,7 @@ public class ResearchTree : MonoBehaviour
             CreateBranches();
             
             UnloadAllNodes();
-            GameState.Instance.SaveTreeToJson();
+            GameState.Instance.SaveResearchTree();
             Debug.Log($"Tree generated successfully with {GameState.Instance.TreeSaveData.rootSaveNodes.Count} root nodes");
             
         }

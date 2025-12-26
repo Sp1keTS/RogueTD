@@ -26,7 +26,6 @@ public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
         
         float totalMultiplier = baseDamageMultiplier + (rank * rankBonusPerLevel);
         blueprint.Damage = Mathf.RoundToInt(blueprint.Damage * totalMultiplier);

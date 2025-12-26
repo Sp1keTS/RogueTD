@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5401783645236407755}
   - component: {fileID: 1001931111099151450}
   - component: {fileID: 260377697274647407}
+  - component: {fileID: 3579100426291752498}
   m_Layer: 5
   m_Name: BlueprintItem
   m_TagString: Untagged
@@ -91,7 +92,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c373a6f058009f4cad371f7380ddd42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  blueprint: {fileID: 0}
   button: {fileID: 260377697274647407}
   nameText: {fileID: 4333518489007740352}
   costText: {fileID: 7656364981370073678}
@@ -139,6 +139,26 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &3579100426291752498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903842169662410369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1 &5634422415338589836
 GameObject:
   m_ObjectHideFlags: 0

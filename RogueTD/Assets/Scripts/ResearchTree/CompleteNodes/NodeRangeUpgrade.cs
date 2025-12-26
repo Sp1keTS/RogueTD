@@ -26,8 +26,6 @@ public class NodeRangeUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
-        
         float totalMultiplier = baseRangeMultiplier + (rank * rankBonusPerLevel);
         blueprint.TargetingRange *= totalMultiplier;
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);

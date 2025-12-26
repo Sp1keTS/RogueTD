@@ -40,8 +40,6 @@ public class ExplosionEffectUpgrade : ProjectileTowerUpgradeTreeNode
             return;
         }
 
-        float totalCost = Cost + Cost * Mathf.Pow(rank, 0.5f);
-        GameState.Instance.SpendCurrency((int)totalCost);
         
         float baseRadius = 3f;
         float baseDamagePercentage = 0.5f;

@@ -26,7 +26,6 @@ public class NodePTProjectileSpeedUpgrade : ProjectileTowerUpgradeTreeNode
     }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
         
         float totalMultiplier = baseSpeedMultiplier + (rank * rankBonusPerLevel);
         blueprint.ProjectileSpeed *= totalMultiplier;

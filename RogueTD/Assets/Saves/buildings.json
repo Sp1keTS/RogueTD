@@ -11,67 +11,7 @@
         "sqrMagnitude": 0
       },
       "BlueprintName": "MainBuilding",
-      "CurrentHealth": 472.0
-    },
-    {
-      "$id": "4",
-      "Position": {
-        "$id": "5",
-        "x": 3,
-        "y": 0,
-        "magnitude": 3.0,
-        "sqrMagnitude": 9
-      },
-      "BlueprintName": "Flamethrower",
-      "CurrentHealth": 50.0
-    },
-    {
-      "$id": "6",
-      "Position": {
-        "$id": "7",
-        "x": -3,
-        "y": 0,
-        "magnitude": 3.0,
-        "sqrMagnitude": 9
-      },
-      "BlueprintName": "Flamethrower",
-      "CurrentHealth": 40.0
-    },
-    {
-      "$id": "8",
-      "Position": {
-        "$id": "9",
-        "x": 0,
-        "y": 3,
-        "magnitude": 3.0,
-        "sqrMagnitude": 9
-      },
-      "BlueprintName": "rocketlauncher",
-      "CurrentHealth": 50.0
-    },
-    {
-      "$id": "10",
-      "Position": {
-        "$id": "11",
-        "x": 0,
-        "y": -3,
-        "magnitude": 3.0,
-        "sqrMagnitude": 9
-      },
-      "BlueprintName": "rocketlauncher",
-      "CurrentHealth": 36.0
-    },
-    {
-      "$id": "12",
-      "Position": {
-        "$id": "13",
-        "x": 3,
-        "y": 3,
-        "magnitude": 4.2426405,
-        "sqrMagnitude": 18
-      },
-      "BlueprintName": "ShotgunTurret",
-      "CurrentHealth": 46.0
+      "CurrentHealth": 500.0
     }
   ]
 }

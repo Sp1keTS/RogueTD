@@ -24,7 +24,7 @@ public class ProjectileTower : Tower
     public int ProjectileDamage => (int)(damage * damageMult);
     public float ProjectileSpeed => projectileSpeed;
     public float ProjectileLifetime => projectileLifetime;
-    public bool ProjectileFragile { get; set; }
+    public bool ProjectileFragile { get => projectileFragile; set => projectileFragile = value; }
     public int ProjectileCount => projectileCount;
     
     protected TowerProjectile projectile;
@@ -60,7 +60,7 @@ public class ProjectileTower : Tower
     public override void InitializeFromBlueprint(TowerBlueprint blueprint)
     {
         base.InitializeFromBlueprint(blueprint);
-        Debug.Log(attackSpeed);
+        Debug.Log("А тут?? :" + projectileFragile); //true
         if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
         {
             InitializeFromProjectileBlueprint(projectileBlueprint);
@@ -81,19 +81,10 @@ public class ProjectileTower : Tower
         movements = ConvertResourceReferencesToValues(blueprint.ProjectileBehaviors);
         towerBehavior = blueprint.ShotBehavior?.Value;
         secondaryShots = ConvertResourceReferencesToValues(blueprint.SecondaryShots);
-        
+        Debug.Log("Хрупкий ли снаряд?? :" + blueprint.ProjectileFragile + " " + projectileFragile); //true true
         BuildShootChain();
     }
     
-    public void UpdateFromBlueprint(ProjectileTowerBlueprint blueprint)
-    {
-        effects = ConvertResourceReferencesToValues(blueprint.ProjectileEffects);
-        movements = ConvertResourceReferencesToValues(blueprint.ProjectileBehaviors);
-        towerBehavior = blueprint.ShotBehavior?.Value;
-        secondaryShots = ConvertResourceReferencesToValues(blueprint.SecondaryShots);
-        
-        BuildShootChain();
-    }
     
     private void BuildShootChain()
     {
@@ -137,6 +128,7 @@ public class ProjectileTower : Tower
         projectile = newProjectile.GetComponent<TowerProjectile>();
         
         projectile.Initialize(this);
+        Debug.Log(ProjectileFragile);
         return projectile;
     }
     public override string GetTowerStats()

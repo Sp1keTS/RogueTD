@@ -33,7 +33,7 @@ public class NodeMachineGunTurret : ProjectileTowerNode
             towerBlueprint.ProjectileSpeed = Random.Range(25f, 35f) + (rank * 1.5f);
             towerBlueprint.ProjectileLifetime = Random.Range(1.2f, 2f) + (rank * 0.1f);
             towerBlueprint.Spread = Random.Range(2f, 6f);
-            towerBlueprint.ProjectileFragile = Random.value > 0.5f;
+            towerBlueprint.ProjectileFragile = true;
             
             towerBlueprint.ProjectileCount = 1;
             towerBlueprint.ProjectileScale = 1;

@@ -42,7 +42,6 @@ public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
         }
 
         float totalCost = Cost + Cost * Mathf.Pow(rank, 0.5f);
-        GameState.Instance.SpendCurrency((int)totalCost);
         
         int baseSplitCount = 2;
         float baseAngle = 30f;

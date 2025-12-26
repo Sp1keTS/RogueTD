@@ -44,7 +44,6 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
             return;
         }
 
-        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
         ResourceManager.RegisterStatusEffect(slowEffect.name, slowEffect);
         
         slowEffect.SlowPercent = Mathf.Clamp01(0.5f + (rank * slowPercentIncreasePerRank));

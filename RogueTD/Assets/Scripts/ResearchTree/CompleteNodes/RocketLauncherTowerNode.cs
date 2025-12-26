@@ -34,7 +34,7 @@ public class NodeRocketLauncherTurret : ProjectileTowerNode
             towerBlueprint.ProjectileSpeed = Random.Range(20f, 30f) + (rank * 1f);
             towerBlueprint.ProjectileLifetime = Random.Range(2f, 3f) + (rank * 0.2f);
             towerBlueprint.Spread = Random.Range(0f, 3f);
-            towerBlueprint.ProjectileFragile = Random.value > 0.3f;
+            towerBlueprint.ProjectileFragile = true;
             
             towerBlueprint.ProjectileCount = 1;
             towerBlueprint.ProjectileScale = Random.Range(1.2f, 1.8f);

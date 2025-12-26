@@ -19,7 +19,6 @@ MonoBehaviour:
   minRank: 0
   directUpgradeOf: {fileID: 0}
   cost: 0
-  baseCost: 0
   icon: {fileID: -250953264470595650, guid: 8fea579d24468c0448b269b2fac5ae06, type: 3}
   tooltipText: Description failed to load properly
   towerBlueprint: {fileID: 11400000, guid: e529cec005e868443b23bdb1fb5463cc, type: 2}
@@ -31,3 +30,6 @@ MonoBehaviour:
 
     Perfect for suppressing
     groups of light enemies and fast-moving targets.'
+  ammoBehavior: {fileID: 0}
+  magazineSizeMultiplier: 1.5
+  reloadSpeedMultiplier: 1.3

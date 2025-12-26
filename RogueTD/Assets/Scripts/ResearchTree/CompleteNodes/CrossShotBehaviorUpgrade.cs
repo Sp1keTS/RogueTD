@@ -35,9 +35,6 @@ public class CrossShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
             return;
         }
 
-        float totalCost = Cost + Cost * Mathf.Pow(rank, 0.5f);
-        GameState.Instance.SpendCurrency((int)totalCost);
-        
         EffectUtils.AddEffectToBlueprint(
             blueprint, 
             crossShotBehavior, 
