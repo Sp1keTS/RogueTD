@@ -15,7 +15,7 @@ public class UIBlueprintController : MonoBehaviour
     {
         UiBlueprintItem.SelectBlueprint += OnBlueprintSelected;
         
-        if (GameInputManager.Instance != null)
+        if (GameInputManager.Instance)
         {
             _gameInput = GameInputManager.Instance.GameInput;
             _gameInput.Gameplay.RightMouseClick.started += OnRightMouseClick;
@@ -27,17 +27,17 @@ public class UIBlueprintController : MonoBehaviour
     {
         if (_buildingPreview && selectedBlueprint)
         {
-            Vector2 mouseScreenPos = Mouse.current.position.ReadValue();
-            Vector2 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
-            Vector2 gridPos = GetGridPosition(mouseWorldPos);
-            Vector3 previewWorldPos = BuildingFactory.GetWorldPosition(gridPos);
+            var mouseScreenPos = Mouse.current.position.ReadValue();
+            var mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+            var gridPos = GetGridPosition(mouseWorldPos);
+            var previewWorldPos = BuildingFactory.GetWorldPosition(gridPos);
             _buildingPreview.transform.position = previewWorldPos;
         }
     }
 
     private void OnBlueprintSelected(BuildingBlueprint blueprint)
     {
-        if (blueprint == null)
+        if (!blueprint)
         {
             Debug.LogWarning("Received null blueprint in OnBlueprintSelected");
             return;
@@ -58,7 +58,7 @@ public class UIBlueprintController : MonoBehaviour
         _buildingPreview = new GameObject($"{blueprint.buildingName}_Preview");
         
         var prefabSpriteRenderer = blueprint.BuildingPrefab.GetComponent<SpriteRenderer>();
-        if (prefabSpriteRenderer != null)
+        if (prefabSpriteRenderer)
         {
             _previewRenderer = _buildingPreview.AddComponent<SpriteRenderer>();
             _previewRenderer.sprite = prefabSpriteRenderer.sprite;
@@ -77,8 +77,8 @@ public class UIBlueprintController : MonoBehaviour
             return;
         }
         
-        Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        Vector2Int gridPos = GetGridPosition(mousePosition);
+        var mousePosition = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        var gridPos = GetGridPosition(mousePosition);
         if (BuildingFactory.CanPlaceBuilding(gridPos, selectedBlueprint) && GameState.Instance.SpendCurrency(selectedBlueprint.Cost))
         {
             ConstructionGridManager.TryCreateBlueprint(selectedBlueprint, gridPos);
@@ -91,7 +91,7 @@ public class UIBlueprintController : MonoBehaviour
     private Vector2Int GetGridPosition(Vector2 worldPosition)
     {
         
-        Vector3Int cellPosition = ConstructionGridManager.ConstructionGrid.WorldToCell((Vector2) worldPosition);
+        var cellPosition = ConstructionGridManager.ConstructionGrid.WorldToCell((Vector2) worldPosition);
         return new Vector2Int(cellPosition.x, cellPosition.y);
     }
     

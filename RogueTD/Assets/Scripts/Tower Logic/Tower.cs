@@ -54,16 +54,16 @@ public class Tower : MonoBehaviour
             return;
         }
         
-        float lowestDistance = Mathf.Infinity;
+        var lowestDistance = Mathf.Infinity;
         target = null;
-        Vector3 myPosition = transform.position;
+        var myPosition = transform.position;
         
         foreach (var enemy in enemies)
         {
             if (!enemy) continue;
             
-            float distance = (enemy.transform.position - myPosition).sqrMagnitude;
-            float rangeSqr = targetingRange * targetingRange;
+            var distance = (enemy.transform.position - myPosition).sqrMagnitude;
+            var rangeSqr = targetingRange * targetingRange;
             
             if (distance <= rangeSqr && distance < lowestDistance)
             {
@@ -77,8 +77,8 @@ public class Tower : MonoBehaviour
     {
         if (target)
         {
-            Vector2 directionToTarget = (target.transform.position - transform.position).normalized;
-            float targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
+            var directionToTarget = (target.transform.position - transform.position).normalized;
+            var targetAngle = Mathf.Atan2(directionToTarget.y, directionToTarget.x) * Mathf.Rad2Deg;
             currentAngle = Mathf.MoveTowardsAngle(currentAngle, targetAngle, rotatingSpeed * Time.deltaTime);
             transform.rotation = Quaternion.AngleAxis(currentAngle, Vector3.forward);
         }
@@ -102,7 +102,7 @@ public class Tower : MonoBehaviour
         if (references == null || references.Length == 0)
             return Array.Empty<T>();
             
-        List<T> result = new List<T>();
+        var result = new List<T>();
         foreach (var reference in references)
         {
             if (reference?.Value != null)

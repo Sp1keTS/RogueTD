@@ -11,9 +11,9 @@ public abstract class StatusEffect : ScriptableObject
     public virtual void OnReapply(Enemy enemy, Coroutine existingCoroutine)
     {
         enemy.StopCoroutine(existingCoroutine);
-        Coroutine newCoroutine = enemy.StartCoroutine(ApplyEffect(enemy));
+        var newCoroutine = enemy.StartCoroutine(ApplyEffect(enemy));
         
-        System.Type effectType = GetType();
+        var effectType = GetType();
         enemy.ReplaceEffectCoroutine(effectType, newCoroutine);
     }
 }

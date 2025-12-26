@@ -30,7 +30,7 @@ public class BasicTurret : ProjectileTower
         while (true)
         {
             GetTarget();
-            if (target != null && currentAmmo >= 1)
+            if (target && currentAmmo >= 1)
             {
                 var shotData = GetShotData(); 
                 ExecuteShootChain();

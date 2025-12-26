@@ -57,7 +57,7 @@ public class BurnEffect : StatusEffect
             enemyRendererForColor.material.color = Color.Lerp(burnData.originalColor, burnColor, burnData.stacks * 0.2f);
         }
         
-        float endTime = Time.time + duration;
+        var endTime = Time.time + duration;
         
         while (Time.time < endTime && enemy && enemy.gameObject.activeInHierarchy)
         {

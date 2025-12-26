@@ -37,7 +37,7 @@ public static class ResourceManager
 #if UNITY_EDITOR
     private static void CreateResourceFoldersIfNeeded()
     {
-        string resourcesPath = "Assets/Resources";
+        var resourcesPath = "Assets/Resources";
         if (!AssetDatabase.IsValidFolder(resourcesPath))
         {
             AssetDatabase.CreateFolder("Assets", "Resources");
@@ -55,7 +55,7 @@ public static class ResourceManager
         
         foreach (string folder in folders)
         {
-            string folderPath = $"{resourcesPath}/{folder}";
+            var folderPath = $"{resourcesPath}/{folder}";
             if (!AssetDatabase.IsValidFolder(folderPath))
             {
                 AssetDatabase.CreateFolder(resourcesPath, folder);
@@ -101,10 +101,10 @@ public static class ResourceManager
     
     private static void LoadResources<T>(string folderPath, Dictionary<string, T> dictionary) where T : ScriptableObject
     {
-        T[] resources = Resources.LoadAll<T>(folderPath);
-        foreach (T resource in resources)
+        var resources = Resources.LoadAll<T>(folderPath);
+        foreach (var resource in resources)
         {
-            if (resource != null && !dictionary.ContainsKey(resource.name))
+            if (resource && !dictionary.ContainsKey(resource.name))
             {
                 dictionary[resource.name] = resource;
             }
@@ -114,7 +114,7 @@ public static class ResourceManager
 
     public static void RegisterTreeNode(string key, TreeNode node)
     {
-        if (node != null && !_treeNodes.ContainsKey(key))
+        if (node && !_treeNodes.ContainsKey(key))
         {
             _treeNodes[key] = node;
             Debug.Log($"TreeNode registered: {key}");
@@ -129,7 +129,7 @@ public static class ResourceManager
         }
         
         var loadedNode = Resources.Load<TreeNode>($"{TREE_NODES_FOLDER}/{key}");
-        if (loadedNode != null)
+        if (loadedNode)
         {
             _treeNodes[key] = loadedNode;
             return loadedNode;
@@ -162,7 +162,6 @@ public static class ResourceManager
         return result;
     }
 
-    // === КОПИРУЕМ СУЩЕСТВУЮЩИЕ МЕТОДЫ (остаются без изменений) ===
 
     public static void RegisterTowerBehavior(string key, ProjectileTowerBehavior behavior)
     {
@@ -179,7 +178,7 @@ public static class ResourceManager
 
     public static void RegisterProjectileBehavior(string key, ProjectileBehavior behavior)
     {
-        if (behavior != null && !_projectileBehaviors.ContainsKey(key))
+        if (behavior && !_projectileBehaviors.ContainsKey(key))
         {
             _projectileBehaviors[key] = behavior;
         }
@@ -204,7 +203,7 @@ public static class ResourceManager
     
     public static void RegisterProjectileEffect(string key, ProjectileEffect effect)
     {
-        if (effect != null && !_projectileEffects.ContainsKey(key))
+        if (effect && !_projectileEffects.ContainsKey(key))
         {
             _projectileEffects[key] = effect;
         }
@@ -212,7 +211,7 @@ public static class ResourceManager
 
     public static void RegisterStatusEffect(string key, StatusEffect effect)
     {
-        if (effect != null && !_statusEffects.ContainsKey(key))
+        if (effect && !_statusEffects.ContainsKey(key))
         {
             _statusEffects[key] = effect;
         }
@@ -220,7 +219,7 @@ public static class ResourceManager
 
     public static void RegisterSecondaryBehavior(string key, SecondaryProjectileTowerBehavior behavior)
     {
-        if (behavior != null && !_secondaryBehaviors.ContainsKey(key))
+        if (behavior && !_secondaryBehaviors.ContainsKey(key))
         {
             _secondaryBehaviors[key] = behavior;
         }

@@ -17,7 +17,7 @@ public class UiBlueprintItem : MonoBehaviour
     
     private void Start()
     {
-        if (button == null)
+        if (!button)
             button = GetComponent<Button>();
             
         button.onClick.AddListener(OnButtonClick);
@@ -27,16 +27,16 @@ public class UiBlueprintItem : MonoBehaviour
     {
         blueprint = newBlueprint;
         
-        if (nameText != null && blueprint != null)
+        if (nameText && blueprint)
             nameText.text = blueprint.buildingName;
         
-        if (costText != null && blueprint != null)
+        if (costText && blueprint)
             costText.text = blueprint.Cost.ToString();
     }
     
     private void OnButtonClick()
     {
-        if (blueprint != null)
+        if (blueprint)
         {
             Debug.Log($"UIBlueprintItem clicked: {blueprint.buildingName}");
             SelectBlueprint?.Invoke(blueprint);
@@ -49,7 +49,7 @@ public class UiBlueprintItem : MonoBehaviour
     
     private void OnDestroy()
     {
-        if (button != null)
+        if (button)
             button.onClick.RemoveListener(OnButtonClick);
     }
 }

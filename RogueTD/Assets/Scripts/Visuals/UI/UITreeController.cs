@@ -26,12 +26,12 @@ public class UITreeController : MonoBehaviour
         _originalTreePosition = treeUI.transform.position;
         _targetPosition = _originalTreePosition;
         
-        if (button != null)
+        if (button)
         {
             button.onClick.AddListener(ToggleCanvas);
         }
         
-        if (treeUICanvas != null)
+        if (treeUICanvas)
         {
             treeUICanvas.gameObject.SetActive(false);
             _isTreeActive = false;
@@ -54,7 +54,7 @@ public class UITreeController : MonoBehaviour
         
         if (inputDirection != Vector2.zero)
         {
-            Vector3 moveDirection = new Vector3(inputDirection.x, inputDirection.y, 0);
+            var moveDirection = new Vector3(inputDirection.x, inputDirection.y, 0);
             _targetPosition += moveDirection * (treeSpeed * Time.deltaTime);
         }
     }
@@ -95,7 +95,7 @@ public class UITreeController : MonoBehaviour
 
     private void ToggleCanvas()
     {
-        if (treeUICanvas == null) return;
+        if (!treeUICanvas) return;
         
         _isTreeActive = !treeUICanvas.gameObject.activeSelf;
         treeUICanvas.gameObject.SetActive(_isTreeActive);
@@ -116,7 +116,7 @@ public class UITreeController : MonoBehaviour
         _targetPosition = _originalTreePosition;
         _targetZoom = 1f;
         
-        if (treeUI != null)
+        if (treeUI)
         {
             treeUI.transform.position = _originalTreePosition;
             treeUI.transform.localScale = Vector3.one;
@@ -125,7 +125,7 @@ public class UITreeController : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (button != null)
+        if (button)
         {
             button.onClick.RemoveListener(ToggleCanvas);
         }

@@ -46,7 +46,7 @@ public static class BlueprintManager
             blueprints = new Dictionary<string, BuildingBlueprint>();
         }
 
-        if (blueprint == null || string.IsNullOrEmpty(blueprint.buildingName))
+        if (!blueprint || string.IsNullOrEmpty(blueprint.buildingName))
         {
             Debug.LogError("Cannot insert null blueprint or blueprint with empty name");
             return;
@@ -71,7 +71,7 @@ public static class BlueprintManager
             blueprints = new Dictionary<string, BuildingBlueprint>();
         }
 
-        if (blueprint == null || string.IsNullOrEmpty(blueprint.buildingName))
+        if (!blueprint || string.IsNullOrEmpty(blueprint.buildingName))
         {
             Debug.LogError("Cannot insert null blueprint or blueprint with empty name");
             return;

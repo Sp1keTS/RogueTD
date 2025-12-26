@@ -46,10 +46,6 @@ public class TowerProjectile : MonoBehaviour
                     break;
                 }
             }
-            //foreach (ProjectileEffect effect in projectileTower.effects)
-            //{
-            //    effect.OnLifeSpanEnd(this, projectileTower);
-            //}
             Destroy(gameObject);
         }
     }
@@ -69,10 +65,6 @@ public class TowerProjectile : MonoBehaviour
                         break;
                     }
                 }
-                //foreach (ProjectileEffect effect in projectileTower.effects)
-                //{
-                //    effect.OnCollision(enemyBase,this, projectileTower);
-                //}
                 _enemyBase.TakeDamage(projectileTower.Damage, projectileTower);
                 if(projectileTower.ProjectileFragile)
                 {
