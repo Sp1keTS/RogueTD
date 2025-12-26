@@ -14,13 +14,16 @@ public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
+        float cost = GetDynamicCost(rank);
         return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
                $"<b>Effect (Rank {rank}):</b>\n" +
                $"• Damage: <color=#00FF00>{baseDamageMultiplier + (rank * rankBonusPerLevel):F2}x</color>\n\n" +
                $"<b>Per Rank:</b> +{rankBonusPerLevel:F2}x";
     }
-    
+    public override int GetDynamicCost(int rank)
+    {
+        return (int)(Cost * Mathf.Pow(rank, 0.5f));
+    }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
         GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));

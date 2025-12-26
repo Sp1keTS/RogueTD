@@ -32,7 +32,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
         if (!treeSaveNode.IsActive && (isRootNode || isChildNodeAvailable))
         {
-            if (GameState.Instance.SpendCurrency(treeSaveNode.currentNode.Cost))
+            if (GameState.Instance.SpendCurrency(treeSaveNode.currentNode.Cost + treeSaveNode.currentNode.GetDynamicCost(Rank)))
             {
                 if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
                 {

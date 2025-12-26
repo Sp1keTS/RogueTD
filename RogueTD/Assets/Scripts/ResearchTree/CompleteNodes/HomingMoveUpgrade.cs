@@ -11,7 +11,7 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
+        float cost = GetDynamicCost(rank);
         
         if (homingMovement != null)
         {
@@ -28,7 +28,10 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
         return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
                "<color=#FF5555>Failed to load effect</color>";
     }
-    
+    public override int GetDynamicCost(int rank)
+    {
+        return (int)(Cost * Mathf.Pow(rank, 0.5f));
+    }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
         if (homingMovement == null)

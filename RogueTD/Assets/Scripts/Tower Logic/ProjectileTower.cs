@@ -24,7 +24,7 @@ public class ProjectileTower : Tower
     public int ProjectileDamage => (int)(damage * damageMult);
     public float ProjectileSpeed => projectileSpeed;
     public float ProjectileLifetime => projectileLifetime;
-    public bool ProjectileFragile => projectileFragile;
+    public bool ProjectileFragile { get; set; }
     public int ProjectileCount => projectileCount;
     
     protected TowerProjectile projectile;

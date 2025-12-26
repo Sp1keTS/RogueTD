@@ -21,7 +21,8 @@ public class Tower : MonoBehaviour
     protected float currentAngle;
     protected Enemy target;
     private List<Enemy> enemies;
-    
+    public int MaxAmmo { get { return maxAmmo; } set { maxAmmo = value; } }
+    public float CurrentAmmo { get { return currentAmmo; } set { currentAmmo = value; } }
     public int Damage => damage;
     public float DamageMult => damageMult;
     public float TargetingRange => targetingRange;

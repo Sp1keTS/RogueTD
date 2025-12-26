@@ -104,6 +104,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6697666949223120341}
   projectileTower: {fileID: 0}
+  spriteRenderer: {fileID: 0}
 --- !u!50 &6697666949223120341
 Rigidbody2D:
   serializedVersion: 5
@@ -166,5 +167,5 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.8, y: 0.4}
+  m_Size: {x: 0.4, y: 0.12}
   m_Direction: 0

@@ -20,7 +20,10 @@ public class NodeRangeUpgrade : ProjectileTowerUpgradeTreeNode
                $"• Range: <color=#00FF00>{baseRangeMultiplier + (rank * rankBonusPerLevel):F2}x</color>\n\n" +
                $"<b>Per Rank:</b> +{rankBonusPerLevel:F2}x";
     }
-    
+    public override int GetDynamicCost(int rank)
+    {
+        return (int)(Cost * Mathf.Pow(rank, 0.5f));
+    }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
         GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));

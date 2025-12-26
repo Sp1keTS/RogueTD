@@ -290,7 +290,7 @@ public class ResearchTree : MonoBehaviour
 
     private float CalculateRandomBranchWeight(TreeSaveData.TreeSaveNode currentNode, TreeSaveData.TreeSaveNode prevNode, List<TreeNode> availableNodes)
     {
-        if (prevNode?.currentNode == null || currentNode?.currentNode == null)
+        if (!prevNode?.currentNode || !currentNode?.currentNode)
             return 1f;
 
         var node = prevNode.currentNode;

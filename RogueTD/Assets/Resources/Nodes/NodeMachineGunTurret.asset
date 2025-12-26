@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3ab754cdd2745a995da04709c04e58e, type: 3}
+  m_Name: NodeMachineGunTurret
+  m_EditorClassIdentifier: 
+  tags:
+  - Building
+  - Unique
+  maxRank: 9
+  minRank: 1
+  directUpgradeOf: {fileID: 0}
+  cost: 0
+  icon: {fileID: 3411130300899309360, guid: 9e7b8350f649b8540bc4d7cde31816f6, type: 3}
+  tooltipText: Description failed to load properly
+  towerBlueprint: {fileID: 11400000, guid: 419331ad9064dcd4fb06e19a5013c0b7, type: 2}
+  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
+  rampingBehavior: {fileID: 11400000, guid: d0bdcd5d261987a41a4e587997b77195, type: 2}
+  ammoBehavior: {fileID: 11400000, guid: 63dcee1c6873aeb4fbf1befbb7ed322f, type: 2}

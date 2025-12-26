@@ -28,4 +28,5 @@ public abstract class TreeNode : ScriptableObject
     abstract public void Initialize(int rank);
     abstract public void LoadDependencies();
     abstract public string GetStats(int rank);
+    abstract public int GetDynamicCost(int rank);
 }

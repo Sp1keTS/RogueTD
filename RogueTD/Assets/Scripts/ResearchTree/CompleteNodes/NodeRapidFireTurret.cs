@@ -7,6 +7,11 @@ public class NodeRapidFireTurret : ProjectileTowerNode
     [SerializeField, TextArea(3, 5)] private string description = 
         "High fire rate, low damage.";
     
+    [Header("Magazine Settings")]
+    [SerializeField] private AmmoBasedShootingBehavior ammoBehavior;
+    [SerializeField] private float magazineSizeMultiplier = 1.5f;
+    [SerializeField] private float reloadSpeedMultiplier = 1.3f;
+    
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
@@ -15,7 +20,11 @@ public class NodeRapidFireTurret : ProjectileTowerNode
         {
             return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                    $"<b>Stats (Rank {rank}):</b>\n" +
-                   $"{towerBlueprint.GetTowerStats()}\n\n";
+                   $"{towerBlueprint.GetTowerStats()}\n\n" +
+                   $"<b>Special:</b>\n" +
+                   $"• Magazine system\n" +
+                   $"• Fires until empty\n" +
+                   $"• Pauses to reload";
         }
         return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                "<color=#FF5555>Failed to load stats</color>";
@@ -28,7 +37,7 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             float rankMultiplier = 1f + (rank * 0.12f);
             
             towerBlueprint.Damage = Mathf.RoundToInt(Random.Range(1f, 2f) * rankMultiplier);
-            towerBlueprint.AttackSpeed = Random.Range(10f, 20f) * (1f + (rank * 0.2f)); 
+            towerBlueprint.AttackSpeed = Random.Range(3f, 7f) * (1f + (rank * 0.2f)); 
             towerBlueprint.TargetingRange = Random.Range(4f, 7f) * (1f + (rank * 0.1f));
             towerBlueprint.RotatingSpeed = Random.Range(130f, 180f) + (rank * 15f);
             
@@ -39,17 +48,24 @@ public class NodeRapidFireTurret : ProjectileTowerNode
             towerBlueprint.ProjectileScale = 1;
             towerBlueprint.ProjectileCount = 1;
             
-            towerBlueprint.MaxAmmo = Random.Range(40, 60) + (rank * 6);
+            towerBlueprint.MaxAmmo = Mathf.RoundToInt(Random.Range(40, 60) * magazineSizeMultiplier) + (rank * 8);
             towerBlueprint.CurrentAmmo = towerBlueprint.MaxAmmo;
-            towerBlueprint.AmmoRegeneration = Random.Range(2f, 3f) + (rank * 0.3f);
+            towerBlueprint.AmmoRegeneration = Random.Range(2f, 3f) * reloadSpeedMultiplier + (rank * 0.3f);
             
             towerBlueprint.DamageMult = Random.Range(0.6f, 0.8f) + (rank * 0.04f);
             
             LoadBasicShot();
             
+            if (ammoBehavior != null)
+            {
+                towerBlueprint.SecondaryShots = new ResourceReference<SecondaryProjectileTowerBehavior>[]
+                {
+                    new ResourceReference<SecondaryProjectileTowerBehavior> { Value = ammoBehavior }
+                };
+            }
+            
             towerBlueprint.ProjectileBehaviors = null;
             towerBlueprint.ProjectileEffects = null;
-            towerBlueprint.SecondaryShots = null;
             towerBlueprint.StatusEffects = null;
             towerBlueprint.TowerBehaviours = null;
         }
@@ -61,6 +77,10 @@ public class NodeRapidFireTurret : ProjectileTowerNode
         if (towerBlueprint != null)
         {
             BlueprintManager.InsertProjectileTowerBlueprint(towerBlueprint);
+        }
+        if (ammoBehavior != null)
+        {
+            ResourceManager.RegisterSecondaryBehavior(ammoBehavior.name, ammoBehavior);
         }
     }
 }

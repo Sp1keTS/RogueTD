@@ -17,10 +17,9 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
         if (bleedEffect)
         {
-            return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n <b>Effect (Rank {rank}):</b>\n" +
+            return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank)}</color></size>\n\n <b>Effect (Rank {rank}):</b>\n" +
                    $"• Damage: <color=#00FF00>{15 + (rank * totalDamageIncreasePerRank):F0}</color>\n" +
                    $"• Duration: <color=#00FF00>{2 + (rank * durationIncreasePerRank):F1}s</color>\n\n" +
                    $"<b>Per Rank:</b> +{totalDamageIncreasePerRank:F0} damage, +{durationIncreasePerRank:F1}s";
@@ -29,7 +28,12 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
                $"{description}\n\n" +
                "<color=#FF5555>Failed to load effect</color>";
     }
-    
+
+    public override int GetDynamicCost(int rank)
+    {
+        return (int)(Cost * Mathf.Pow(rank, 0.5f));
+    }
+
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
         if (!bleedEffect)
@@ -38,7 +42,6 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
             return;
         }
 
-        GameState.Instance.SpendCurrency((int)(Cost * Mathf.Pow(rank, 0.5f)));
         ResourceManager.RegisterStatusEffect(bleedEffect.name, bleedEffect);
         
         bleedEffect.TotalDamage = (int)(blueprint.Damage * (rank  * 0.17));

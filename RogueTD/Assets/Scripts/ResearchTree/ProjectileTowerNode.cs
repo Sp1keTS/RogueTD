@@ -23,4 +23,8 @@ public abstract class ProjectileTowerNode : TreeNode
             ResourceManager.RegisterTowerBehavior(basicShotBehavior.name, basicShotBehavior);
         }
     }
+    public override int GetDynamicCost(int rank)
+    {
+        return (int)(Cost * Mathf.Pow(rank, 0.25f));
+    }
 }

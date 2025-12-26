@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db7d2a2abb664d178c8e31fbe330ca7d, type: 3}
+  m_Name: NodeFlamethrowerTurret
+  m_EditorClassIdentifier: 
+  tags:
+  - Unique
+  - Building
+  maxRank: 9
+  minRank: 1
+  directUpgradeOf: {fileID: 0}
+  cost: 0
+  icon: {fileID: 5189364983115794057, guid: b29cac61716777b4eb9c50f19c675258, type: 3}
+  tooltipText: Description failed to load properly
+  towerBlueprint: {fileID: 11400000, guid: 75760156214c8f44ba0369d7ad2d3f33, type: 2}
+  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
+  burnEffect: {fileID: 11400000, guid: d16c9007b2a2a504aadc2842d9a9c575, type: 2}

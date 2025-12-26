@@ -17,7 +17,7 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override string GetStats(int rank)
     {
-        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
+        float cost = GetDynamicCost(rank);
         
         if (slowEffect)
         {
@@ -32,7 +32,10 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
                $"{description}\n\n" +
                "<color=#FF5555>Failed to load effect</color>";
     }
-    
+    public override int GetDynamicCost(int rank)
+    {
+        return (int)(Cost * Mathf.Pow(rank, 0.5f));
+    }
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
         if (slowEffect == null)
