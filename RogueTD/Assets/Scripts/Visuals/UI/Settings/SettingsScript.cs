@@ -19,7 +19,7 @@ public class SettingsScript : MonoBehaviour
     
     [SerializeField] private int defaultVolume = 100;
     [SerializeField] private int defaultEffectsVolume = 100;
-    [SerializeField] private int defaultMusicVolume = 100;
+    [SerializeField] private int defaultMusicVolume = 60;
     
     private int globalVolume;
     private int effectsVolume;

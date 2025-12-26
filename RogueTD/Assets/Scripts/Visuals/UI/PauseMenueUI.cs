@@ -8,7 +8,10 @@ public class PauseMenueUI : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private Button pauseButton;
-    [SerializeField] private Button mainMenuButton; 
+    [SerializeField] private Button mainMenuButton;
+    [SerializeField] private Button settingsButton;
+    [SerializeField] GameObject PauseMenuCanvas;
+    [SerializeField] GameObject settingsCanvas;
     private GameInput _gameInput;
 
     private void Awake()
@@ -18,8 +21,11 @@ public class PauseMenueUI : MonoBehaviour
             pauseButton = GetComponent<Button>();
         if (mainMenuButton == null)
             mainMenuButton = GetComponent<Button>();
+        if (settingsButton == null)
+            settingsButton = GetComponent<Button>();
         pauseButton.onClick.AddListener(OnPauseButtonClick);
         mainMenuButton.onClick.AddListener(OnMainMenuButtonClick);
+        settingsButton.onClick.AddListener(OnSettingsButtonClick);
     }
 
     private void OnPauseButtonClick()
@@ -34,5 +40,14 @@ public class PauseMenueUI : MonoBehaviour
         _gameInput.Gameplay.Enable();
         Time.timeScale = 1;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+
+    private void OnSettingsButtonClick()
+    {
+        if (settingsCanvas && PauseMenuCanvas)
+        {
+            settingsCanvas.SetActive(true);
+            PauseMenuCanvas.SetActive(false);
+        }
     }
 }

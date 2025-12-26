@@ -16,7 +16,7 @@ public class MusicManager : MonoBehaviour
         set => currentMusic = value;
     }
 
-    void Start()
+    void Awake()
     {
         if (instance == null)
         {

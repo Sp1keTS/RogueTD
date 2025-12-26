@@ -27,6 +27,7 @@ public class MainMenuScript : MonoBehaviour
         settingsButton.onClick.AddListener(OnSettingsButtonClick);
         
         continueButton.interactable = GameState.Instance.IsANewRun;
+        MusicManager.instance.PlayMusic(menuMusic, 0.8f);
     }
 
     private void OnNewGameButtonClick()
