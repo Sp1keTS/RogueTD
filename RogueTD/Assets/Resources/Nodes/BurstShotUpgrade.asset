@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4fd9d6470754c7d4ca4f4dab5eef1a01, type: 3}
   m_Name: BurstShotUpgrade
   m_EditorClassIdentifier: 
-  tags: []
+  tags:
+  - Unique
   maxRank: 9
   minRank: 0
   directUpgradeOf: {fileID: 0}
   cost: 0
-  icon: {fileID: 0}
+  icon: {fileID: 692906763773742359, guid: 98c8ebbed3980214ca51bf9fe4aec455, type: 3}
   tooltipText: Description failed to load properly
-  burstShotBehavior: {fileID: 0}
+  burstShotBehavior: {fileID: 11400000, guid: 8e8070d461470a343ada40d696f9db34, type: 2}
   additionalBurstPerRank: 0.5
   delayReductionPerRank: 0.02

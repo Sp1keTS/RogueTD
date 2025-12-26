@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04e8470aca9064040af28d7781feb3eb, type: 3}
   m_Name: SplitUpgrade
   m_EditorClassIdentifier: 
-  tags: []
+  tags:
+  - Unique
   maxRank: 9
   minRank: 0
   directUpgradeOf: {fileID: 0}
-  cost: 0
-  icon: {fileID: 0}
+  cost: 50
+  icon: {fileID: 2230340668242725293, guid: 076fc6f90bca7ed4eafa149da35c19f0, type: 3}
   tooltipText: Description failed to load properly
-  splitEffect: {fileID: 0}
+  splitEffect: {fileID: 11400000, guid: f5c6660ab5668f54ab218a6f9cbb04ff, type: 2}
   additionalSplitPerRank: 0.25
   angleIncreasePerRank: 10

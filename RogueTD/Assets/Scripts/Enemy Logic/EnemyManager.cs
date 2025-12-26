@@ -24,6 +24,9 @@ public static class EnemyManager
         if (parent)
             enemyInstance.transform.SetParent(parent);
     
+        string uniqueName = GenerateUniqueEnemyName(enemyInstance.EnemyName);
+        enemyInstance.gameObject.name = uniqueName;
+        
         enemyInstance.InitializeImmediate();
         RegisterEnemy(enemyInstance);
     
@@ -34,17 +37,23 @@ public static class EnemyManager
     {
         if (!enemy) return;
         
-        string id = enemy.Id;
-        if (string.IsNullOrEmpty(id))
+        string enemyName = enemy.gameObject.name;
+        
+        if (string.IsNullOrEmpty(enemyName))
         {
-            Debug.LogWarning($"Cannot register enemy with null or empty ID: {enemy.EnemyName}");
-            return;
+            enemyName = GenerateUniqueEnemyName(enemy.EnemyName);
+            enemy.gameObject.name = enemyName;
         }
         
-        if (!enemies.ContainsKey(id))
+        if (!enemies.ContainsKey(enemyName))
         {
-            enemies[id] = enemy;
+            enemies[enemyName] = enemy;
             enemy.OnDeath += HandleEnemyDeath;
+            Debug.Log($"Registered enemy: {enemyName}");
+        }
+        else
+        {
+            Debug.LogWarning($"Enemy with name '{enemyName}' already registered!");
         }
     }
     
@@ -58,11 +67,12 @@ public static class EnemyManager
     {
         if (!enemy) return;
         
-        string id = enemy.Id;
-        if (!string.IsNullOrEmpty(id) && enemies.ContainsKey(id))
+        string enemyName = enemy.gameObject.name;
+        if (!string.IsNullOrEmpty(enemyName) && enemies.ContainsKey(enemyName))
         {
-            enemies[id].OnDeath -= HandleEnemyDeath;
-            enemies.Remove(id);
+            enemies[enemyName].OnDeath -= HandleEnemyDeath;
+            enemies.Remove(enemyName);
+            Debug.Log($"Unregistered enemy: {enemyName}");
         }
     }
     
@@ -77,5 +87,48 @@ public static class EnemyManager
             }
         }
         enemies.Clear();
+    }
+    
+    private static string GenerateUniqueEnemyName(string baseName)
+    {
+        string uniqueName;
+        int counter = 0;
+        
+        do
+        {
+            uniqueName = $"{baseName}_{System.Guid.NewGuid().ToString("N").Substring(0, 8)}";
+            if (counter > 0)
+            {
+                uniqueName = $"{baseName}_{counter:000}_{System.Guid.NewGuid().ToString("N").Substring(0, 4)}";
+            }
+            counter++;
+        }
+        while (enemies.ContainsKey(uniqueName) && counter < 1000);
+        
+        return uniqueName;
+    }
+    
+    public static bool TryGetEnemy(GameObject gameObject, out Enemy enemy)
+    {
+        if (gameObject != null && enemies.ContainsKey(gameObject.name))
+        {
+            enemy = enemies[gameObject.name];
+            return true;
+        }
+        
+        enemy = null;
+        return false;
+    }
+    
+    public static bool TryGetEnemyByName(string enemyName, out Enemy enemy)
+    {
+        if (!string.IsNullOrEmpty(enemyName) && enemies.ContainsKey(enemyName))
+        {
+            enemy = enemies[enemyName];
+            return true;
+        }
+        
+        enemy = null;
+        return false;
     }
 }
