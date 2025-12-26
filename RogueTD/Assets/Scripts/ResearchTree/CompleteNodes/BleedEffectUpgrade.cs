@@ -11,31 +11,23 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "Adds a powerful bleeding effect to your tower's projectiles.\n" +
-        "Inflicts damage over time to enemies, causing them to bleed.\n" +
-        "Higher ranks increase bleed damage and duration.";
+        "Damage over time. Based on Turret damage";
     
+    public override string TooltipText => description;
     
-    public override string TooltipText
-    {
-        get => description;
-    }
     public override string GetStats(int rank)
     {
-        
+        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
         if (bleedEffect)
         {
-            return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}" +
-                   $"{description}\n\n" +
-                   $"Current Effect (Rank {rank}):\n" +
-                   $"• Total Bleed Damage: {15 + (rank * totalDamageIncreasePerRank):F0}\n" + 
-                   $"• Duration: {2 + (rank * durationIncreasePerRank):F1} seconds\n" +
-                   $"• Damage per Tick: {(15 + (rank * totalDamageIncreasePerRank)) / ((2 + (rank * durationIncreasePerRank)) / 0.5f):F1}\n\n" +
-                   $"Rank Bonus:\n" + 
-                   $"• +{totalDamageIncreasePerRank:F0} total damage per rank\n" + 
-                   $"• +{durationIncreasePerRank:F1}s duration per rank";
+            return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n <b>Effect (Rank {rank}):</b>\n" +
+                   $"• Damage: <color=#00FF00>{15 + (rank * totalDamageIncreasePerRank):F0}</color>\n" +
+                   $"• Duration: <color=#00FF00>{2 + (rank * durationIncreasePerRank):F1}s</color>\n\n" +
+                   $"<b>Per Rank:</b> +{totalDamageIncreasePerRank:F0} damage, +{durationIncreasePerRank:F1}s";
         }
-        return $"FAILED TO LOAD\n\n{description}";
+        return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
+               $"{description}\n\n" +
+               "<color=#FF5555>Failed to load effect</color>";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)

@@ -5,27 +5,20 @@ public class NodeRapidFireTurret : ProjectileTowerNode
 {
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "High-speed projectile tower with incredible rate of fire.\n" +
-        "Sacrifices damage per shot for overwhelming projectile volume.\n" +
-        "Perfect for suppressing groups of light enemies and fast-moving targets.";
+        "High fire rate, low damage.";
     
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
-            return $"Cost: {Cost}\n" +
-                   $"{description}\n\n" +
-                   $"Tower Stats (Rank {rank}):\n" +
-                   $"{towerBlueprint.GetTowerStats()}\n\n" +
-                   $"Specialization:\n" +
-                   $"• Extreme attack speed\n" +
-                   $"• Fast rotation speed\n" +
-                   $"• High ammo regeneration\n" +
-                   $"• Lower damage per shot";
+            return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
+                   $"<b>Stats (Rank {rank}):</b>\n" +
+                   $"{towerBlueprint.GetTowerStats()}\n\n";
         }
-        return $"FAILED TO LOAD\n\n{description}";
+        return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
+               "<color=#FF5555>Failed to load stats</color>";
     }
     
     public override void Initialize(int rank)

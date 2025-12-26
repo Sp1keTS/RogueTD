@@ -5,29 +5,21 @@ public class NodeShotgunTurret : ProjectileTowerNode
 {
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "Close-range powerhouse that fires multiple projectiles in a wide spread.\n" +
-        "Devastating at short range but ineffective at distance.\n" +
-        "Ideal for choke points and dealing with tightly packed enemies.";
+        "<b>SHOTGUN TURRET</b>\n" +
+        "Close-range multi-projectile.";
     
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
-            return $"Cost: {Cost}\n" +
-                   $"{description}\n\n" +
-                   $"Tower Stats (Rank {rank}):\n" +
-                   $"{towerBlueprint.GetTowerStats()}\n\n" +
-                   $"Specialization:\n" +
-                   $"• Multiple projectiles per shot (4-8+)\n" +
-                   $"• Wide spread pattern (10-20°)\n" +
-                   $"• Short effective range\n" +
-                   $"• High close-quarters damage\n" +
-                   $"• Fast projectile velocity\n" +
-                   $"• Perfect for corridor defense";
+            return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
+                   $"<b>Stats (Rank {rank}):</b>\n" +
+                   $"{towerBlueprint.GetTowerStats()}\n\n";
         }
-        return $"FAILED TO LOAD\n\n{description}";
+        return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
+               "<color=#FF5555>Failed to load stats</color>";
     }
     
     public override void Initialize(int rank)

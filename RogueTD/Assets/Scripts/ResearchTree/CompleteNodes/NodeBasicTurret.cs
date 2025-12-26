@@ -5,22 +5,20 @@ public class NodeBasicTurret : ProjectileTowerNode
 {
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "The standard projectile tower with balanced stats.\n" +
-        "Versatile and reliable, this tower excels in most situations.\n" +
-        "Good damage, range, and fire rate make it an excellent all-rounder.";
+        "Balanced all-rounder tower.";
     
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        if (towerBlueprint != null)
+        if (towerBlueprint)
         {
-            return $"Cost: {Cost}\n" +
-                   $"{description}\n\n" +
-                   $"Tower Stats (Rank {rank}):\n" +
+            return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
+                   $"<b>Stats (Rank {rank}):</b>\n" +
                    $"{towerBlueprint.GetTowerStats()}";
         }
-        return $"FAILED TO LOAD\n\n{description}";
+        return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
+               "<color=#FF5555>Failed to load stats</color>";
     }
     
     public override void Initialize(int rank)

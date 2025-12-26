@@ -9,22 +9,18 @@ public class NodeAmmoUpgrade : ProjectileTowerUpgradeTreeNode
     
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "Upgrades your tower's ammunition capacity and regeneration rate.\n" +
-        "Increases maximum ammo and improves ammo regeneration.\n" +
-        "Higher ranks provide additional bonuses for sustained fire.";
+        "Increases maximum ammo and regeneration rate.";
     
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}\n" +
-               $"{description}\n\n" +
-               $"Current Effect (Rank {rank}):\n" +
-               $"• Ammo Multiplier: {baseAmmoMultiplier + (rank * rankBonusPerLevel):F2}x\n" +
-               $"• Regeneration Bonus: {1f + (rank * regenerationBonus):F1}x\n\n" +
-               $"Rank Bonus:\n" +
-               $"• +{rankBonusPerLevel:F2}x ammo multiplier per rank\n" +
-               $"• +{regenerationBonus:F1}x regeneration per rank";
+        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
+        return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
+               $"<b>Effect (Rank {rank}):</b>\n" +
+               $"• Ammo: <color=#00FF00>{baseAmmoMultiplier + (rank * rankBonusPerLevel):F2}x</color>\n" +
+               $"• Regen: <color=#00FF00>{1f + (rank * regenerationBonus):F1}x</color>\n\n" +
+               $"<b>Per Rank:</b> +{rankBonusPerLevel:F2}x ammo, +{regenerationBonus:F1}x regen";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)

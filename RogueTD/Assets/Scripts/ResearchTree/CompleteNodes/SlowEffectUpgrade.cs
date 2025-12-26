@@ -11,26 +11,26 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "Adds a slowing effect to your tower's projectiles.\n" +
-        "Reduces enemy movement speed for a duration.\n" +
-        "Higher ranks increase the slow percentage and duration.";
+        "Slows enemy movement speed.";
     
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        if (slowEffect != null)
+        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
+        
+        if (slowEffect)
         {
-            return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}\n" +
-                   $"{description}\n\n" +
-                   $"Current Effect (Rank {rank}):\n" +
-                   $"• Slow Percentage: {(0.5f + (rank * slowPercentIncreasePerRank)) * 100:F0}%\n" +
-                   $"• Duration: {2 + (rank * durationIncreasePerRank):F1} seconds\n\n" +
-                   $"Rank Bonus:\n" +
-                   $"• +{slowPercentIncreasePerRank * 100:F0}% slow per rank\n" +
-                   $"• +{durationIncreasePerRank:F1}s duration per rank";
+            return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
+                   $"<b>Effect (Rank {rank}):</b>\n" +
+                   $"• Slow: <color=#00FF00>{(0.5f + (rank * slowPercentIncreasePerRank)) * 100:F0}%</color>\n" +
+                   $"• Duration: <color=#00FF00>{2 + (rank * durationIncreasePerRank):F1}s</color>\n\n" +
+                   $"<b>Per Rank:</b> +{slowPercentIncreasePerRank * 100:F0}%, +{durationIncreasePerRank:F1}s";
         }
-        return $"FAILED TO LOAD\n\n{description}";
+        
+        return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
+               $"{description}\n\n" +
+               "<color=#FF5555>Failed to load effect</color>";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)

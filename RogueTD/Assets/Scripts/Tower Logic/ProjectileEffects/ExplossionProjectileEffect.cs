@@ -7,6 +7,18 @@ public class ExplosionEffect : ProjectileEffect
     [SerializeField] private int damagePercentage = 50;
     [SerializeField] private GameObject explosionPrefab;
     
+    public float ExplosionRadius
+    {
+        get => explosionRadius;
+        set => explosionRadius = value;
+    }
+
+    public int DamagePercentage
+    {
+        get => damagePercentage;
+        set => damagePercentage = value;
+    }
+    
     public override bool OnCollision(Enemy target, TowerProjectile projectile, ProjectileTower tower)
     {
         CreateExplosion(projectile.transform.position, tower);

@@ -5,9 +5,7 @@ public class NodeSniperTurret : ProjectileTowerNode
 {
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "Long-range precision tower with massive single-shot damage.\n" +
-        "Slow rate of fire but devastating impact per shot.\n" +
-        "Excellent for picking off high-value targets and armored enemies from a safe distance.";
+        "Long-range high damage.";
     
     public override string TooltipText => description;
     
@@ -15,21 +13,12 @@ public class NodeSniperTurret : ProjectileTowerNode
     {
         if (towerBlueprint != null)
         {
-            return $"Cost: {Cost}\n" +
-                   $"{description}\n\n" +
-                   $"Tower Stats (Rank {rank}):\n" +
-                   $"{towerBlueprint.GetTowerStats()}\n\n" +
-                   $"Specialization:\n" +
-                   $"• Extreme single-shot damage (20-30+)\n" +
-                   $"• Very long range (8-12+ tiles)\n" +
-                   $"• High damage multiplier (1.3-1.8x)\n" +
-                   $"• Pinpoint accuracy (0-1° spread)\n" +
-                   $"• Durable projectiles\n" +
-                   $"• Slow attack speed\n" +
-                   $"• Excellent for boss elimination\n" +
-                   $"• Projectiles travel at extreme velocity";
+            return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
+                   $"<b>Stats (Rank {rank}):</b>\n" +
+                   $"{towerBlueprint.GetTowerStats()}\n\n";
         }
-        return $"FAILED TO LOAD\n\n{description}";
+        return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
+               "<color=#FF5555>Failed to load stats</color>";
     }
     
     public override void Initialize(int rank)

@@ -7,6 +7,9 @@ public class HomingMovement : ProjectileBehavior
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private bool findNearestTarget = true;
     
+    public float HomingRadius {get => homingRadius; set { homingRadius = value; } }
+    public float RotationSpeed {get => rotationSpeed; set { rotationSpeed = value; } }
+    
     public override void Move(TowerProjectile projectile, ProjectileTower tower)
     {
         Enemy findTarget = FindTarget(projectile.transform.position);

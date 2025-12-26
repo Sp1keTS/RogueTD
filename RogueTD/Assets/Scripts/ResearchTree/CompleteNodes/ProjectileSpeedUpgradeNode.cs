@@ -8,20 +8,17 @@ public class NodePTProjectileSpeedUpgrade : ProjectileTowerUpgradeTreeNode
     
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "Increases projectile velocity, allowing faster target engagement.\n" +
-        "Faster projectiles are harder for enemies to dodge and reach targets quicker.\n" +
-        "Essential for hitting fast-moving enemies at long range.";
+        "Increases projectile velocity.";
     
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}\n" +
-               $"{description}\n\n" +
-               $"Current Effect (Rank {rank}):\n" +
-               $"• Speed Multiplier: {baseSpeedMultiplier + (rank * rankBonusPerLevel):F2}x\n\n" +
-               $"Rank Bonus:\n" +
-               $"• +{rankBonusPerLevel:F2}x multiplier per rank";
+        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
+        return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
+               $"<b>Effect (Rank {rank}):</b>\n" +
+               $"• Speed: <color=#00FF00>{baseSpeedMultiplier + (rank * rankBonusPerLevel):F2}x</color>\n\n" +
+               $"<b>Per Rank:</b> +{rankBonusPerLevel:F2}x";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)

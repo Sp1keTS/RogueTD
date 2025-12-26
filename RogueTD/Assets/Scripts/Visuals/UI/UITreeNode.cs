@@ -79,7 +79,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNode.name, TreeSaveNode.currentNode.TooltipText + treeSaveNode.currentNode.GetStats(Rank), 
+        UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNode.name, TreeSaveNode.currentNode.TooltipText +"/n" + treeSaveNode.currentNode.GetStats(Rank), 
             new Vector2(transform.position.x, transform.position.y) );
     }
     

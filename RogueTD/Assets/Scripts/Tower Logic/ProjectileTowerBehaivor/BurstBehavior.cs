@@ -8,6 +8,9 @@ public class BurstShotBehavior : SecondaryProjectileTowerBehavior
     [SerializeField] private int burstCount = 3;
     [SerializeField] private float burstDelay = 0.1f;
     
+    public int BurstCount { get => burstCount; set { burstCount = value; } }
+    public float BurstDelay { get => burstDelay; set { burstDelay = value; } }
+    
     public override void Shoot(ProjectileTower tower, ProjectileTower.ShotData shotData, Action<ProjectileTower.ShotData> nextBehavior)
     {
         tower.StartCoroutine(BurstCoroutine(tower, shotData, nextBehavior));

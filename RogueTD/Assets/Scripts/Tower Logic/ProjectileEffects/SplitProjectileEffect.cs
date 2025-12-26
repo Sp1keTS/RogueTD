@@ -7,7 +7,9 @@ public class SplitEffect : ProjectileEffect
     [SerializeField] private int splitCount = 2;
     [SerializeField] private float splitAngle = 30f;
     [SerializeField] private float spawnOffset = 0.5f;
-    
+
+    public int SplitCount {get =>  splitCount; set { splitCount = value; } }
+
     public override bool OnCollision(Enemy target, TowerProjectile projectile, ProjectileTower tower)
     {
         if (splitCount <= 0) return false;

@@ -8,20 +8,17 @@ public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
     
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
-        "Massively increases your tower's damage output.\n" +
-        "Boosts both base damage and damage multiplier for devastating attacks.\n" +
-        "Essential for dealing with armored or high-health enemies.";
+        "Increases damage output.";
     
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        return $"Cost: {Cost + Cost * Mathf.Pow(rank, 0.5f):F0}\n" +
-               $"{description}\n\n" +
-               $"Current Effect (Rank {rank}):\n" +
-               $"• Damage Multiplier: {baseDamageMultiplier + (rank * rankBonusPerLevel):F2}x\n\n" +
-               $"Rank Bonus:\n" +
-               $"• +{rankBonusPerLevel:F2}x multiplier per rank";
+        float cost = Cost + Cost * Mathf.Pow(rank, 0.5f);
+        return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
+               $"<b>Effect (Rank {rank}):</b>\n" +
+               $"• Damage: <color=#00FF00>{baseDamageMultiplier + (rank * rankBonusPerLevel):F2}x</color>\n\n" +
+               $"<b>Per Rank:</b> +{rankBonusPerLevel:F2}x";
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
