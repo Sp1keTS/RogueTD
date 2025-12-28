@@ -20,7 +20,7 @@ public class BuildingFactory : MonoBehaviour
         var buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
         var building = buildingObj.GetComponent<Building>();
     
-        building.buildingName = blueprint.buildingName;
+        building.buildingName = blueprint.BuildingName;
         building.GridPosition = gridPos; // Добавляем установку GridPosition
     
         // Инициализация Building с кастомным здоровьем если указано
@@ -49,7 +49,7 @@ public class BuildingFactory : MonoBehaviour
         var worldPosition = GetWorldPosition(gridPos);
         var buildingObj = Instantiate(blueprint.BuildingPrefab, worldPosition, Quaternion.identity);
         var building = buildingObj.GetComponent<Building>();
-        building.buildingName = blueprint.buildingName;
+        building.buildingName = blueprint.BuildingName;
         building.GridPosition = gridPos;
     
         building.Initialize(blueprint.MaxHealthPoints, customHealth);
@@ -95,7 +95,7 @@ public class BuildingFactory : MonoBehaviour
         return new Vector3(baseWorldPos.x + offsetX, baseWorldPos.y + offsetY, baseWorldPos.z);
     }
     
-    private static ProjectileTower CreateProjectileTowerChild(GameObject buildingObj, ProjectileTowerBlueprint blueprint, Vector3 position)
+    private static ProjectileTower CreateProjectileTowerChild(Building buildingObj, ProjectileTowerBlueprint blueprint, Vector3 position)
     {
         position.z = -1;
         if (blueprint.TowerPrefab)

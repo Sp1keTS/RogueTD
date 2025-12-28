@@ -179,9 +179,9 @@ public class TreeSolver : MonoBehaviour
         {
             if (node.IsActive)
             {
-                if (!BlueprintManager.HasBlueprint(towerNode.TowerBlueprint.buildingName))
+                if (!BlueprintManager.HasBlueprint(towerNode.TowerBlueprint.BuildingName))
                 {
-                    BlueprintManager.InsertProjectileTowerBlueprint(towerNode.TowerBlueprint);
+                    BlueprintManager.InsertProjectileTowerBlueprint(towerNode.ProjectileTowerBlueprint);
                 }
             }
         }

@@ -11,7 +11,10 @@ public abstract class ProjectileTowerUpgradeTreeNode : TreeNode
     {
         
     }
-
+    public override int GetDynamicCost(int rank)
+    {
+        return (int)(Cost * Mathf.Pow(rank, 0.5f));
+    }
     public override void Initialize(int rank)
     {
         this.CurrentRank = rank;

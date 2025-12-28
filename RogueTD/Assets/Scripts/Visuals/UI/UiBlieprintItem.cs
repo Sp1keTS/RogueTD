@@ -27,18 +27,18 @@ public class UiBlueprintItem : MonoBehaviour
     {
         blueprint = newBlueprint;
         
-        if (nameText && blueprint)
-            nameText.text = blueprint.buildingName;
+        if (nameText && blueprint != null)
+            nameText.text = blueprint.BuildingName;
         
-        if (costText && blueprint)
+        if (costText && blueprint != null)
             costText.text = blueprint.Cost.ToString();
     }
     
     private void OnButtonClick()
     {
-        if (blueprint)
+        if (blueprint != null)
         {
-            Debug.Log($"UIBlueprintItem clicked: {blueprint.buildingName}");
+            Debug.Log($"UIBlueprintItem clicked: {blueprint.BuildingName}");
             SelectBlueprint?.Invoke(blueprint);
         }
         else

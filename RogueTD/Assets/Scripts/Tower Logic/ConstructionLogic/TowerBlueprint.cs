@@ -4,21 +4,22 @@ using System.Text;
 [CreateAssetMenu(fileName = "TowerBlueprint", menuName = "Tower Defense/TowerBlueprint")]
 public class TowerBlueprint : BuildingBlueprint
 {
-    [Header("Tower Settings")]
-    [SerializeField] protected GameObject towerPrefab;
-    [SerializeField] protected float rotatingSpeed = 10f;
-    [SerializeField] protected float targetingRange = 5f;
-    [SerializeField] protected float damageMult = 1f;
-    [SerializeField] protected float attackSpeed = 1f;
-    [SerializeField] protected int damage = 1;
-    [SerializeField] protected int maxAmmo;
-    [SerializeField] protected float currentAmmo;
-    [SerializeField] protected float ammoRegeneration;
-    [SerializeField] protected float projectileScale;
-    [SerializeField] protected ResourceReference<StatusEffect>[] statusEffects; 
-    [SerializeField] protected TowerBehaviour[] towerBehaviours;
+    private Tower towerPrefab;
+    protected float rotatingSpeed = 10f;
+    protected float targetingRange = 5f;
+    protected float damageMult = 1f;
+    protected float attackSpeed = 1f;
+    protected int damage = 1;
+    protected int maxAmmo;
+    protected float currentAmmo;
+    protected float ammoRegeneration;
+    protected float projectileScale;
+    protected ResourceReference<StatusEffect>[] statusEffects; 
+    protected TowerBehaviour[] towerBehaviours;
+    protected float attackAngle = 10;
+    public float AttackAngle { get => attackAngle; set => attackAngle = value; }
     
-    public GameObject TowerPrefab { get => towerPrefab; set => towerPrefab = value; }
+    public Tower TowerPrefab { get => towerPrefab; set => towerPrefab = value; }
     public float RotatingSpeed { get => rotatingSpeed; set => rotatingSpeed = value; }
     public float TargetingRange { get => targetingRange; set => targetingRange = value; }
     public float DamageMult { get => damageMult; set => damageMult = value; }  
@@ -44,5 +45,14 @@ public class TowerBlueprint : BuildingBlueprint
         stats.AppendLine($"▸ Status Effects: {statusEffects?.Length ?? 0}");
         
         return stats.ToString();
+    }
+    public void Initialize(string buildingName, Tower tower, Building buildingPrefab, int maxHealthPoints, int cost, Vector2 size)
+    {
+        _buildingName = buildingName;
+        towerPrefab = tower;
+        _buildingPrefab = buildingPrefab;
+        _maxHealthPoints = maxHealthPoints;
+        _cost = cost;
+        _size = size;
     }
 }

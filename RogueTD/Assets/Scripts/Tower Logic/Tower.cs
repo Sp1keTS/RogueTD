@@ -42,6 +42,7 @@ public class Tower : MonoBehaviour
         ammoRegeneration = blueprint.AmmoRegeneration;
         statusEffects = ConvertResourceReferencesToValues(blueprint.StatusEffects);
         towerBehaviours = blueprint.TowerBehaviours;
+        attackAngle = blueprint.AttackAngle;
     }
     
     protected void GetTarget()

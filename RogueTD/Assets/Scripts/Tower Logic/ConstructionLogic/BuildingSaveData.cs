@@ -12,7 +12,7 @@ public class BuildingSaveData
     public BuildingSaveData(Vector2Int position, BuildingBlueprint blueprint, Building building = null)
     {
         Position = position;
-        BlueprintName = blueprint.buildingName;
+        BlueprintName = blueprint.BuildingName;
         CurrentHealth = building != null ? building.CurrentHealthPoints : blueprint.MaxHealthPoints;
     }
     

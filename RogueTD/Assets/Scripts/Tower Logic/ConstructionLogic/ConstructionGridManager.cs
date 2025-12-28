@@ -74,7 +74,7 @@ public class ConstructionGridManager : MonoBehaviour
             var saveData = savePoses.FirstOrDefault(data => data.Position == gridPos);
             
             var sizeToClear = Vector2Int.one;
-            if (saveData != null && saveData.Blueprint)
+            if (saveData != null && saveData.Blueprint != null)
             {
                 sizeToClear = new Vector2Int((int)saveData.Blueprint.Size.x, (int)saveData.Blueprint.Size.y);
             }
@@ -114,7 +114,7 @@ public class ConstructionGridManager : MonoBehaviour
 
     static public void TryCreateBlueprint(BuildingBlueprint blueprint, Vector2Int gridPosition)
     {
-        if (!blueprint) return;
+        if (blueprint == null) return;
         
         if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
         { 
@@ -142,7 +142,7 @@ public class ConstructionGridManager : MonoBehaviour
             foreach (var saveData in buildingsToRecreate)
             {
                 var blueprint = saveData.Blueprint;
-                if (!blueprint)
+                if (blueprint == null)
                 {
                     continue;
                 }

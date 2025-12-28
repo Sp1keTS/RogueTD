@@ -20,7 +20,7 @@ public class UIBlueprintHolderScript : MonoBehaviour
 
     private void AddUiBlueprint(BuildingBlueprint blueprint, string name)
     {
-        if (!blueprint || blueprint.buildingName == "MainBuilding") return;
+        if (blueprint == null || blueprint.BuildingName == "MainBuilding") return;
         
         
         if (!blueprints.ContainsKey(name))
@@ -32,7 +32,7 @@ public class UIBlueprintHolderScript : MonoBehaviour
             blueprintItems.Add(name, item);
             
             if (item.NameText)
-                item.NameText.text = blueprint.buildingName;
+                item.NameText.text = blueprint.BuildingName;
             
             if (item.CostText)
                 item.CostText.text = blueprint.Cost.ToString();
@@ -46,7 +46,7 @@ public class UIBlueprintHolderScript : MonoBehaviour
                 existingItem.Initialize(blueprint);
                 
                 if (existingItem.NameText)
-                    existingItem.NameText.text = blueprint.buildingName;
+                    existingItem.NameText.text = blueprint.BuildingName;
                 
                 if (existingItem.CostText)
                     existingItem.CostText.text = blueprint.Cost.ToString();

@@ -25,7 +25,7 @@ public class UIBlueprintController : MonoBehaviour
 
     private void Update()
     {
-        if (_buildingPreview && selectedBlueprint)
+        if (_buildingPreview && selectedBlueprint != null)
         {
             var mouseScreenPos = Mouse.current.position.ReadValue();
             var mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
@@ -37,14 +37,14 @@ public class UIBlueprintController : MonoBehaviour
 
     private void OnBlueprintSelected(BuildingBlueprint blueprint)
     {
-        if (!blueprint)
+        if (blueprint == null)
         {
             Debug.LogWarning("Received null blueprint in OnBlueprintSelected");
             return;
         }
         
         selectedBlueprint = blueprint;
-        Debug.Log($"Blueprint selected: {blueprint.buildingName}");
+        Debug.Log($"Blueprint selected: {blueprint.BuildingName}");
         
         ClearPreview();
         
@@ -55,7 +55,7 @@ public class UIBlueprintController : MonoBehaviour
     {
         if (!blueprint.BuildingPrefab) return;
         
-        _buildingPreview = new GameObject($"{blueprint.buildingName}_Preview");
+        _buildingPreview = new GameObject($"{blueprint.BuildingName}_Preview");
         
         var prefabSpriteRenderer = blueprint.BuildingPrefab.GetComponent<SpriteRenderer>();
         if (prefabSpriteRenderer)
@@ -71,7 +71,7 @@ public class UIBlueprintController : MonoBehaviour
 
     private void OnLeftMouseClick(InputAction.CallbackContext context)
     {
-        if (!selectedBlueprint) 
+        if (selectedBlueprint == null) 
         {
             Debug.Log("No blueprint selected!");
             return;

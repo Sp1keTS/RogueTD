@@ -2,24 +2,23 @@ using System;
 using UnityEngine;
 using System.Text;
 
-[Serializable]
-[CreateAssetMenu(fileName = "ProjectileTowerBlueprint", menuName = "Tower Defense/ProjectileTowerBlueprint")]
 public class ProjectileTowerBlueprint : TowerBlueprint
 {
-    [Header("Projectile Tower Settings")]
-    [SerializeField] private GameObject projectilePrefab;
-    [SerializeField] private float projectileSpeed = 10f;
-    [SerializeField] private float spread = 0f;
-    [SerializeField] private float projectileLifetime = 3f;
-    [SerializeField] private bool projectileFragile = true;
+    private GameObject projectilePrefab;
+    private float projectileSpeed;
+    private float spread;
+    private float projectileLifetime;
+    private bool projectileFragile = true;
     
-    [SerializeField] protected int projectileCount;
+     protected int projectileCount;
     
-    [Header("Projectile Behaviors")]
-    [SerializeField] private ResourceReference<ProjectileBehavior>[] projectileBehaviors;
-    [SerializeField] private ResourceReference<ProjectileEffect>[] projectileEffects;
-    [SerializeField] private ResourceReference<ProjectileTowerBehavior> shotBehavior;
-    [SerializeField] private ResourceReference<SecondaryProjectileTowerBehavior>[] secondaryShots;
+    private ResourceReference<ProjectileBehavior>[] projectileBehaviors;
+    private ResourceReference<ProjectileEffect>[] projectileEffects;
+    private ResourceReference<ProjectileTowerBehavior> shotBehavior;
+    private ResourceReference<SecondaryProjectileTowerBehavior>[] secondaryShots;
+
+    private ProjectileTower _projectileTowerPrefab;
+    public ProjectileTower ProjectileTowerPrefab => _projectileTowerPrefab;
     
     public GameObject ProjectilePrefab { get => projectilePrefab; set => projectilePrefab = value; }
     public float ProjectileSpeed { get => projectileSpeed; set => projectileSpeed = value; }
@@ -69,5 +68,14 @@ public class ProjectileTowerBlueprint : TowerBlueprint
         stats.AppendLine($"▸ Secondary Shots: {secondaryShots?.Length ?? 0}");
         
         return stats.ToString();
+    }
+    public void Initialize(string buildingName, ProjectileTower projectileTower, Building buildingPrefab, int maxHealthPoints, int cost, Vector2 size)
+    {
+        _buildingName = buildingName;
+        _projectileTowerPrefab = projectileTower;
+        _buildingPrefab = buildingPrefab;
+        _maxHealthPoints = maxHealthPoints;
+        _cost = cost;
+        _size = size;
     }
 }

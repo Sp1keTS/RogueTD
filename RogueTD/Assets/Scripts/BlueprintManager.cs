@@ -46,22 +46,22 @@ public static class BlueprintManager
             blueprints = new Dictionary<string, BuildingBlueprint>();
         }
 
-        if (!blueprint || string.IsNullOrEmpty(blueprint.buildingName))
+        if (blueprint == null || string.IsNullOrEmpty(blueprint.BuildingName))
         {
             Debug.LogError("Cannot insert null blueprint or blueprint with empty name");
             return;
         }
 
-        if (blueprints.ContainsKey(blueprint.buildingName))
+        if (blueprints.ContainsKey(blueprint.BuildingName))
         {
-            blueprints[blueprint.buildingName] = blueprint;
+            blueprints[blueprint.BuildingName] = blueprint;
         }
         else
         {
-            blueprints.Add(blueprint.buildingName, blueprint);
+            blueprints.Add(blueprint.BuildingName, blueprint);
         }
         
-        InvokeBuildingChanged(blueprint, blueprint.buildingName);
+        InvokeBuildingChanged(blueprint, blueprint.BuildingName);
     }
 
     public static void InsertBuildingBlueprint(BuildingBlueprint blueprint)
@@ -71,19 +71,19 @@ public static class BlueprintManager
             blueprints = new Dictionary<string, BuildingBlueprint>();
         }
 
-        if (!blueprint || string.IsNullOrEmpty(blueprint.buildingName))
+        if (blueprint == null || string.IsNullOrEmpty(blueprint.BuildingName))
         {
             Debug.LogError("Cannot insert null blueprint or blueprint with empty name");
             return;
         }
 
-        if (blueprints.ContainsKey(blueprint.buildingName))
+        if (blueprints.ContainsKey(blueprint.BuildingName))
         {
-            blueprints[blueprint.buildingName] = blueprint;
+            blueprints[blueprint.BuildingName] = blueprint;
         }
         else
         {
-            blueprints.Add(blueprint.buildingName, blueprint);
+            blueprints.Add(blueprint.BuildingName, blueprint);
         }
         
     }
