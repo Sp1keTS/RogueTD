@@ -10,7 +10,7 @@ public class NodeFlamethrowerTurret : ProjectileTowerNode
     
     public override string GetStats(int rank)
     {
-        if (ProjectileTowerBlueprint != null)
+        if (_ProjectileTowerBlueprint != null)
         {
             return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                    $"<b>Flamethrower (Rank {rank}):</b>\n";
@@ -21,32 +21,32 @@ public class NodeFlamethrowerTurret : ProjectileTowerNode
     
     public override void Initialize(int rank)
     {
-        
-        ProjectileTowerBlueprint = new ProjectileTowerBlueprint();
-        ProjectileTowerBlueprint.Initialize(buildingName, ProjectileTower, buildingPrefab, maxHealthPoints, buildingCost, size);
-        
-        if (ProjectileTowerBlueprint != null)
+        SetupNode(rank);
+    }
+
+    private void SetupNode(int rank)
+    {
+        CreateBlueprint();
+        if (_ProjectileTowerBlueprint != null)
         {
             LoadBasicShot();
-            LoadBasicStats(rank, 0.5f);
+            LoadBasicStats(rank, 1.05f * rank);
             if (burnEffect)
             {
-                ProjectileTowerBlueprint.StatusEffects = new ResourceReference<StatusEffect>[]
+                _ProjectileTowerBlueprint.StatusEffects = new ResourceReference<StatusEffect>[] 
                 {
                     new ResourceReference<StatusEffect> { Value = burnEffect }
                 };
             }
-            
-            
         }
     }
-    
-    public override void LoadDependencies()
+
+    public override void LoadDependencies(int rank)
     {
         LoadBasicShot();
-        if (ProjectileTowerBlueprint != null)
+        if (_ProjectileTowerBlueprint != null)
         {
-            BlueprintManager.InsertProjectileTowerBlueprint(ProjectileTowerBlueprint);
+            BlueprintManager.InsertProjectileTowerBlueprint(_ProjectileTowerBlueprint);
         }
         if (burnEffect)
         {

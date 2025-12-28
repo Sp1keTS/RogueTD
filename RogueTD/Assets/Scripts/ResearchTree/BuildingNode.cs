@@ -16,13 +16,16 @@ public abstract class BuildingNode : TreeNode
         _buildingBlueprint = new BuildingBlueprint();
         _buildingBlueprint.Initialize(buildingName, buildingPrefab, maxHealthPoints, size );
     }
-    
+    public virtual void LoadBasicStats(int rank, float rankMultiplier)
+    {
+        _buildingBlueprint.Cost = buildingCost;
+        _buildingBlueprint.BuildingName = buildingName;
+        _buildingBlueprint.BuildingPrefab = buildingPrefab;
+        _buildingBlueprint.MaxHealthPoints = maxHealthPoints;
+        _buildingBlueprint.Size = size;
+    }
     public override int GetDynamicCost(int rank)
     {
         return (int)(Cost * Mathf.Pow(rank, 0.25f));
-    }
-    public override void OnActivate()
-    {
-        LoadDependencies();
     }
 }

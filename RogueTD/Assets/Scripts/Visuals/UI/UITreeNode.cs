@@ -38,7 +38,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 {
                     if (towerToUpgrade && towerToUpgrade.TowerBlueprint != null)
                     {
-                        upgradeNode.ApplyUpgrade(towerToUpgrade.ProjectileTowerBlueprint, upgradeNode.CurrentRank);
+                        upgradeNode.ApplyUpgrade(towerToUpgrade._ProjectileTowerBlueprint, upgradeNode.CurrentRank);
                     }
                 }
 

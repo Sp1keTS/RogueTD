@@ -53,7 +53,7 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void LoadDependencies()
+    public override void LoadDependencies(int rank)
     {
         if (bleedEffect)
         {
