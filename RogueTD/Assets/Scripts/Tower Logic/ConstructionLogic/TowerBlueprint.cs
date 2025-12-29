@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 
@@ -14,7 +15,7 @@ public class TowerBlueprint : BuildingBlueprint
     protected float currentAmmo;
     protected float ammoRegeneration;
     protected float projectileScale;
-    protected ResourceReference<StatusEffect>[] statusEffects; 
+    protected List<StatusEffect> statusEffects; 
     protected TowerBehaviour[] towerBehaviours;
     protected float attackAngle = 10;
     public float AttackAngle { get => attackAngle; set => attackAngle = value; }
@@ -25,7 +26,7 @@ public class TowerBlueprint : BuildingBlueprint
     public float DamageMult { get => damageMult; set => damageMult = value; }  
     public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
     public int Damage { get => damage; set => damage = value; }
-    public ResourceReference<StatusEffect>[] StatusEffects { get => statusEffects; set => statusEffects = value; } 
+    public List<StatusEffect> StatusEffects { get => statusEffects; set => statusEffects = value; } 
     public float ProjectileScale { get => projectileScale; set => projectileScale = value; }
     public int MaxAmmo { get => maxAmmo; set => maxAmmo = value; }
     public float CurrentAmmo { get => currentAmmo; set => currentAmmo = value; }
@@ -42,7 +43,7 @@ public class TowerBlueprint : BuildingBlueprint
         stats.AppendLine($"▸ Rotation Speed: {rotatingSpeed:F0}°/sec");
         stats.AppendLine($"▸ Ammo: {currentAmmo:F0}/{maxAmmo}");
         stats.AppendLine($"▸ Regeneration: {ammoRegeneration:F1}/sec");
-        stats.AppendLine($"▸ Status Effects: {statusEffects?.Length ?? 0}");
+        stats.AppendLine($"▸ Status Effects: {statusEffects?.Count ?? 0}");
         
         return stats.ToString();
     }

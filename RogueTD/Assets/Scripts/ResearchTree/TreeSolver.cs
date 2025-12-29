@@ -42,7 +42,7 @@ public class TreeSolver : MonoBehaviour
             ProcessBuildingNode(root);
             if (root.IsActive && root.currentNode)
             {
-                root.currentNode.LoadDependencies(0);
+                root.currentNode.OnActivate(0);
                 Debug.Log($"Загружены зависимости корневой ноды: {root.currentNodeId}");
             }
             var direction = AngleToDirection(currentAngle);
@@ -101,7 +101,7 @@ public class TreeSolver : MonoBehaviour
             if (current.node.IsActive && current.node.currentNode)
             {
                 Debug.Log(current.node.currentNode + " " +  current.node.IsActive);
-                current.node.currentNode.LoadDependencies(current.depth);
+                current.node.currentNode.OnActivate(current.depth);
             }
 
             

@@ -24,9 +24,8 @@ public abstract class TreeNode : ScriptableObject
     public string[] Tags => tags;
     public int CurrentRank { get; set; } 
     public int Cost => cost;
-    abstract public void OnActivate();
+    abstract public void OnActivate(int rank);
     abstract public void Initialize(int rank);
-    abstract public void LoadDependencies(int rank);
     abstract public string GetStats(int rank);
     abstract public int GetDynamicCost(int rank);
 }

@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
 
 public class ProjectileTowerBlueprint : TowerBlueprint
 {
-    private GameObject projectilePrefab;
+    private TowerProjectile projectilePrefab;
     private float projectileSpeed;
     private float spread;
     private float projectileLifetime;
@@ -12,15 +13,15 @@ public class ProjectileTowerBlueprint : TowerBlueprint
     
      protected int projectileCount;
     
-    private ResourceReference<ProjectileBehavior>[] projectileBehaviors;
-    private ResourceReference<ProjectileEffect>[] projectileEffects;
-    private ResourceReference<ProjectileTowerBehavior> shotBehavior;
-    private ResourceReference<SecondaryProjectileTowerBehavior>[] secondaryShots;
+    private List<ProjectileBehavior> projectileBehaviors;
+    private List<ProjectileEffect> projectileEffects;
+    private ProjectileTowerBehavior shotBehavior;
+    private List<SecondaryProjectileTowerBehavior> secondaryShots;
 
     private ProjectileTower _projectileTowerPrefab;
     public ProjectileTower ProjectileTowerPrefab => _projectileTowerPrefab;
     
-    public GameObject ProjectilePrefab { get => projectilePrefab; set => projectilePrefab = value; }
+    public TowerProjectile ProjectilePrefab { get => projectilePrefab; set => projectilePrefab = value; }
     public float ProjectileSpeed { get => projectileSpeed; set => projectileSpeed = value; }
     public float Spread { get => spread; set => spread = value; }
     
@@ -28,25 +29,25 @@ public class ProjectileTowerBlueprint : TowerBlueprint
     public float ProjectileLifetime { get => projectileLifetime; set => projectileLifetime = value; }
     public bool ProjectileFragile { get => projectileFragile; set => projectileFragile = value; }
     
-    public ResourceReference<ProjectileBehavior>[] ProjectileBehaviors 
+    public List<ProjectileBehavior> ProjectileBehaviors 
     { 
         get => projectileBehaviors; 
         set => projectileBehaviors = value; 
     }
     
-    public ResourceReference<ProjectileEffect>[] ProjectileEffects 
+    public List<ProjectileEffect> ProjectileEffects 
     { 
         get => projectileEffects; 
         set => projectileEffects = value; 
     }
     
-    public ResourceReference<ProjectileTowerBehavior> ShotBehavior 
+    public ProjectileTowerBehavior ShotBehavior 
     { 
         get => shotBehavior; 
         set => shotBehavior = value; 
     }
     
-    public ResourceReference<SecondaryProjectileTowerBehavior>[] SecondaryShots 
+    public List<SecondaryProjectileTowerBehavior> SecondaryShots 
     { 
         get => secondaryShots; 
         set => secondaryShots = value; 
@@ -63,9 +64,9 @@ public class ProjectileTowerBlueprint : TowerBlueprint
         stats.AppendLine($"▸ Spread: {spread:F1}°");
         stats.AppendLine($"▸ Lifetime: {projectileLifetime:F1}sec");
         stats.AppendLine($"▸ Fragile: {(projectileFragile ? "Yes" : "No")}");
-        stats.AppendLine($"▸ Projectile Effects: {projectileEffects?.Length ?? 0}");
-        stats.AppendLine($"▸ Projectile Behaviors: {projectileBehaviors?.Length ?? 0}");
-        stats.AppendLine($"▸ Secondary Shots: {secondaryShots?.Length ?? 0}");
+        stats.AppendLine($"▸ Projectile Effects: {projectileEffects?.Count ?? 0}");
+        stats.AppendLine($"▸ Projectile Behaviors: {projectileBehaviors?.Count ?? 0}");
+        stats.AppendLine($"▸ Secondary Shots: {secondaryShots?.Count ?? 0}");
         
         return stats.ToString();
     }

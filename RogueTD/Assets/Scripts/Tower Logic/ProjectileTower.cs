@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileTower : Tower
@@ -10,12 +11,12 @@ public class ProjectileTower : Tower
     [SerializeField] protected int projectileCount = 1;
     [SerializeField] protected float projectileScale = 1;
     [SerializeField] protected bool projectileFragile = true;
-    [SerializeField] protected GameObject projectilePrefab;
+    [SerializeField] protected TowerProjectile projectilePrefab;
     [SerializeField] protected GameObject barrel;
     
-    public SecondaryProjectileTowerBehavior[] secondaryShots = Array.Empty<SecondaryProjectileTowerBehavior>();
-    public ProjectileEffect[] effects = Array.Empty<ProjectileEffect>();    
-    public ProjectileBehavior[] movements = Array.Empty<ProjectileBehavior>();
+    public List<SecondaryProjectileTowerBehavior> secondaryShots = new List<SecondaryProjectileTowerBehavior>();
+    public List<ProjectileEffect> effects =  new List<ProjectileEffect>();    
+    public List<ProjectileBehavior> movements = new List<ProjectileBehavior>();
     public ProjectileTowerBehavior towerBehavior;
     
     public Action<ShotData> ShootChain;
@@ -77,10 +78,10 @@ public class ProjectileTower : Tower
         projectileFragile = blueprint.ProjectileFragile;
         projectilePrefab = blueprint.ProjectilePrefab;
         projectileScale = blueprint.ProjectileScale;
-        effects = ConvertResourceReferencesToValues(blueprint.ProjectileEffects);
-        movements = ConvertResourceReferencesToValues(blueprint.ProjectileBehaviors);
-        towerBehavior = blueprint.ShotBehavior?.Value;
-        secondaryShots = ConvertResourceReferencesToValues(blueprint.SecondaryShots);
+        effects = blueprint.ProjectileEffects;
+        movements = blueprint.ProjectileBehaviors;
+        towerBehavior = blueprint.ShotBehavior;
+        secondaryShots = blueprint.SecondaryShots;
         Debug.Log("Хрупкий ли снаряд?? :" + blueprint.ProjectileFragile + " " + projectileFragile); //true true
         BuildShootChain();
     }
@@ -97,7 +98,7 @@ public class ProjectileTower : Tower
         
         if (secondaryShots != null && chain != null)
         {
-            for (int i = secondaryShots.Length - 1; i >= 0; i--)
+            for (int i = secondaryShots.Count - 1; i >= 0; i--)
             {
                 if (secondaryShots[i] != null)
                 {
@@ -124,11 +125,10 @@ public class ProjectileTower : Tower
     {
         if (!projectilePrefab) return null;
         
-        GameObject newProjectile = Instantiate(projectilePrefab, position, Quaternion.identity);
-        projectile = newProjectile.GetComponent<TowerProjectile>();
+        var newProjectile = Instantiate(projectilePrefab, position, Quaternion.identity);
+        projectile = projectilePrefab;
         
         projectile.Initialize(this);
-        Debug.Log(ProjectileFragile);
         return projectile;
     }
     public override string GetTowerStats()
@@ -142,8 +142,8 @@ public class ProjectileTower : Tower
                $"▸ Spread: {spread}°\n" +
                $"▸ Lifetime: {projectileLifetime}sec\n" +
                $"▸ Fragile: {(projectileFragile ? "Yes" : "No")}\n" +
-               $"▸ Projectile Effects: {effects?.Length ?? 0}\n" +
-               $"▸ Projectile Behaviors: {movements?.Length ?? 0}\n" +
-               $"▸ Secondary Shots: {secondaryShots?.Length ?? 0}";
+               $"▸ Projectile Effects: {effects?.Count ?? 0}\n" +
+               $"▸ Projectile Behaviors: {movements?.Count ?? 0}\n" +
+               $"▸ Secondary Shots: {secondaryShots?.Count ?? 0}";
     }
 }

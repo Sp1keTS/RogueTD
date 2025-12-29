@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class ProjectileTowerNode : TowerNode
@@ -6,7 +7,7 @@ public abstract class ProjectileTowerNode : TowerNode
     [SerializeField] private BasicShotBehavior basicShotBehavior;
     private ProjectileTowerBlueprint _projectileTowerBlueprint;
     [SerializeField] private ProjectileTower projectileTower;
-    [SerializeField] protected GameObject projectilePrefab;
+    [SerializeField] protected TowerProjectile projectilePrefab;
     [SerializeField] protected float projectileSpeed;
     [SerializeField] protected float spread ;
     [SerializeField] protected float projectileLifetime;
@@ -15,10 +16,10 @@ public abstract class ProjectileTowerNode : TowerNode
     [SerializeField] protected int projectileCount;
     
     [Header("Projectile Behaviors")]
-    [SerializeField] protected ResourceReference<ProjectileBehavior>[] projectileBehaviors;
-    [SerializeField] protected ResourceReference<ProjectileEffect>[] projectileEffects;
-    [SerializeField] protected ResourceReference<ProjectileTowerBehavior> shotBehavior;
-    [SerializeField] protected ResourceReference<SecondaryProjectileTowerBehavior>[] secondaryShots;
+    [SerializeField] protected List<ProjectileBehavior> projectileBehaviors;
+    [SerializeField] protected List<ProjectileEffect> projectileEffects;
+    [SerializeField] protected ProjectileTowerBehavior shotBehavior;
+    [SerializeField] protected List<SecondaryProjectileTowerBehavior> secondaryShots;
 
     
     public ProjectileTower ProjectileTower => projectileTower;
@@ -26,15 +27,12 @@ public abstract class ProjectileTowerNode : TowerNode
     
     public ProjectileTowerBlueprint TowerBlueprint => _projectileTowerBlueprint;
 
+
     protected void LoadBasicShot()
     {
         if (basicShotBehavior)
         {
-            _projectileTowerBlueprint.ShotBehavior = new ResourceReference<ProjectileTowerBehavior> 
-            { 
-                Value = basicShotBehavior 
-            };
-                
+            _projectileTowerBlueprint.ShotBehavior = basicShotBehavior;
             ResourceManager.RegisterTowerBehavior(basicShotBehavior.name, basicShotBehavior);
         }
     }

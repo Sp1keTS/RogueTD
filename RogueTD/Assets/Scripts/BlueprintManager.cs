@@ -88,27 +88,6 @@ public static class BlueprintManager
         
     }
 
-    private static ResourceReference<T>[] ConvertToResourceReferences<T>(T[] items) where T : ScriptableObject
-    {
-        if (items == null || items.Length == 0)
-            return null;
-
-        var references = new ResourceReference<T>[items.Length];
-        for (int i = 0; i < items.Length; i++)
-        {
-            references[i] = new ResourceReference<T> { Value = items[i] };
-        }
-        return references;
-    }
-
-    private static ResourceReference<T> ConvertToResourceReference<T>(T item) where T : ScriptableObject
-    {
-        if (item == null)
-            return null;
-
-        return new ResourceReference<T> { Value = item };
-    }
-
     public static void RemoveBlueprint(string buildingName)
     {
         if (blueprints != null && blueprints.ContainsKey(buildingName))

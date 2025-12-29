@@ -42,7 +42,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                     }
                 }
 
-                treeSaveNode.currentNode.OnActivate();
+                treeSaveNode.currentNode.OnActivate(Rank);
                 treeSaveNode.IsActive = true;
                 button.interactable = false;
             }

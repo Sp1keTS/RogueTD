@@ -10,7 +10,7 @@ public static class ResourceManager
     private static readonly Dictionary<string, StatusEffect> _statusEffects = new();
     private static readonly Dictionary<string, SecondaryProjectileTowerBehavior> _secondaryBehaviors = new();
     private static readonly Dictionary<string, ProjectileTowerBehavior> _projectileTowerBehaviors = new();
-    private static readonly Dictionary<string, TreeNode> _treeNodes = new(); 
+    private static readonly Dictionary<string, TreeNode>  _treeNodes = new(); 
     public static IReadOnlyDictionary<string, ProjectileBehavior> ProjectileBehaviors => _projectileBehaviors;
     public static IReadOnlyDictionary<string, ProjectileEffect> ProjectileEffects => _projectileEffects;
     public static IReadOnlyDictionary<string, StatusEffect> StatusEffects => _statusEffects;
@@ -83,11 +83,6 @@ public static class ResourceManager
                  $"{_treeNodes.Count} tree nodes"); 
     }
 
-    public static void DropResources()
-    {
-        ClearDictionaries();
-        Debug.Log("All runtime resources dropped");
-    }
     
     private static void ClearDictionaries()
     {
@@ -96,7 +91,7 @@ public static class ResourceManager
         _statusEffects.Clear();
         _secondaryBehaviors.Clear();
         _projectileTowerBehaviors.Clear();
-        _treeNodes.Clear(); // ← ДОБАВИЛИ
+        _treeNodes.Clear(); 
     }
     
     private static void LoadResources<T>(string folderPath, Dictionary<string, T> dictionary) where T : ScriptableObject
@@ -111,15 +106,6 @@ public static class ResourceManager
         }
     }
 
-
-    public static void RegisterTreeNode(string key, TreeNode node)
-    {
-        if (node && !_treeNodes.ContainsKey(key))
-        {
-            _treeNodes[key] = node;
-            Debug.Log($"TreeNode registered: {key}");
-        }
-    }
 
     public static TreeNode GetTreeNode(string key)
     {
@@ -171,10 +157,6 @@ public static class ResourceManager
         }
     }
 
-    public static ProjectileTowerBehavior GetTowerBehavior(string key)
-    {
-        return _projectileTowerBehaviors.TryGetValue(key, out var behavior) ? behavior : null;
-    }
 
     public static void RegisterProjectileBehavior(string key, ProjectileBehavior behavior)
     {
@@ -197,7 +179,7 @@ public static class ResourceManager
         if (typeof(T) == typeof(StatusEffect)) return _statusEffects as Dictionary<string, T>;
         if (typeof(T) == typeof(SecondaryProjectileTowerBehavior)) return _secondaryBehaviors as Dictionary<string, T>;
         if (typeof(T) == typeof(ProjectileTowerBehavior)) return _projectileTowerBehaviors as Dictionary<string, T>;
-        if (typeof(T) == typeof(TreeNode)) return _treeNodes as Dictionary<string, T>; // ← ДОБАВИЛИ
+        if (typeof(T) == typeof(TreeNode)) return _treeNodes as Dictionary<string, T>; 
         return null;
     }
     
@@ -223,25 +205,5 @@ public static class ResourceManager
         {
             _secondaryBehaviors[key] = behavior;
         }
-    }
-
-    public static ProjectileBehavior GetProjectileBehavior(string key)
-    {
-        return _projectileBehaviors.TryGetValue(key, out var behavior) ? behavior : null;
-    }
-
-    public static ProjectileEffect GetProjectileEffect(string key)
-    {
-        return _projectileEffects.TryGetValue(key, out var effect) ? effect : null;
-    }
-
-    public static StatusEffect GetStatusEffect(string key)
-    {
-        return _statusEffects.TryGetValue(key, out var effect) ? effect : null;
-    }
-
-    public static SecondaryProjectileTowerBehavior GetSecondaryBehavior(string key)
-    {
-        return _secondaryBehaviors.TryGetValue(key, out var behavior) ? behavior : null;
     }
 }

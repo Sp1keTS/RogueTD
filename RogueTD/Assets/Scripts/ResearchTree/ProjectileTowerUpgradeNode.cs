@@ -7,10 +7,6 @@ public abstract class ProjectileTowerUpgradeTreeNode : TreeNode
     
     public abstract void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank);
 
-    public override void OnActivate()
-    {
-        
-    }
     public override int GetDynamicCost(int rank)
     {
         return (int)(Cost * Mathf.Pow(rank, 0.5f));

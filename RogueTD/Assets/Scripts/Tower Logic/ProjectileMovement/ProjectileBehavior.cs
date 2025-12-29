@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class ProjectileBehavior : ScriptableObject
+public abstract class ProjectileBehavior : Resource
 {
     public Enemy target;
     public Vector2 targetPoint;

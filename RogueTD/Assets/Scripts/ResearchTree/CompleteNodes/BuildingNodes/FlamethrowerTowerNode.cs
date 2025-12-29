@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Diagnostics;
 
 [CreateAssetMenu(fileName = "NodeFlamethrowerTurret", menuName = "Research Tree/Turrets/Flamethrower Turret Node")]
 public class NodeFlamethrowerTurret : ProjectileTowerNode
@@ -18,7 +20,13 @@ public class NodeFlamethrowerTurret : ProjectileTowerNode
         return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                "<color=#FF5555>Failed to load stats</color>";
     }
-    
+
+
+    public override void OnActivate(int rank)
+    {
+        BlueprintManager.InsertProjectileTowerBlueprint(_ProjectileTowerBlueprint);
+    }
+
     public override void Initialize(int rank)
     {
         SetupNode(rank);
@@ -31,26 +39,10 @@ public class NodeFlamethrowerTurret : ProjectileTowerNode
         {
             LoadBasicShot();
             LoadBasicStats(rank, 1.05f * rank);
-            if (burnEffect)
-            {
-                _ProjectileTowerBlueprint.StatusEffects = new ResourceReference<StatusEffect>[] 
-                {
-                    new ResourceReference<StatusEffect> { Value = burnEffect }
-                };
-            }
+            _ProjectileTowerBlueprint.StatusEffects = new List<StatusEffect>() { burnEffect };
+
         }
     }
 
-    public override void LoadDependencies(int rank)
-    {
-        LoadBasicShot();
-        if (_ProjectileTowerBlueprint != null)
-        {
-            BlueprintManager.InsertProjectileTowerBlueprint(_ProjectileTowerBlueprint);
-        }
-        if (burnEffect)
-        {
-            ResourceManager.RegisterStatusEffect(burnEffect.name, burnEffect);
-        }
-    }
+    
 }

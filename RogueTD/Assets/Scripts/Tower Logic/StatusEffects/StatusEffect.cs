@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public abstract class StatusEffect : ScriptableObject
+public abstract class StatusEffect : Resource
 {
     public string effectName;
     public float duration = 2;

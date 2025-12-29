@@ -13,7 +13,7 @@ public class Tower : MonoBehaviour
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected float currentAmmo;
     [SerializeField] protected float ammoRegeneration;
-    [SerializeField] public  StatusEffect[] statusEffects;
+    [SerializeField] public  List<StatusEffect> statusEffects;
     [SerializeField] protected TowerBehaviour[] towerBehaviours;
     [SerializeField] protected GameObject light;
     [SerializeField] protected float attackAngle = 10;
@@ -40,7 +40,7 @@ public class Tower : MonoBehaviour
         maxAmmo = blueprint.MaxAmmo;
         currentAmmo = blueprint.CurrentAmmo;
         ammoRegeneration = blueprint.AmmoRegeneration;
-        statusEffects = ConvertResourceReferencesToValues(blueprint.StatusEffects);
+        statusEffects = blueprint.StatusEffects;
         towerBehaviours = blueprint.TowerBehaviours;
         attackAngle = blueprint.AttackAngle;
     }
@@ -98,21 +98,7 @@ public class Tower : MonoBehaviour
         RotateTowardsTarget();
     }
     
-    protected T[] ConvertResourceReferencesToValues<T>(ResourceReference<T>[] references) where T : ScriptableObject
-    {
-        if (references == null || references.Length == 0)
-            return Array.Empty<T>();
-            
-        var result = new List<T>();
-        foreach (var reference in references)
-        {
-            if (reference?.Value != null)
-            {
-                result.Add(reference.Value);
-            }
-        }
-        return result.ToArray();
-    }
+    
     public bool EnemyInAttackCone()
     {
         var position2D = (Vector2)transform.position;
@@ -153,6 +139,6 @@ public class Tower : MonoBehaviour
                $"▸ Rotation Speed: {rotatingSpeed}°/sec\n" +
                $"▸ Ammo: {currentAmmo:F0}/{maxAmmo}\n" +
                $"▸ Regeneration: {ammoRegeneration:F1}/sec\n" +
-               $"▸ Status Effects: {statusEffects?.Length ?? 0}";
+               $"▸ Status Effects: {statusEffects?.Count ?? 0}";
     }
 }
