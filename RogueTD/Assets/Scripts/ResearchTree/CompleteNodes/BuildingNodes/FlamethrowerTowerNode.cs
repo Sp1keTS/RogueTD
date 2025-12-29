@@ -40,9 +40,7 @@ public class NodeFlamethrowerTurret : ProjectileTowerNode
             LoadBasicShot();
             LoadBasicStats(rank, 1.05f * rank);
             _ProjectileTowerBlueprint.StatusEffects = new List<StatusEffect>() { burnEffect };
-
+            ResourceManager.RegisterStatusEffect(burnEffect.SetRankedName(rank),burnEffect);
         }
     }
-
-    
 }

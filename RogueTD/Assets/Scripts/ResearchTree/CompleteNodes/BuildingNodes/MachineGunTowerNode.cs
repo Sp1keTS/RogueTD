@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "NodeMachineGunTurret", menuName = "Research Tree/Turrets/Machine Gun Turret Node")]
 public class NodeMachineGunTurret : ProjectileTowerNode
 {
     [SerializeField] private RampingFireRateBehavior rampingBehavior;
-    [SerializeField] private AmmoBasedShootingBehavior ammoBehavior;
+    [SerializeField] private AmmoBasedShootBehavior ammoBehavior;
     
     public override string TooltipText => "Machine gun with ramping fire rate.";
     
@@ -36,15 +37,10 @@ public class NodeMachineGunTurret : ProjectileTowerNode
         {
             LoadBasicShot();
             LoadBasicStats(rank, 1.05f * rank);
-            if (burnEffect)
-            {
-                var newBurnEffect = new BurnEffect();
-                newBurnEffect.SetRankedName(rank);
-                _ProjectileTowerBlueprint.StatusEffects = new ResourceReference<StatusEffect>[] 
-                {
-                    new ResourceReference<StatusEffect> { Value = newBurnEffect }
-                };
-            }
+            _ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { ammoBehavior };
+            ResourceManager.RegisterSecondaryBehavior(ammoBehavior.SetRankedName(rank),ammoBehavior);
+            _ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { rampingBehavior };
+            ResourceManager.RegisterSecondaryBehavior(rampingBehavior.SetRankedName(rank),rampingBehavior);
         }
     }
 }

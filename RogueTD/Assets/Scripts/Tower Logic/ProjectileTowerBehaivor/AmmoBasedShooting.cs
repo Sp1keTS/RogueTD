@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "AmmoBasedShooting", menuName = "Tower Defense/SecondaryShot/Ammo Based Shooting")]
-public class AmmoBasedShootingBehavior : SecondaryProjectileTowerBehavior
+public class AmmoBasedShootBehavior : SecondaryProjectileTowerBehavior
 {
     [System.Serializable]
     private class TowerAmmoState
