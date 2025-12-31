@@ -37,11 +37,9 @@ public class TrixterUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newHomingRicochetEffect = new HomingRicochetEffect
-        {
-            MaxRicochets = rankedRicochets,
-            HomingRadius = rankedRadius
-        };
+        var newHomingRicochetEffect = CreateInstance<HomingRicochetEffect>();
+        newHomingRicochetEffect.HomingRadius = rankedRadius;
+        newHomingRicochetEffect.MaxRicochets = rankedRicochets;
         ResourceManager.RegisterProjectileEffect(newHomingRicochetEffect.SetRankedName(rank), newHomingRicochetEffect);
         
         blueprint.ProjectileFragile = false;

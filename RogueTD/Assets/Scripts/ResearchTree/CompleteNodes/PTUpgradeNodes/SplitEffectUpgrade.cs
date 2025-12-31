@@ -35,10 +35,8 @@ public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newSplitEffect = new SplitEffect
-        {
-            SplitCount = rankedSplitCount,
-        };
+        var newSplitEffect = CreateInstance<SplitEffect>();
+        newSplitEffect.SplitCount = rankedSplitCount;
         ResourceManager.RegisterProjectileEffect(newSplitEffect.SetRankedName(rank), newSplitEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }

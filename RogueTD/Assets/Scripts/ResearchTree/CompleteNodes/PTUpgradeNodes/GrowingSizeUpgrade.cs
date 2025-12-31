@@ -36,11 +36,9 @@ public class GrowingSizeUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newGrowingSizeMovement = new GrowingSizeMovement
-        {
-            GrowthRate = rankedGrowthRate,
-            MaxSize = rankedMaxSize
-        };
+        var newGrowingSizeMovement = CreateInstance<GrowingSizeMovement>();
+        newGrowingSizeMovement.GrowthRate = rankedGrowthRate;
+        newGrowingSizeMovement.MaxSize = rankedMaxSize;
         ResourceManager.RegisterProjectileBehavior(newGrowingSizeMovement.SetRankedName(rank), newGrowingSizeMovement);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }

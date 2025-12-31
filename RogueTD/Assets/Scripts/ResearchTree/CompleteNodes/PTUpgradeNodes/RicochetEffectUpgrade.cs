@@ -17,7 +17,6 @@ public class RicochetEffectUpgrade : ProjectileTowerUpgradeTreeNode
         "Projectiles ricochet on hit.";
 
     private int rankedRicochets;
-    private float rankedAngle;
     
     public override string TooltipText => description;
     
@@ -26,7 +25,6 @@ public class RicochetEffectUpgrade : ProjectileTowerUpgradeTreeNode
         return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank):F0}</color></size>\n\n" +
                $"<b>Effect (Rank {rank}):</b>\n" +
                $"• Ricochets: <color=#00FF00>{rankedRicochets}</color>\n" +
-               $"• Angle Change: <color=#00FF00>{rankedAngle:F0}°</color>\n\n" +
                $"<b>Per Rank:</b> +{additionalRicochetsPerRank:F1} ricochets, +{angleIncreasePerRank:F0}°";
     }
 
@@ -37,11 +35,8 @@ public class RicochetEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newRicochetEffect = new RicochetEffect
-        {
-            MaxRicochets = rankedRicochets,
-            AngleChange = rankedAngle
-        };
+        var newRicochetEffect = CreateInstance<RicochetEffect>();
+        newRicochetEffect.MaxRicochets = rankedRicochets;
         ResourceManager.RegisterProjectileEffect(newRicochetEffect.SetRankedName(rank), newRicochetEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
@@ -49,6 +44,5 @@ public class RicochetEffectUpgrade : ProjectileTowerUpgradeTreeNode
     public override void Initialize(int rank)
     {
         rankedRicochets = baseRicochets + (int)Math.Floor(rank * additionalRicochetsPerRank);
-        rankedAngle = baseAngle + (rank * angleIncreasePerRank);
     }
 }

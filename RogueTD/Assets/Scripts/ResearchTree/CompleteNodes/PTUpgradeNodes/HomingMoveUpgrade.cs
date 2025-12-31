@@ -36,11 +36,9 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newHomingMovement = new HomingMovement
-        {
-            HomingRadius = rankedRadius,
-            RotationSpeed = rankedRotationSpeed
-        };
+        var newHomingMovement = CreateInstance<HomingMovement>();
+        newHomingMovement.HomingRadius = rankedRadius;
+        newHomingMovement.RotationSpeed = rankedRotationSpeed;
         ResourceManager.RegisterProjectileBehavior(newHomingMovement.SetRankedName(rank), newHomingMovement);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }

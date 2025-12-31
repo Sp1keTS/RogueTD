@@ -36,11 +36,9 @@ public class ExplosionEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newExplosionEffect = new ExplosionEffect
-        {
-            ExplosionRadius = rankedRadius,
-            DamagePercentage = rankedDamagePercentage
-        };
+        var newExplosionEffect = CreateInstance<ExplosionEffect>();
+        newExplosionEffect.DamagePercentage = rankedDamagePercentage;
+        newExplosionEffect.ExplosionRadius = rankedRadius;
         ResourceManager.RegisterProjectileEffect(newExplosionEffect.SetRankedName(rank), newExplosionEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }

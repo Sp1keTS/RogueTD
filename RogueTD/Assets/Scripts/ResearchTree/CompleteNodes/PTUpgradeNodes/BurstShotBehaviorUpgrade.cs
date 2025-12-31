@@ -37,7 +37,7 @@ public class BurstShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     { 
-        var newBurstShotBehavior = ScriptableObject.CreateInstance<BurstShotBehavior>();
+        var newBurstShotBehavior = CreateInstance<BurstShotBehavior>();
         newBurstShotBehavior.BurstCount = baseBurstCount;
         newBurstShotBehavior.BurstDelay = rankedBurstDelay;
         ResourceManager.RegisterSecondaryBehavior(newBurstShotBehavior.SetRankedName(rank), newBurstShotBehavior);

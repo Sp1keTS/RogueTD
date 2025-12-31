@@ -36,11 +36,9 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newSlowEffect = new SlowStatusEffect
-        {
-            SlowPercent = rankedSlowPercent,
-            Duration = rankedDuration
-        };
+        var newSlowEffect = CreateInstance<SlowStatusEffect>();
+        newSlowEffect.SlowPercent = rankedSlowPercent;
+        newSlowEffect.Duration = rankedDuration;
         ResourceManager.RegisterStatusEffect(newSlowEffect.SetRankedName(rank), newSlowEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }

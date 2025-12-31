@@ -34,7 +34,9 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newBleedEffect = new BleedEffect(rankedDamage, rankedDuration );
+        var newBleedEffect = CreateInstance<BleedEffect>();
+        newBleedEffect.Damage = rankedDamage;
+        newBleedEffect.Duration = rankedDuration;
         ResourceManager.RegisterStatusEffect(newBleedEffect.SetRankedName(rank), newBleedEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }

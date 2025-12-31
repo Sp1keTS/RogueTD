@@ -19,7 +19,7 @@ public class CrossShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     { 
-        var newCrossShotBehavior = new CrossShotBehavior();
+        var newCrossShotBehavior = CreateInstance<CrossShotBehavior>();
         ResourceManager.RegisterSecondaryBehavior(newCrossShotBehavior.SetRankedName(rank), newCrossShotBehavior);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
         

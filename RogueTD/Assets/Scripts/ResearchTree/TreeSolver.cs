@@ -173,9 +173,7 @@ public class TreeSolver : MonoBehaviour
 
     private void ProcessBuildingNode(ResearchTree.TreeSaveData.TreeSaveNode node)
     {
-        if (node == null) return;
-    
-        if (node.currentNode is ProjectileTowerNode towerNode)
+        if (node?.currentNode is ProjectileTowerNode towerNode)
         {
             if (node.IsActive)
             {
