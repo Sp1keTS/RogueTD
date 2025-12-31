@@ -14,17 +14,22 @@ public abstract class ProjectileTowerNode : TowerNode
     [SerializeField] protected bool projectileFragile = true;
     [SerializeField] protected float projectileScale;
     [SerializeField] protected int projectileCount;
-    
-    [Header("Projectile Behaviors")]
-    [SerializeField] protected List<ProjectileBehavior> projectileBehaviors;
-    [SerializeField] protected List<ProjectileEffect> projectileEffects;
-    [SerializeField] protected ProjectileTowerBehavior shotBehavior;
-    [SerializeField] protected List<SecondaryProjectileTowerBehavior> secondaryShots;
 
     
     public ProjectileTower ProjectileTower => projectileTower;
-    public ProjectileTowerBlueprint _ProjectileTowerBlueprint {get => _projectileTowerBlueprint; set => _projectileTowerBlueprint = value; }
-    
+    public ProjectileTowerBlueprint _ProjectileTowerBlueprint
+    {
+        get
+        {
+            if (_projectileTowerBlueprint == null)
+            {
+                _projectileTowerBlueprint = new ProjectileTowerBlueprint();
+            }
+            return _projectileTowerBlueprint;
+        }
+        set => _projectileTowerBlueprint = value;
+    }
+
     public ProjectileTowerBlueprint TowerBlueprint => _projectileTowerBlueprint;
 
 
@@ -32,33 +37,25 @@ public abstract class ProjectileTowerNode : TowerNode
     {
         if (basicShotBehavior)
         {
-            _projectileTowerBlueprint.ShotBehavior = basicShotBehavior;
+            _ProjectileTowerBlueprint.ShotBehavior = basicShotBehavior;
             ResourceManager.RegisterTowerBehavior(basicShotBehavior.name, basicShotBehavior);
         }
     }
-    public void CreateBlueprint()
-    {
-        _ProjectileTowerBlueprint = new ProjectileTowerBlueprint();
-        _ProjectileTowerBlueprint.Initialize(buildingName, buildingPrefab, maxHealthPoints, size );
-    }
+    
     public override void LoadBasicStats(int rank, float rankMultiplier)
     {
         base.LoadBasicStats(rank, rankMultiplier);
         
-        _projectileTowerBlueprint.ProjectilePrefab = projectilePrefab;
-        _projectileTowerBlueprint.TowerPrefab = projectileTower;
-        _projectileTowerBlueprint.BuildingPrefab = buildingPrefab;
+        _ProjectileTowerBlueprint.ProjectilePrefab = projectilePrefab;
+        _ProjectileTowerBlueprint.TowerPrefab = projectileTower;
+        _ProjectileTowerBlueprint.BuildingPrefab = buildingPrefab;
         
-        _projectileTowerBlueprint.ProjectileSpeed = projectileSpeed * rankMultiplier;
-        _projectileTowerBlueprint.ProjectileLifetime = projectileLifetime * rankMultiplier;
-        _projectileTowerBlueprint.Spread = spread / rankMultiplier;
-        _projectileTowerBlueprint.ProjectileFragile = projectileFragile;
+        _ProjectileTowerBlueprint.ProjectileSpeed = projectileSpeed * rankMultiplier;
+        _ProjectileTowerBlueprint.ProjectileLifetime = projectileLifetime * rankMultiplier;
+        _ProjectileTowerBlueprint.Spread = spread / rankMultiplier;
+        _ProjectileTowerBlueprint.ProjectileFragile = projectileFragile;
         
-        _projectileTowerBlueprint.ProjectileCount = projectileCount;
-        _projectileTowerBlueprint.ProjectileScale = projectileScale;
-        
-        _projectileTowerBlueprint.ProjectileBehaviors = projectileBehaviors;
-        _projectileTowerBlueprint.ProjectileEffects = projectileEffects;
-        _projectileTowerBlueprint.SecondaryShots = secondaryShots;
+        _ProjectileTowerBlueprint.ProjectileCount = projectileCount;
+        _ProjectileTowerBlueprint.ProjectileScale = projectileScale;
     }
 }

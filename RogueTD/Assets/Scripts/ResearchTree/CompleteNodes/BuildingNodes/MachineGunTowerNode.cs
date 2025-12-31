@@ -4,9 +4,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NodeMachineGunTurret", menuName = "Research Tree/Turrets/Machine Gun Turret Node")]
 public class NodeMachineGunTurret : ProjectileTowerNode
 {
-    [SerializeField] private RampingFireRateBehavior rampingBehavior;
-    [SerializeField] private AmmoBasedShootBehavior ammoBehavior;
-    
     public override string TooltipText => "Machine gun with ramping fire rate.";
     
     public override string GetStats(int rank)
@@ -32,9 +29,11 @@ public class NodeMachineGunTurret : ProjectileTowerNode
 
     private void SetupNode(int rank)
     {
-        CreateBlueprint();
         if (_ProjectileTowerBlueprint != null)
         {
+            _ProjectileTowerBlueprint.BuildingName = buildingName;
+            var ammoBehavior = new AmmoBasedShootBehavior();
+            var rampingBehavior = new AmmoBasedShootBehavior();
             LoadBasicShot();
             LoadBasicStats(rank, 1.05f * rank);
             _ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { ammoBehavior };

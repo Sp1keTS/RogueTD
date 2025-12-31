@@ -5,9 +5,6 @@ using UnityEngine.Diagnostics;
 [CreateAssetMenu(fileName = "NodeFlamethrowerTurret", menuName = "Research Tree/Turrets/Flamethrower Turret Node")]
 public class NodeFlamethrowerTurret : ProjectileTowerNode
 {
-    
-    [SerializeField] private BurnEffect burnEffect;
-    
     public override string TooltipText => "Flamethrower tower.";
     
     public override string GetStats(int rank)
@@ -34,9 +31,10 @@ public class NodeFlamethrowerTurret : ProjectileTowerNode
 
     private void SetupNode(int rank)
     {
-        CreateBlueprint();
         if (_ProjectileTowerBlueprint != null)
         {
+            _ProjectileTowerBlueprint.BuildingName = buildingName;
+            var burnEffect = new BurnEffect();
             LoadBasicShot();
             LoadBasicStats(rank, 1.05f * rank);
             _ProjectileTowerBlueprint.StatusEffects = new List<StatusEffect>() { burnEffect };

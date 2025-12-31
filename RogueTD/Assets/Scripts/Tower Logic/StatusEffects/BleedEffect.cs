@@ -1,11 +1,16 @@
 using UnityEngine;
 using System.Collections;
 
-[CreateAssetMenu(fileName = "PoisonStatusEffect", menuName = "Tower Defense/Effects/Poison Status Effect")]
+
 public class BleedEffect : StatusEffect
 {
     [SerializeField] private Color bleedColor = Color.red;
-    public int TotalDamage { get; set; }
+    public int Damage { get; set; }
+
+    public BleedEffect(int Damage, float duration)
+    {
+        duration = duration;
+    }
     
     public override IEnumerator ApplyEffect(Enemy enemy)
     {
@@ -13,15 +18,13 @@ public class BleedEffect : StatusEffect
         
         var renderer = enemy.EnemyRenderer;
         var originalColor = renderer.material.color;
-        
         renderer.material.color += bleedColor/2;
         
-        var damagePerTick = TotalDamage / (duration / 0.5f);
-        var endTime = Time.time + duration;
+        var endTime = Time.time + Duration;
         
         while (Time.time < endTime && enemy)
         {
-            enemy.TakeDamage(Mathf.RoundToInt(damagePerTick),null);
+            enemy.TakeDamage(Mathf.RoundToInt(Damage),null);
             yield return new WaitForSeconds(0.5f);
         }
         

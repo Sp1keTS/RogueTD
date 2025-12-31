@@ -9,7 +9,6 @@ public class NodeRapidFireTurret : ProjectileTowerNode
         "High fire rate, low damage.";
     
     [Header("Magazine Settings")]
-    [SerializeField] private AmmoBasedShootBehavior ammoBehavior;
     [SerializeField] private float magazineSizeMultiplier = 1.5f;
     [SerializeField] private float reloadSpeedMultiplier = 1.3f;
     
@@ -43,9 +42,10 @@ public class NodeRapidFireTurret : ProjectileTowerNode
 
     private void SetupNode(int rank)
     {
-        CreateBlueprint();
         if (_ProjectileTowerBlueprint != null)
         {
+            _ProjectileTowerBlueprint.BuildingName = buildingName;
+            var ammoBehavior = new AmmoBasedShootBehavior();
             LoadBasicShot();
             LoadBasicStats(rank, 1.05f * rank);
             _ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { ammoBehavior };

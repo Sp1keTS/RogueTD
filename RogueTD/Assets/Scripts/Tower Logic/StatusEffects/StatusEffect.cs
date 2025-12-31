@@ -3,8 +3,8 @@ using UnityEngine;
 
 public abstract class StatusEffect : Resource
 {
-    public string effectName;
-    public float duration = 2;
+    private float duration = 2;
+    public float Duration{ get => duration;  set => duration = value; } 
     
     public abstract IEnumerator ApplyEffect(Enemy enemy);
     

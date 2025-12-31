@@ -3,7 +3,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SlowUpgrade", menuName = "Research Tree/Upgrades/Slow Upgrade")]
 public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [SerializeField] private SlowStatusEffect slowEffect;
+    [Header("Base Settings")]
+    [SerializeField] private float baseSlowPercent = 0.5f;
+    [SerializeField] private float baseDuration = 2f;
     
     [Header("Upgrade Settings")]
     [SerializeField] private float slowPercentIncreasePerRank = 0.1f;
@@ -12,55 +14,40 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
         "Slows enemy movement speed.";
+
+    private float rankedSlowPercent;
+    private float rankedDuration;
     
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        var cost = GetDynamicCost(rank);
-        
-        if (slowEffect)
-        {
-            return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
-                   $"<b>Effect (Rank {rank}):</b>\n" +
-                   $"• Slow: <color=#00FF00>{(0.5f + (rank * slowPercentIncreasePerRank)) * 100:F0}%</color>\n" +
-                   $"• Duration: <color=#00FF00>{2 + (rank * durationIncreasePerRank):F1}s</color>\n\n" +
-                   $"<b>Per Rank:</b> +{slowPercentIncreasePerRank * 100:F0}%, +{durationIncreasePerRank:F1}s";
-        }
-        
-        return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
-               $"{description}\n\n" +
-               "<color=#FF5555>Failed to load effect</color>";
+        return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank):F0}</color></size>\n\n" +
+               $"<b>Effect (Rank {rank}):</b>\n" +
+               $"• Slow: <color=#00FF00>{rankedSlowPercent * 100:F0}%</color>\n" +
+               $"• Duration: <color=#00FF00>{rankedDuration:F1}s</color>\n\n" +
+               $"<b>Per Rank:</b> +{slowPercentIncreasePerRank * 100:F0}%, +{durationIncreasePerRank:F1}s";
+    }
+
+    public override void OnActivate(int rank)
+    {
+        ApplyUpgrade(ProjectileTowerBlueprint, rank);
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (!slowEffect)
+        var newSlowEffect = new SlowStatusEffect
         {
-            Debug.LogError("SlowEffect is not assigned in SlowEffectUpgrade!");
-            return;
-        }
-
-        ResourceManager.RegisterStatusEffect(slowEffect.name, slowEffect);
-        
-        slowEffect.SlowPercent = Mathf.Clamp01(0.5f + (rank * slowPercentIncreasePerRank));
-        slowEffect.duration = 2 + (rank * durationIncreasePerRank);
-        
-        EffectUtils.AddEffectToBlueprint(
-            blueprint, 
-            slowEffect, 
-            b => b.StatusEffects,
-            (b, arr) => b.StatusEffects = arr
-        );
-        
+            SlowPercent = rankedSlowPercent,
+            Duration = rankedDuration
+        };
+        ResourceManager.RegisterStatusEffect(newSlowEffect.SetRankedName(rank), newSlowEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void LoadDependencies()
+    public override void Initialize(int rank)
     {
-        if (slowEffect)
-        {
-            ResourceManager.RegisterStatusEffect(slowEffect.name, slowEffect);
-        }
+        rankedSlowPercent = Mathf.Clamp01(baseSlowPercent + (rank * slowPercentIncreasePerRank));
+        rankedDuration = baseDuration + (rank * durationIncreasePerRank);
     }
 }

@@ -23,7 +23,7 @@ public class TowerProjectile : MonoBehaviour
         {
             foreach (var effect in tower.effects)
             {
-                if (effect)
+                if (effect != null)
                     effectsToProcess.Enqueue(effect);
             }
         }

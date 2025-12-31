@@ -21,7 +21,33 @@ MonoBehaviour:
   cost: 10
   icon: {fileID: 3411130300899309360, guid: 9e7b8350f649b8540bc4d7cde31816f6, type: 3}
   tooltipText: Description failed to load properly
-  towerBlueprint: {fileID: 11400000, guid: 419331ad9064dcd4fb06e19a5013c0b7, type: 2}
-  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
-  rampingBehavior: {fileID: 11400000, guid: d0bdcd5d261987a41a4e587997b77195, type: 2}
-  ammoBehavior: {fileID: 11400000, guid: 63dcee1c6873aeb4fbf1befbb7ed322f, type: 2}
+  buildingPrefab: {fileID: 0}
+  buildingName: MachinegunTurret
+  maxHealthPoints: 0
+  buildingCost: 0
+  size: {x: 0, y: 0}
+  tower: {fileID: 0}
+  targetingRange: 0
+  damageMult: 0
+  attackSpeed: 0
+  rotatingSpeed: 0
+  damage: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  ammoRegeneration: 0
+  statusEffects: []
+  towerBehaviours: []
+  attackAngle: 0
+  basicShotBehavior: {fileID: 0}
+  projectileTower: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0
+  spread: 0
+  projectileLifetime: 0
+  projectileFragile: 1
+  projectileScale: 0
+  projectileCount: 0
+  projectileBehaviors: []
+  projectileEffects: []
+  shotBehavior: {fileID: 0}
+  secondaryShots: []

@@ -21,6 +21,33 @@ MonoBehaviour:
   cost: 10
   icon: {fileID: 626344658162884069, guid: bd41aada41b5d8e458ace47a1a838c87, type: 3}
   tooltipText: Description failed to load properly
-  towerBlueprint: {fileID: 11400000, guid: c91bbe39169494e4aa9d22ada219b646, type: 2}
-  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
-  explosionEffect: {fileID: 11400000, guid: c7d29b856a978b644a54a61ee350457c, type: 2}
+  buildingPrefab: {fileID: 0}
+  buildingName: RocketTurret
+  maxHealthPoints: 0
+  buildingCost: 0
+  size: {x: 0, y: 0}
+  tower: {fileID: 0}
+  targetingRange: 0
+  damageMult: 0
+  attackSpeed: 0
+  rotatingSpeed: 0
+  damage: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  ammoRegeneration: 0
+  statusEffects: []
+  towerBehaviours: []
+  attackAngle: 0
+  basicShotBehavior: {fileID: 0}
+  projectileTower: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0
+  spread: 0
+  projectileLifetime: 0
+  projectileFragile: 1
+  projectileScale: 0
+  projectileCount: 0
+  projectileBehaviors: []
+  projectileEffects: []
+  shotBehavior: {fileID: 0}
+  secondaryShots: []

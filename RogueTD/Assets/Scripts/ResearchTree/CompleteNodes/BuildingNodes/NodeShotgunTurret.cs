@@ -34,9 +34,9 @@ public class NodeShotgunTurret : ProjectileTowerNode
 
     private void SetupNode(int rank)
     {
-        CreateBlueprint();
         if (_ProjectileTowerBlueprint != null)
         {
+            _ProjectileTowerBlueprint.BuildingName = buildingName;
             LoadBasicShot();
             LoadBasicStats(rank, 1.05f * rank);
         }

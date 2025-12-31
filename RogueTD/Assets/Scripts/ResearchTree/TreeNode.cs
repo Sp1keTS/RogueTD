@@ -1,8 +1,6 @@
-
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
-
 
 [CreateAssetMenu(fileName = "NodeBasicTurret", menuName = "Research Tree/Nodes/Basic Turret")]
 public abstract class TreeNode : ScriptableObject

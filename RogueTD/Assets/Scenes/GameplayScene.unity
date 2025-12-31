@@ -3768,13 +3768,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   constructionGrid: {fileID: 598903010}
-  mainBuildingBlueprint: {fileID: 11400000, guid: 490ad5472c7032945936e50e40e0bcb8, type: 2}
   researchTree: {fileID: 1479132556}
   treeSolver: {fileID: 893651684}
   mapManager: {fileID: 1355944169}
   uiBlueprintHolder: {fileID: 1845572264}
   gridManager: {fileID: 598903012}
   currencyUI: {fileID: 1173795255}
+  buildingPrefab: {fileID: 2983300425965187776, guid: 036c6b10c6bd08a47b8977d9231048b7, type: 3}
+  maxHealthPoints: 500
+  size: {x: 3, y: 3}
 --- !u!1 &1845572259
 GameObject:
   m_ObjectHideFlags: 0
@@ -9098,6 +9100,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
+  - {fileID: 1981703337}
   - {fileID: 598903011}
   - {fileID: 1747437074}
   - {fileID: 2040614440}
@@ -9105,7 +9108,6 @@ SceneRoots:
   - {fileID: 1871200902}
   - {fileID: 893651685}
   - {fileID: 1479132557}
-  - {fileID: 1981703337}
   - {fileID: 89260875}
   - {fileID: 241252329}
   - {fileID: 1668421558541897570}

@@ -19,11 +19,38 @@ MonoBehaviour:
   minRank: 0
   directUpgradeOf: {fileID: 0}
   cost: 0
-  baseCost: 0
   icon: {fileID: 8008833675835605673, guid: c730c59a9b52c664680814b355b534f9, type: 3}
   tooltipText: Description failed to load properly
-  towerBlueprint: {fileID: 11400000, guid: c8bc9ee49361af945a98b101a1f9e45d, type: 2}
-  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
+  buildingPrefab: {fileID: 0}
+  buildingName: ShotgunTurret
+  maxHealthPoints: 0
+  buildingCost: 0
+  size: {x: 0, y: 0}
+  tower: {fileID: 0}
+  targetingRange: 0
+  damageMult: 0
+  attackSpeed: 0
+  rotatingSpeed: 0
+  damage: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  ammoRegeneration: 0
+  statusEffects: []
+  towerBehaviours: []
+  attackAngle: 0
+  basicShotBehavior: {fileID: 0}
+  projectileTower: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0
+  spread: 0
+  projectileLifetime: 0
+  projectileFragile: 1
+  projectileScale: 0
+  projectileCount: 0
+  projectileBehaviors: []
+  projectileEffects: []
+  shotBehavior: {fileID: 0}
+  secondaryShots: []
   description: 'Close-range powerhouse that fires multiple projectiles in a wide
     spread.
 

@@ -3,61 +3,45 @@
 [CreateAssetMenu(fileName = "BleedUpgrade", menuName = "Research Tree/Upgrades/Bleed Upgrade")]
 public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [SerializeField] BleedEffect bleedEffect;
     
     [Header("Upgrade Settings")]
-    [SerializeField] private float totalDamageIncreasePerRank = 5f;
+    [SerializeField] private float damageIncreasePerRank = 5f;
     [SerializeField] private float durationIncreasePerRank = 0.5f;
+    [SerializeField] private float baseDuration;
     
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
         "Damage over time. Based on Turret damage";
+
+    private int rankedDamage;
+    private float rankedDuration;
     
     public override string TooltipText => description;
-    
+
     public override string GetStats(int rank)
     {
-        if (bleedEffect)
-        {
-            return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank)}</color></size>\n\n <b>Effect (Rank {rank}):</b>\n" +
-                   $"• Damage: <color=#00FF00>{15 + (rank * totalDamageIncreasePerRank):F0}</color>\n" +
-                   $"• Duration: <color=#00FF00>{2 + (rank * durationIncreasePerRank):F1}s</color>\n\n" +
-                   $"<b>Per Rank:</b> +{totalDamageIncreasePerRank:F0} damage, +{durationIncreasePerRank:F1}s";
-        }
-        return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
-               $"{description}\n\n" +
-               "<color=#FF5555>Failed to load effect</color>";
+        return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank)}</color></size>\n\n " +
+               $"<b>Effect (Rank {rank}):</b>\n" +
+               $"• Damage: <color=#00FF00> base tower damage + {(rank * damageIncreasePerRank):F0}</color>\n" +
+               $"• Duration: <color=#00FF00>{rankedDuration:F1}s</color>\n\n" +
+               $"<b>Per Rank:</b> +{damageIncreasePerRank:F0} damage, +{durationIncreasePerRank:F1}s";
     }
 
+    public override void OnActivate(int rank)
+    {
+        ApplyUpgrade(ProjectileTowerBlueprint,rank);
+    }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (!bleedEffect)
-        {
-            Debug.LogError("BleedEffect is not assigned in BleedEffectUpgrade!");
-            return;
-        }
-
-        ResourceManager.RegisterStatusEffect(bleedEffect.name, bleedEffect);
-        
-        bleedEffect.TotalDamage = (int)(blueprint.Damage * (rank  * 0.17));
-        bleedEffect.duration = 2 + (rank * durationIncreasePerRank);
-        
-        EffectUtils.AddEffectToBlueprint(
-            blueprint, 
-            bleedEffect, 
-            b => b.StatusEffects,
-            (b, arr) => b.StatusEffects = arr
-        );
-        
+        var newBleedEffect = new BleedEffect(rankedDamage, rankedDuration );
+        ResourceManager.RegisterStatusEffect(newBleedEffect.SetRankedName(rank), newBleedEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void LoadDependencies(int rank)
+    public override void Initialize(int rank)
     {
-        if (bleedEffect)
-        {
-            ResourceManager.RegisterStatusEffect(bleedEffect.name, bleedEffect);
-        }
+        rankedDamage = (int)(ProjectileTowerBlueprint.Damage * (rank * 0.17));
+        rankedDuration = baseDuration + (rank * durationIncreasePerRank);
     }
 }

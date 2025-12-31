@@ -21,8 +21,36 @@ MonoBehaviour:
   cost: 0
   icon: {fileID: -250953264470595650, guid: 8fea579d24468c0448b269b2fac5ae06, type: 3}
   tooltipText: Description failed to load properly
-  towerBlueprint: {fileID: 11400000, guid: e529cec005e868443b23bdb1fb5463cc, type: 2}
-  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
+  buildingPrefab: {fileID: 0}
+  buildingName: RapidTurret
+  maxHealthPoints: 0
+  buildingCost: 0
+  size: {x: 0, y: 0}
+  tower: {fileID: 0}
+  targetingRange: 0
+  damageMult: 0
+  attackSpeed: 0
+  rotatingSpeed: 0
+  damage: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  ammoRegeneration: 0
+  statusEffects: []
+  towerBehaviours: []
+  attackAngle: 0
+  basicShotBehavior: {fileID: 0}
+  projectileTower: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0
+  spread: 0
+  projectileLifetime: 0
+  projectileFragile: 1
+  projectileScale: 0
+  projectileCount: 0
+  projectileBehaviors: []
+  projectileEffects: []
+  shotBehavior: {fileID: 0}
+  secondaryShots: []
   description: 'High-speed projectile tower with incredible rate of fire.
 
     Sacrifices
@@ -30,6 +58,5 @@ MonoBehaviour:
 
     Perfect for suppressing
     groups of light enemies and fast-moving targets.'
-  ammoBehavior: {fileID: 0}
   magazineSizeMultiplier: 1.5
   reloadSpeedMultiplier: 1.3

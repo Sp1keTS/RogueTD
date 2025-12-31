@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SlowStatusEffect", menuName = "Tower Defense/Effects/Slow Status Effect")]
 public class SlowStatusEffect : StatusEffect
 {
     [SerializeField] private float slowPercent = 0.5f;
@@ -15,7 +14,7 @@ public class SlowStatusEffect : StatusEffect
         if (!enemy) yield break;
         var originalSpeed = enemy.MoveSpeed;
         enemy.MoveSpeed = originalSpeed * slowPercent;
-        yield return new WaitForSeconds(duration);
+        yield return new WaitForSeconds(Duration);
         if (enemy)
         {
             enemy.MoveSpeed = originalSpeed;

@@ -9,20 +9,31 @@ public abstract class BuildingNode : TreeNode
     [SerializeField] protected int buildingCost;
     [SerializeField] protected Vector2 size;
     
-    public BuildingBlueprint BuildingBlueprint {get => _buildingBlueprint; set => _buildingBlueprint = value;}
+    public BuildingBlueprint BuildingBlueprint
+    {
+        get
+        {
+            if (_buildingBlueprint == null)
+            {
+                _buildingBlueprint = new BuildingBlueprint();
+            }
+            return _buildingBlueprint;
+        }
+        set => _buildingBlueprint = value;
+    }
 
     public virtual void CreateBlueprint()
     {
-        _buildingBlueprint = new BuildingBlueprint();
-        _buildingBlueprint.Initialize(buildingName, buildingPrefab, maxHealthPoints, size );
+        BuildingBlueprint = new BuildingBlueprint();
+        BuildingBlueprint.Initialize(buildingName, buildingPrefab, maxHealthPoints, size );
     }
     public virtual void LoadBasicStats(int rank, float rankMultiplier)
     {
-        _buildingBlueprint.Cost = buildingCost;
-        _buildingBlueprint.BuildingName = buildingName;
-        _buildingBlueprint.BuildingPrefab = buildingPrefab;
-        _buildingBlueprint.MaxHealthPoints = maxHealthPoints;
-        _buildingBlueprint.Size = size;
+        BuildingBlueprint.Cost = buildingCost;
+        BuildingBlueprint.BuildingName = buildingName;
+        BuildingBlueprint.BuildingPrefab = buildingPrefab;
+        BuildingBlueprint.MaxHealthPoints = maxHealthPoints;
+        BuildingBlueprint.Size = size;
     }
     public override int GetDynamicCost(int rank)
     {

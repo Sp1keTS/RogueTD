@@ -91,7 +91,7 @@ public class ProjectileTower : Tower
     {
         Action<ShotData> chain = null;
         
-        if (towerBehavior)
+        if (towerBehavior != null)
         {
             chain = (shotData) => towerBehavior.Shoot(this, shotData, null);
         }

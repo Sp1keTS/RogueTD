@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "BurnEffect", menuName = "Tower Defense/Effects/Burn Effect")]
+
 public class BurnEffect : StatusEffect
 {
-    [SerializeField] private int baseDamagePerTick = 5;
-    [SerializeField] private float tickInterval = 0.5f;
-    [SerializeField] private Color burnColor = new Color(1f, 0.5f, 0f, 1f);
-    [SerializeField] private float reapplyCooldown = 0.5f; 
+    private int baseDamagePerTick = 5;
+    private float tickInterval = 0.5f;
+    private Color burnColor = new Color(1f, 0.5f, 0f, 1f);
+    private float reapplyCooldown = 0.5f; 
     
     private class BurnData
     {
@@ -57,7 +57,7 @@ public class BurnEffect : StatusEffect
             enemyRendererForColor.material.color = Color.Lerp(burnData.originalColor, burnColor, burnData.stacks * 0.2f);
         }
         
-        var endTime = Time.time + duration;
+        var endTime = Time.time + Duration;
         
         while (Time.time < endTime && enemy && enemy.gameObject.activeInHierarchy)
         {

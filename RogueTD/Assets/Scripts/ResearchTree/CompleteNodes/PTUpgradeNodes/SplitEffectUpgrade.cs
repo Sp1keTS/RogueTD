@@ -4,62 +4,47 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SplitUpgrade", menuName = "Research Tree/Upgrades/Split Upgrade")]
 public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [SerializeField] private SplitEffect splitEffect;
+    [Header("Base Settings")]
+    [SerializeField] private int baseSplitCount = 2;
+    [SerializeField] private float baseAngle = 30f;
+    
+    [Header("Upgrade Settings")]
     [SerializeField] private float additionalSplitPerRank = 0.25f;
     [SerializeField] private float angleIncreasePerRank = 10f;
     
-    public override string TooltipText => "Projectiles split on impact.";
+    [Header("Description")]
+    [SerializeField, TextArea(3, 5)] private string description = 
+        "Projectiles split on impact.";
+
+    private int rankedSplitCount;
+    
+    public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        var cost = GetDynamicCost(rank);
-        
-        if (splitEffect)
-        {
-            int baseSplitCount = 2;
-            float baseAngle = 30f;
-            
-            return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
-                   $"<b>Effect (Rank {rank}):</b>\n" +
-                   $"• Split Count: <color=#00FF00>{baseSplitCount + (rank * additionalSplitPerRank)}</color>\n" +
-                   $"• Angle: <color=#00FF00>{baseAngle + (rank * angleIncreasePerRank):F0}°</color>\n\n" +
-                   $"<b>Per Rank:</b> +{additionalSplitPerRank} projectiles, +{angleIncreasePerRank:F0}°";
-        }
-        
-        return $"<size=120%><color=#FFD700>Cost: {cost:F0}</color></size>\n\n" +
-               "<color=#FF5555>Failed to load effect</color>";
+        return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank):F0}</color></size>\n\n" +
+               $"<b>Effect (Rank {rank}):</b>\n" +
+               $"• Split Count: <color=#00FF00>{rankedSplitCount}</color>\n" +
+               $"<b>Per Rank:</b> +{additionalSplitPerRank:F1} projectiles, +{angleIncreasePerRank:F0}°";
+    }
+
+    public override void OnActivate(int rank)
+    {
+        ApplyUpgrade(ProjectileTowerBlueprint, rank);
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        if (!splitEffect)
+        var newSplitEffect = new SplitEffect
         {
-            Debug.LogError("SplitEffect is not assigned!");
-            return;
-        }
-
-        var totalCost = Cost + Cost * Mathf.Pow(rank, 0.5f);
-        
-        var baseSplitCount = 2;
-        var baseAngle = 30f;
-        
-        splitEffect.SplitCount = (int)Math.Floor(baseSplitCount + (rank * additionalSplitPerRank));
-        
-        EffectUtils.AddEffectToBlueprint(
-            blueprint, 
-            splitEffect, 
-            b => b.ProjectileEffects,
-            (b, arr) => b.ProjectileEffects = arr
-        );
-        
+            SplitCount = rankedSplitCount,
+        };
+        ResourceManager.RegisterProjectileEffect(newSplitEffect.SetRankedName(rank), newSplitEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void LoadDependencies()
+    public override void Initialize(int rank)
     {
-        if (splitEffect)
-        {
-            ResourceManager.RegisterProjectileEffect(splitEffect.name, splitEffect);
-        }
+        rankedSplitCount = (int)Math.Floor(baseSplitCount + (rank * additionalSplitPerRank));
     }
 }

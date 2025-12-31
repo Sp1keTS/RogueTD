@@ -21,6 +21,33 @@ MonoBehaviour:
   cost: 10
   icon: {fileID: 5189364983115794057, guid: b29cac61716777b4eb9c50f19c675258, type: 3}
   tooltipText: Description failed to load properly
-  towerBlueprint: {fileID: 11400000, guid: 75760156214c8f44ba0369d7ad2d3f33, type: 2}
-  basicShotBehavior: {fileID: 11400000, guid: ac272bf25608b5d4c91dad0bf18bbf66, type: 2}
-  burnEffect: {fileID: 11400000, guid: d16c9007b2a2a504aadc2842d9a9c575, type: 2}
+  buildingPrefab: {fileID: 0}
+  buildingName: FlamethrowerTurret
+  maxHealthPoints: 0
+  buildingCost: 0
+  size: {x: 0, y: 0}
+  tower: {fileID: 0}
+  targetingRange: 0
+  damageMult: 0
+  attackSpeed: 0
+  rotatingSpeed: 0
+  damage: 0
+  maxAmmo: 0
+  currentAmmo: 0
+  ammoRegeneration: 0
+  statusEffects: []
+  towerBehaviours: []
+  attackAngle: 0
+  basicShotBehavior: {fileID: 0}
+  projectileTower: {fileID: 0}
+  projectilePrefab: {fileID: 0}
+  projectileSpeed: 0
+  spread: 0
+  projectileLifetime: 0
+  projectileFragile: 1
+  projectileScale: 0
+  projectileCount: 0
+  projectileBehaviors: []
+  projectileEffects: []
+  shotBehavior: {fileID: 0}
+  secondaryShots: []

@@ -11,33 +11,40 @@ public abstract class TowerNode : BuildingNode
     [SerializeField] protected int maxAmmo;
     [SerializeField] protected float currentAmmo;
     [SerializeField] protected float ammoRegeneration;
-    [SerializeField] protected StatusEffect[] statusEffects;
-    [SerializeField] protected TowerBehaviour[] towerBehaviours;
     [SerializeField] protected float attackAngle;
     
     private TowerBlueprint _towerBlueprint;
-    
-    public TowerBlueprint TowerBlueprint => _towerBlueprint;
+    public TowerBlueprint TowerBlueprint
+    {
+        get
+        {
+            if (_towerBlueprint == null)
+            {
+                _towerBlueprint = new ProjectileTowerBlueprint();
+            }
+            return _towerBlueprint;
+        }
+        set => _towerBlueprint = value;
+    }
 
     public void CreateBlueprint()
     {
-        _towerBlueprint = new TowerBlueprint();
-        _towerBlueprint.Initialize(buildingName, buildingPrefab, maxHealthPoints, size );
+        TowerBlueprint = new TowerBlueprint();
+        TowerBlueprint.Initialize(buildingName, buildingPrefab, maxHealthPoints, size );
     }
     public override void LoadBasicStats(int rank, float rankMultiplier)
     {
         base.LoadBasicStats(rank, rankMultiplier);
         
-        _towerBlueprint.TowerPrefab = tower;
-        _towerBlueprint.TargetingRange = targetingRange * rankMultiplier;
-        _towerBlueprint.DamageMult = damageMult;
-        _towerBlueprint.AttackSpeed = attackSpeed * rankMultiplier;
-        _towerBlueprint.RotatingSpeed = rotatingSpeed * rankMultiplier;
-        _towerBlueprint.Damage = (int)(damage * rankMultiplier);
-        _towerBlueprint.MaxAmmo = (int)(maxAmmo * rankMultiplier);
-        _towerBlueprint.CurrentAmmo = _towerBlueprint.MaxAmmo;
-        _towerBlueprint.AmmoRegeneration = ammoRegeneration;
-        _towerBlueprint.TowerBehaviours = towerBehaviours;
-        _towerBlueprint.AttackAngle = attackAngle;
+        TowerBlueprint.TowerPrefab = tower;
+        TowerBlueprint.TargetingRange = targetingRange * rankMultiplier;
+        TowerBlueprint.DamageMult = damageMult;
+        TowerBlueprint.AttackSpeed = attackSpeed * rankMultiplier;
+        TowerBlueprint.RotatingSpeed = rotatingSpeed * rankMultiplier;
+        TowerBlueprint.Damage = (int)(damage * rankMultiplier);
+        TowerBlueprint.MaxAmmo = (int)(maxAmmo * rankMultiplier);
+        TowerBlueprint.CurrentAmmo = _towerBlueprint.MaxAmmo;
+        TowerBlueprint.AmmoRegeneration = ammoRegeneration;
+        TowerBlueprint.AttackAngle = attackAngle;
     }
 }

@@ -6,8 +6,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NodeRocketLauncherTurret", menuName = "Research Tree/Turrets/Rocket Launcher Turret Node")]
 public class NodeRocketLauncherTurret : ProjectileTowerNode
 {
-    [SerializeField] private ExplosionEffect explosionEffect;
-    
     public override string TooltipText => "Rocket launcher with explosions.";
     
     public override string GetStats(int rank)
@@ -33,10 +31,11 @@ public class NodeRocketLauncherTurret : ProjectileTowerNode
 
     private void SetupNode(int rank)
     {
-        CreateBlueprint();
         if (_ProjectileTowerBlueprint != null)
         {
+            var explosionEffect = new ExplosionEffect();
             LoadBasicShot();
+            _ProjectileTowerBlueprint.BuildingName = buildingName;
             LoadBasicStats(rank, 1.05f * rank);
             _ProjectileTowerBlueprint.ProjectileEffects = new List<ProjectileEffect>() { explosionEffect };
             ResourceManager.RegisterProjectileEffect(explosionEffect.SetRankedName(rank),explosionEffect);

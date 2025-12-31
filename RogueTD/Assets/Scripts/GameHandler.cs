@@ -6,18 +6,21 @@ public class GameHandler : MonoBehaviour
     private static GameHandler instance;
     
     [SerializeField] private Grid constructionGrid;
-    [SerializeField] private BuildingBlueprint mainBuildingBlueprint;
     [SerializeField] private ResearchTree researchTree;
     [SerializeField] private TreeSolver treeSolver;
     [SerializeField] private MapManager mapManager;
     [SerializeField] private UIBlueprintHolderScript uiBlueprintHolder;
     [SerializeField] private ConstructionGridManager gridManager;
     [SerializeField] private CurrencyUI currencyUI;
-    
+    [Header("Main Building")]
+    [SerializeField] protected Building buildingPrefab;
+    [SerializeField] protected int maxHealthPoints;
+    [SerializeField] protected Vector2 size;
 
     void Start()
     {
-        BlueprintManager.InsertBuildingBlueprint(mainBuildingBlueprint);
+        
+        
         ConstructionGridManager.ConstructionGrid = constructionGrid;
         
         
@@ -67,8 +70,11 @@ public class GameHandler : MonoBehaviour
     
     private void CreateMainBuilding()
     {
-        if (mainBuildingBlueprint == null) return;
-
+        var mainBuildingBlueprint = new BuildingBlueprint();
+        mainBuildingBlueprint.BuildingName = "MainBuilding";
+        mainBuildingBlueprint.BuildingPrefab = buildingPrefab;
+        mainBuildingBlueprint.MaxHealthPoints = maxHealthPoints;
+        mainBuildingBlueprint.Size = size;
         var gridPosition = Vector2Int.zero;
         BlueprintManager.InsertBuildingBlueprint(mainBuildingBlueprint);
         Building mainBuilding = BuildingFactory.CreateBuilding(gridPosition, mainBuildingBlueprint);
