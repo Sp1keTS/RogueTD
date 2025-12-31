@@ -45,6 +45,7 @@ public class GrowingSizeUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedGrowthRate = baseGrowthRate + (rank * growthRateIncreasePerRank);
         rankedMaxSize = baseMaxSize + (rank * maxSizeIncreasePerRank);
     }

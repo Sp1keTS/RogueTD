@@ -33,6 +33,4 @@ public class NodeAmmoUpgrade : ProjectileTowerUpgradeTreeNode
         blueprint.AmmoRegeneration *= (1f + rank * regenerationBonus);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
-    
-    public override void Initialize(int rank) { }
 }

@@ -43,6 +43,7 @@ public class RicochetEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedRicochets = baseRicochets + (int)Math.Floor(rank * additionalRicochetsPerRank);
     }
 }

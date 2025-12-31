@@ -38,6 +38,7 @@ public class NodePTProjectileSpeedUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedSpeedMultiplier = baseSpeedMultiplier + (rank * rankBonusPerLevel);
     }
 }

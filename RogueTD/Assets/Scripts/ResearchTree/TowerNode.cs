@@ -20,7 +20,7 @@ public abstract class TowerNode : BuildingNode
         {
             if (_towerBlueprint == null)
             {
-                _towerBlueprint = new ProjectileTowerBlueprint();
+                _towerBlueprint = new TowerBlueprint();  
             }
             return _towerBlueprint;
         }

@@ -45,6 +45,7 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedSlowPercent = Mathf.Clamp01(baseSlowPercent + (rank * slowPercentIncreasePerRank));
         rankedDuration = baseDuration + (rank * durationIncreasePerRank);
     }

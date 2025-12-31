@@ -39,6 +39,7 @@ public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedDamageMultiplier = baseDamageMultiplier + (rank * rankBonusPerLevel);
     }
 }

@@ -25,5 +25,4 @@ public class CrossShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
         
     }
 
-    public override void Initialize(int rank) { }
 }

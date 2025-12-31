@@ -12,4 +12,10 @@ public abstract class ProjectileTowerUpgradeTreeNode : TreeNode
     {
         return (int)(Cost * Mathf.Pow(rank, 0.5f));
     }
+
+    public override void Initialize(int rank)
+    {
+        CurrentRank = rank;    
+    }
+    
 }

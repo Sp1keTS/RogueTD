@@ -45,6 +45,7 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedRadius = baseRadius + (rank * radiusIncreasePerRank);
         rankedRotationSpeed = baseRotationSpeed + (rank * rotationSpeedIncreasePerRank);
     }

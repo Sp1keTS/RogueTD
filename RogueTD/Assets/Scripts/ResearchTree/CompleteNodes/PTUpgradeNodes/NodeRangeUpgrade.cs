@@ -38,6 +38,7 @@ public class NodeRangeUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedRangeMultiplier = baseRangeMultiplier + (rank * rankBonusPerLevel);
     }
 }

@@ -57,6 +57,15 @@ public class TreeSolver : MonoBehaviour
             var rootNode = Instantiate(uiTreeNodePrefab, canvas.transform);
             rootNode.transform.localPosition = position;
             rootNode.TreeSaveNode = root;
+            Debug.Log(rootNode.TreeSaveNode.currentNode);
+            if (rootNode.TreeSaveNode.currentNode != null)
+            {
+                var clonedNode = ScriptableObject.CreateInstance(rootNode.TreeSaveNode.currentNode.GetType()) as TreeNode;
+                clonedNode.name = rootNode.TreeSaveNode.currentNode.name + "_Clone";
+                rootNode.TreeSaveNode.currentNode = clonedNode;
+            }
+            Debug.Log(rootNode.TreeSaveNode.currentNode);
+            rootNode.TreeSaveNode.currentNode.Initialize(0);
             rootNode.Rank = 0; 
             rootNode.SetImage();
             if (rootNode.TreeSaveNode.IsActive)
@@ -130,12 +139,20 @@ public class TreeSolver : MonoBehaviour
                 var uiNode = Instantiate(uiTreeNodePrefab, canvas.transform);
                 uiNode.transform.localPosition = childPosition;
                 uiNode.TreeSaveNode = nextSaveNode;
+                
+                uiNode.TreeSaveNode.currentNode = Instantiate(uiNode.TreeSaveNode.currentNode);
+                uiNode.TreeSaveNode.currentNodeId = uiNode.TreeSaveNode.currentNodeId;
+                uiNode.TreeSaveNode.currentNode.Initialize(current.depth);
                 uiNode.Rank = current.depth; 
                 uiNode.SetImage();
-                if (nextSaveNode.nodeToUpgrade)
+                
+                var upgradeNode = uiNode.TreeSaveNode.currentNode as ProjectileTowerUpgradeTreeNode;
+                if (nextSaveNode.nodeToUpgrade && upgradeNode)
                 {
-                    uiNode.towerToUpgrade = nextSaveNode.nodeToUpgrade;
+                    upgradeNode.ProjectileTowerBlueprint = 
+                        nextSaveNode.nodeToUpgrade._ProjectileTowerBlueprint;
                 }
+                
                 nodeToUI[nextSaveNode] = uiNode;
                 if (nextSaveNode.IsActive)
                 {

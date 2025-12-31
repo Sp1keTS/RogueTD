@@ -48,6 +48,7 @@ public class TrixterUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedRicochets = baseRicochets + (int)Math.Floor(rank * additionalRicochetsPerRank);
         rankedRadius = baseRadius + (rank * radiusIncreasePerRank);
     }

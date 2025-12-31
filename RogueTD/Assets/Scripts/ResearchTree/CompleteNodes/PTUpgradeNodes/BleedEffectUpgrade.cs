@@ -43,6 +43,7 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedDamage = (int)(ProjectileTowerBlueprint.Damage * (rank * 0.17));
         rankedDuration = baseDuration + (rank * durationIncreasePerRank);
     }

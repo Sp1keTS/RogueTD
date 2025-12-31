@@ -47,6 +47,7 @@ public class BurstShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedBurstCount = (int)Math.Floor(baseBurstCount + (rank * additionalBurstPerRank));
         rankedBurstDelay = Mathf.Max(0.05f, baseBurstDelay - (rank * delayReductionPerRank));
     }

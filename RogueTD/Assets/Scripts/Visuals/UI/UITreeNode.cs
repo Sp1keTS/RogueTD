@@ -11,7 +11,6 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] Image image;
     ResearchTree.TreeSaveData.TreeSaveNode treeSaveNode;
     public ResearchTree.TreeSaveData.TreeSaveNode  TreeSaveNode {get => treeSaveNode; set => treeSaveNode = value; }
-    public ProjectileTowerNode towerToUpgrade {get; set;}
     public int Rank {get; set;} 
     public Button Button => button;
     private void Awake()
@@ -34,15 +33,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             if (GameState.Instance.SpendCurrency(treeSaveNode.currentNode.GetDynamicCost(Rank)))
             {
-                if (treeSaveNode.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode)
-                {
-                    if (towerToUpgrade && towerToUpgrade.TowerBlueprint != null)
-                    {
-                        upgradeNode.ApplyUpgrade(towerToUpgrade._ProjectileTowerBlueprint, upgradeNode.CurrentRank);
-                    }
-                }
-
-                treeSaveNode.currentNode.OnActivate(Rank);
+                treeSaveNode.currentNode.OnActivate(treeSaveNode.currentNode.CurrentRank);
                 treeSaveNode.IsActive = true;
                 button.interactable = false;
             }

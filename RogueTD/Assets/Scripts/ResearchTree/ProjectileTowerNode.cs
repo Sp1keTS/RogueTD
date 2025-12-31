@@ -30,8 +30,6 @@ public abstract class ProjectileTowerNode : TowerNode
         set => _projectileTowerBlueprint = value;
     }
 
-    public ProjectileTowerBlueprint TowerBlueprint => _projectileTowerBlueprint;
-
 
     protected void LoadBasicShot()
     {

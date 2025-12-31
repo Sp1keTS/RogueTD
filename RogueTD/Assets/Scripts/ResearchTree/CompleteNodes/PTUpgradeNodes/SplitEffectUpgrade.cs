@@ -43,6 +43,7 @@ public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedSplitCount = (int)Math.Floor(baseSplitCount + (rank * additionalSplitPerRank));
     }
 }

@@ -45,6 +45,7 @@ public class ExplosionEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void Initialize(int rank)
     {
+        base.Initialize(rank);
         rankedRadius = baseRadius + (rank * radiusIncreasePerRank);
         rankedDamagePercentage = Mathf.RoundToInt(baseDamagePercentage + (rank * damageIncreasePerRank));
     }

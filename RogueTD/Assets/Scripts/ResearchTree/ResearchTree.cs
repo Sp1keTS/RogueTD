@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class ResearchTree : MonoBehaviour
 {
-    [SerializeField] static public int _maxRank = 7;
+    [SerializeField] public int _maxRank = 7;
     [SerializeField] private int rootCount = 4;
     
     static List<TreeNode> allAvailableNodes = new List<TreeNode>();
@@ -103,7 +103,6 @@ public class ResearchTree : MonoBehaviour
             
             CreateBranches();
             
-            UnloadAllNodes();
             GameState.Instance.SaveResearchTree();
             Debug.Log($"Tree generated successfully with {GameState.Instance.TreeSaveData.rootSaveNodes.Count} root nodes");
             
@@ -134,9 +133,8 @@ public class ResearchTree : MonoBehaviour
         for (var i = 0; i < rootCount && _weightedNodes.Count > 0; i++)
         {
             var rootNode = GetRandomNode(_weightedNodes);
-            if (rootNode != null)
+            if (rootNode)
             {
-                rootNode.Initialize(0);
                 var rootSaveNode = new TreeSaveData.TreeSaveNode(
                     rootNode, 
                     new List<TreeSaveData.TreeSaveNode>(), 
@@ -199,15 +197,9 @@ public class ResearchTree : MonoBehaviour
         }
     
         var selectedNode = GetRandomNode(_weightedNodes);
-        if (selectedNode != null)
+        if (selectedNode)
         {
-            if (selectedNode.CurrentRank == 0)
-            {
-                selectedNode.CurrentRank = rank;
-                selectedNode.Initialize(rank);
-            }
             nextNode.currentNode = selectedNode;
-
             if (selectedNode is ProjectileTowerUpgradeTreeNode projectileNode)
             {
                 var towerToUpgrade = GetTowerToUpgradeForNode(parentNode, visited);
