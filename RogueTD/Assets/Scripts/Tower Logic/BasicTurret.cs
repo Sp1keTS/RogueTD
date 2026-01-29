@@ -24,7 +24,6 @@ public class BasicTurret : ProjectileTower
 
     IEnumerator ShootCoroutine()
     {
-        Debug.Log("BasicTurret attackSpeed: " + attackSpeed);
         float attackDelay = 1f / attackSpeed;
         
         while (true)
@@ -32,8 +31,11 @@ public class BasicTurret : ProjectileTower
             GetTarget();
             if (target && currentAmmo >= 1)
             {
+                Debug.Log("Выстрел происхлдит");
                 var shotData = GetShotData(); 
                 ExecuteShootChain();
+                Debug.Log(ShootChain);
+                Debug.Log(towerBehavior);
                 yield return new WaitForSeconds(attackDelay);
                 currentAmmo -= 1;
             }

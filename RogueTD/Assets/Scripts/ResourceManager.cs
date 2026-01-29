@@ -10,13 +10,13 @@ public static class ResourceManager
     private static readonly Dictionary<string, StatusEffect> _statusEffects = new();
     private static readonly Dictionary<string, SecondaryProjectileTowerBehavior> _secondaryBehaviors = new();
     private static readonly Dictionary<string, ProjectileTowerBehavior> _projectileTowerBehaviors = new();
-    private static readonly Dictionary<string, TreeNode>  _treeNodes = new(); 
+    private static readonly Dictionary<string, TreeNodeConfig>  _treeNodeConfigs = new(); 
     public static IReadOnlyDictionary<string, ProjectileBehavior> ProjectileBehaviors => _projectileBehaviors;
     public static IReadOnlyDictionary<string, ProjectileEffect> ProjectileEffects => _projectileEffects;
     public static IReadOnlyDictionary<string, StatusEffect> StatusEffects => _statusEffects;
     public static IReadOnlyDictionary<string, SecondaryProjectileTowerBehavior> SecondaryBehaviors => _secondaryBehaviors;
     public static IReadOnlyDictionary<string, ProjectileTowerBehavior> ProjectileTowerBehaviors => _projectileTowerBehaviors;
-    public static IReadOnlyDictionary<string, TreeNode> TreeNodes => _treeNodes;
+    public static IReadOnlyDictionary<string, TreeNodeConfig> TreeNodeConfigConfigs => _treeNodeConfigs;
     
     private const string TREE_NODES_FOLDER = "Nodes"; 
     
@@ -63,46 +63,46 @@ public static class ResourceManager
         _statusEffects.Clear();
         _secondaryBehaviors.Clear();
         _projectileTowerBehaviors.Clear();
-        _treeNodes.Clear(); 
+        _treeNodeConfigs.Clear(); 
     }
     
     
 
 
-    public static TreeNode GetTreeNode(string key)
+    public static TreeNodeConfig GetTreeNodeConfig(string key)
     {
-        if (_treeNodes.TryGetValue(key, out var node))
+        if (_treeNodeConfigs.TryGetValue(key, out var node))
         {
             return node;
         }
         
-        var loadedNode = Resources.Load<TreeNode>($"{TREE_NODES_FOLDER}/{key}");
+        var loadedNode = Resources.Load<TreeNodeConfig>($"{TREE_NODES_FOLDER}/{key}");
         if (loadedNode)
         {
-            _treeNodes[key] = loadedNode;
+            _treeNodeConfigs[key] = loadedNode;
             return loadedNode;
         }
         
         return null;
     }
 
-    public static T GetTreeNode<T>(string key) where T : TreeNode
+    public static T GetTreeNodeConfig<T>(string key) where T : TreeNode
     {
-        var node = GetTreeNode(key);
+        var node = GetTreeNodeConfig(key);
         return node as T;
     }
 
-    public static List<TreeNode> GetAllTreeNodes()
+    public static List<TreeNodeConfig> GetAllTreeNodes()
     {
-        return new List<TreeNode>(_treeNodes.Values);
+        return new List<TreeNodeConfig>(_treeNodeConfigs.Values);
     }
 
-    public static List<TreeNode> GetTreeNodesByTag(string tag)
+    public static List<TreeNodeConfig> GetTreeNodesByTag(string tag)
     {
-        var result = new List<TreeNode>();
-        foreach (var node in _treeNodes.Values)
+        var result = new List<TreeNodeConfig>();
+        foreach (var node in _treeNodeConfigs.Values)
         {
-            if (node.Tags != null && System.Array.IndexOf(node.Tags, tag) >= 0)
+            if (node.UtillityTags != null && System.Array.IndexOf(node.UtillityTags, tag) >= 0)
             {
                 result.Add(node);
             }
@@ -141,7 +141,7 @@ public static class ResourceManager
         if (typeof(T) == typeof(StatusEffect)) return _statusEffects as Dictionary<string, T>;
         if (typeof(T) == typeof(SecondaryProjectileTowerBehavior)) return _secondaryBehaviors as Dictionary<string, T>;
         if (typeof(T) == typeof(ProjectileTowerBehavior)) return _projectileTowerBehaviors as Dictionary<string, T>;
-        if (typeof(T) == typeof(TreeNode)) return _treeNodes as Dictionary<string, T>; 
+        if (typeof(T) == typeof(TreeNode)) return _treeNodeConfigs as Dictionary<string, T>; 
         return null;
     }
     

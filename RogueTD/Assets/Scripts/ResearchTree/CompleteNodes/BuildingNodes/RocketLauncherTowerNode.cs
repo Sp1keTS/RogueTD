@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NodeRocketLauncherTurret", menuName = "Research Tree/Turrets/Rocket Launcher Turret Node")]
-public class NodeRocketLauncherTurret : ProjectileTowerNode
+public class NodeRocketLauncherTurret : ProjectileTowerNode<ProjectileTowerBlueprint>
 {
-    public override string TooltipText => "Rocket launcher with explosions.";
-    
+    public override string TooltipText => description;
+    private string description;
+
+    private ExplosionEffect explosionEffect;
     public override string GetStats(int rank)
     {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
             return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                    $"<b>Rocket Launcher (Rank {rank}):</b>\n";
@@ -18,26 +20,29 @@ public class NodeRocketLauncherTurret : ProjectileTowerNode
         return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                "<color=#FF5555>Failed to load stats</color>";
     }
-    
+
+    public override List<Resource> GetResources()
+    {
+        return new List<Resource>{explosionEffect};
+    }
+
     public override void OnActivate(int rank)
     {
-        BlueprintManager.InsertProjectileTowerBlueprint(_ProjectileTowerBlueprint);
+        BlueprintManager.InsertProjectileTowerBlueprint(ProjectileTowerBlueprint);
     }
-
-    public override void Initialize(int rank)
+    
+    public NodeRocketLauncherTurret(RocketLauncherTowerConfig towerConfig, int rank) : base(GetRankMultiplier(rank), towerConfig)
     {
-        SetupNode(rank);
+        description = towerConfig.Description;
+        Initialize(rank);
     }
-
-    private void SetupNode(int rank)
+    private void Initialize(int rank)
     {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
-            var explosionEffect = new ExplosionEffect();
-            LoadBasicShot();
-            _ProjectileTowerBlueprint.BuildingName = buildingName;
-            LoadBasicStats(rank, 1.05f * rank);
-            _ProjectileTowerBlueprint.ProjectileEffects = new List<ProjectileEffect>() { explosionEffect };
+            explosionEffect = new ExplosionEffect();
+            ProjectileTowerBlueprint.ShotBehavior = LoadShotBehavior(new BasicShotBehavior());
+            ProjectileTowerBlueprint.ProjectileEffects = new List<ProjectileEffect>() { explosionEffect };
             ResourceManager.RegisterProjectileEffect(explosionEffect.SetRankedName(rank),explosionEffect);
         }
     }

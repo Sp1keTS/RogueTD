@@ -1,22 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-[CreateAssetMenu(fileName = "GrowingSizeUpgrade", menuName = "Research Tree/Upgrades/Growing Size Upgrade")]
 public class GrowingSizeUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private float baseGrowthRate = 0.5f;
-    [SerializeField] private float baseMaxSize = 3f;
+    private float baseGrowthRate;
+    private float baseMaxSize;
+    private float growthRateIncreasePerRank;
+    private float maxSizeIncreasePerRank;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float growthRateIncreasePerRank = 0.2f;
-    [SerializeField] private float maxSizeIncreasePerRank = 0.5f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Projectiles grow over time.";
-
     private float rankedGrowthRate;
     private float rankedMaxSize;
+    private GrowingSizeMovement newGrowingSizeMovement;
     
     public override string TooltipText => description;
     
@@ -36,17 +31,33 @@ public class GrowingSizeUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newGrowingSizeMovement = CreateInstance<GrowingSizeMovement>();
-        newGrowingSizeMovement.GrowthRate = rankedGrowthRate;
-        newGrowingSizeMovement.MaxSize = rankedMaxSize;
         ResourceManager.RegisterProjectileBehavior(newGrowingSizeMovement.SetRankedName(rank), newGrowingSizeMovement);
+        blueprint.ProjectileBehaviors.Add(newGrowingSizeMovement);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> { newGrowingSizeMovement };
+    }
+
+    public GrowingSizeUpgrade(GrowingSizeConfig config, int rank) 
+    {
+        baseGrowthRate = config.BaseGrowthRate;
+        baseMaxSize = config.BaseMaxSize;
+        growthRateIncreasePerRank = config.GrowthRateIncreasePerRank;
+        maxSizeIncreasePerRank = config.MaxSizeIncreasePerRank;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedGrowthRate = baseGrowthRate + (rank * growthRateIncreasePerRank);
         rankedMaxSize = baseMaxSize + (rank * maxSizeIncreasePerRank);
+        newGrowingSizeMovement = new GrowingSizeMovement();
+        newGrowingSizeMovement.GrowthRate = rankedGrowthRate;
+        newGrowingSizeMovement.MaxSize = rankedMaxSize;
     }
 }

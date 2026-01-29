@@ -1,22 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "HomingUpgrade", menuName = "Research Tree/Upgrades/Homing Upgrade")]
 public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private float baseRadius = 5f;
-    [SerializeField] private float baseRotationSpeed = 5f;
+    private float baseRadius;
+    private float baseRotationSpeed;
+    private float radiusIncreasePerRank;
+    private float rotationSpeedIncreasePerRank;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float radiusIncreasePerRank = 0.5f;
-    [SerializeField] private float rotationSpeedIncreasePerRank = 1f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Projectiles track enemies.";
-
     private float rankedRadius;
     private float rankedRotationSpeed;
+    private HomingMovement newHomingMovement;
     
     public override string TooltipText => description;
     
@@ -36,17 +31,33 @@ public class HomingMovementUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newHomingMovement = CreateInstance<HomingMovement>();
-        newHomingMovement.HomingRadius = rankedRadius;
-        newHomingMovement.RotationSpeed = rankedRotationSpeed;
         ResourceManager.RegisterProjectileBehavior(newHomingMovement.SetRankedName(rank), newHomingMovement);
+        blueprint.ProjectileBehaviors.Add(newHomingMovement);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> { newHomingMovement };
+    }
+
+    public HomingMovementUpgrade(HomingConfig config, int rank) 
+    {
+        baseRadius = config.BaseRadius;
+        baseRotationSpeed = config.BaseRotationSpeed;
+        radiusIncreasePerRank = config.RadiusIncreasePerRank;
+        rotationSpeedIncreasePerRank = config.RotationSpeedIncreasePerRank;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedRadius = baseRadius + (rank * radiusIncreasePerRank);
         rankedRotationSpeed = baseRotationSpeed + (rank * rotationSpeedIncreasePerRank);
+        newHomingMovement = new HomingMovement();
+        newHomingMovement.HomingRadius = rankedRadius;
+        newHomingMovement.RotationSpeed = rankedRotationSpeed;
     }
 }

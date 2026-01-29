@@ -1,22 +1,17 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SplitUpgrade", menuName = "Research Tree/Upgrades/Split Upgrade")]
 public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private int baseSplitCount = 2;
-    [SerializeField] private float baseAngle = 30f;
+    private int baseSplitCount;
+    private float baseAngle;
+    private float additionalSplitPerRank;
+    private float angleIncreasePerRank;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float additionalSplitPerRank = 0.25f;
-    [SerializeField] private float angleIncreasePerRank = 10f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Projectiles split on impact.";
-
     private int rankedSplitCount;
+    private SplitEffect newSplitEffect;
     
     public override string TooltipText => description;
     
@@ -35,15 +30,30 @@ public class SplitEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newSplitEffect = CreateInstance<SplitEffect>();
-        newSplitEffect.SplitCount = rankedSplitCount;
         ResourceManager.RegisterProjectileEffect(newSplitEffect.SetRankedName(rank), newSplitEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> { newSplitEffect };
+    }
+
+    public SplitEffectUpgrade(SplitConfig config, int rank) 
+    {
+        baseSplitCount = config.BaseSplitCount;
+        baseAngle = config.BaseAngle;
+        additionalSplitPerRank = config.AdditionalSplitPerRank;
+        angleIncreasePerRank = config.AngleIncreasePerRank;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedSplitCount = (int)Math.Floor(baseSplitCount + (rank * additionalSplitPerRank));
+        newSplitEffect = new SplitEffect();
+        newSplitEffect.SplitCount = rankedSplitCount;
     }
 }

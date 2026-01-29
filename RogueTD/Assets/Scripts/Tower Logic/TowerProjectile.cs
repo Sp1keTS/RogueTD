@@ -8,10 +8,12 @@ public class TowerProjectile : MonoBehaviour
     [SerializeField] ProjectileTower projectileTower;
     [SerializeField] SpriteRenderer spriteRenderer;
     private Queue<ProjectileEffect> effectsToProcess;
+    private int PenetrationCount;
     private float lifeTime;
+    private bool critical;
     private GameObject enemy;
     private Enemy _enemyBase;
-
+    
     public Queue<ProjectileEffect> EffectsToProcess  {get => effectsToProcess; set => effectsToProcess = value;}
     public void Initialize(ProjectileTower tower)
     {
@@ -19,6 +21,8 @@ public class TowerProjectile : MonoBehaviour
         projectileTower = tower;
         lifeTime = tower.ProjectileLifetime;
         effectsToProcess = new Queue<ProjectileEffect>();
+        PenetrationCount = tower.ProjectileCount;
+        critical = tower.Multiply;
         if (tower.effects != null)
         {
             foreach (var effect in tower.effects)
@@ -31,11 +35,14 @@ public class TowerProjectile : MonoBehaviour
     
     void Update()
     {
-        foreach (ProjectileBehavior movement in projectileTower.movements)
+        if (projectileTower.movements != null && projectileTower.movements.Count > 0)
         {
-            movement.Move(this, projectileTower);
+            foreach (ProjectileBehavior movement in projectileTower.movements)
+            {
+                movement.Move(this, projectileTower);
+            }
         }
-        
+
         lifeTime -= Time.deltaTime;                        
         if (lifeTime <= 0)                                 
         {
@@ -65,12 +72,9 @@ public class TowerProjectile : MonoBehaviour
                         break;
                     }
                 }
-                _enemyBase.TakeDamage(projectileTower.Damage, projectileTower);
-                if(projectileTower.ProjectileFragile)
-                {
-                    Destroy(gameObject);
-                    
-                }
+                _enemyBase.TakeDamage((int)(projectileTower.Damage * (critical ? projectileTower.DamageMult : 1)) , projectileTower);
+                if(PenetrationCount >= 0) { PenetrationCount--; }
+                else { Destroy(gameObject); }
             }
         }
     }

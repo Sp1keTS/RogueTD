@@ -9,9 +9,9 @@ public class ProjectileTowerBlueprint : TowerBlueprint
     private float projectileSpeed;
     private float spread;
     private float projectileLifetime;
-    private bool projectileFragile = true;
+    private int _penetrationCount = 0;
     
-     protected int projectileCount;
+    protected int projectileCount;
     
     private List<ProjectileBehavior> projectileBehaviors;
     private List<ProjectileEffect> projectileEffects;
@@ -27,7 +27,7 @@ public class ProjectileTowerBlueprint : TowerBlueprint
     
     public int ProjectileCount { get => projectileCount; set => projectileCount = value; }
     public float ProjectileLifetime { get => projectileLifetime; set => projectileLifetime = value; }
-    public bool ProjectileFragile { get => projectileFragile; set => projectileFragile = value; }
+    public int PenetrationCount { get => _penetrationCount; set => _penetrationCount = value; }
     
     public List<ProjectileBehavior> ProjectileBehaviors 
     { 
@@ -59,14 +59,14 @@ public class ProjectileTowerBlueprint : TowerBlueprint
         stats.Append(base.GetTowerStats());
         
         stats.AppendLine("\nProjectile Stats:");
-        stats.AppendLine($"▸ Projectile Speed: {projectileSpeed:F1}");
-        stats.AppendLine($"▸ Projectile Count: {projectileCount}");
-        stats.AppendLine($"▸ Spread: {spread:F1}°");
-        stats.AppendLine($"▸ Lifetime: {projectileLifetime:F1}sec");
-        stats.AppendLine($"▸ Fragile: {(projectileFragile ? "Yes" : "No")}");
-        stats.AppendLine($"▸ Projectile Effects: {projectileEffects?.Count ?? 0}");
-        stats.AppendLine($"▸ Projectile Behaviors: {projectileBehaviors?.Count ?? 0}");
-        stats.AppendLine($"▸ Secondary Shots: {secondaryShots?.Count ?? 0}");
+        stats.AppendLine($"Projectile Speed: {projectileSpeed:F1}");
+        stats.AppendLine($"Projectile Count: {projectileCount}");
+        stats.AppendLine($"Spread: {spread:F1}°");
+        stats.AppendLine($"Lifetime: {projectileLifetime:F1}sec");
+        stats.AppendLine($"PenCount: {_penetrationCount}");
+        stats.AppendLine($"Projectile Effects: {projectileEffects?.Count ?? 0}");
+        stats.AppendLine($"Projectile Behaviors: {projectileBehaviors?.Count ?? 0}");
+        stats.AppendLine($"Secondary Shots: {secondaryShots?.Count ?? 0}");
         
         return stats.ToString();
     }

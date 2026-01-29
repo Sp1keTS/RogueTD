@@ -14,11 +14,4 @@ public class BuildingBlueprint
     public Vector2 Size { get => _size; set => _size = value; }
     public string BuildingName { get => _buildingName; set => _buildingName = value; }
 
-    public void Initialize(string buildingName, Building buildingPrefab, int maxHealthPoints, Vector2 size)
-    {
-        _buildingName = buildingName;
-        _buildingPrefab = buildingPrefab;
-        _maxHealthPoints = maxHealthPoints;
-        _size = size;
-    }
 }

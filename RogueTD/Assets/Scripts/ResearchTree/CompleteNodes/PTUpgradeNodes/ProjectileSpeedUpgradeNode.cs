@@ -1,18 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ProjectileSpeedUpgrade", menuName = "Research Tree/Upgrades/ProjectileSpeed Upgrade")]
 public class NodePTProjectileSpeedUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private float baseSpeedMultiplier = 1.2f;
+    private float baseSpeedMultiplier;
+    private float rankBonusPerLevel;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float rankBonusPerLevel = 0.05f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Increases projectile velocity.";
-
     private float rankedSpeedMultiplier;
     
     public override string TooltipText => description;
@@ -36,9 +30,22 @@ public class NodePTProjectileSpeedUpgrade : ProjectileTowerUpgradeTreeNode
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource>(); 
+    }
+
+    public NodePTProjectileSpeedUpgrade(ProjectileSpeedConfig config, int rank) 
+    {
+        baseSpeedMultiplier = config.BaseSpeedMultiplier;
+        rankBonusPerLevel = config.RankBonusPerLevel;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedSpeedMultiplier = baseSpeedMultiplier + (rank * rankBonusPerLevel);
     }
 }

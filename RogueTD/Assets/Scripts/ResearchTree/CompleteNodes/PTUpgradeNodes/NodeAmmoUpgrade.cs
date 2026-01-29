@@ -1,16 +1,13 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-[CreateAssetMenu(fileName = "AmmoUpgrade", menuName = "Research Tree/Upgrades/Ammo Upgrade")]
 public class NodeAmmoUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [SerializeField] private float baseAmmoMultiplier = 1.25f;
-    [SerializeField] private float rankBonusPerLevel = 0.08f;
-    [SerializeField] private float regenerationBonus = 0.1f;
+    private float baseAmmoMultiplier;
+    private float rankBonusPerLevel;
+    private float regenerationBonus;
+    private string description;
     
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Increases maximum ammo and regeneration rate.";
-
     private float rankedAmmoMultiplier;
     
     public override string TooltipText => description;
@@ -19,18 +16,40 @@ public class NodeAmmoUpgrade : ProjectileTowerUpgradeTreeNode
     {
         return $"<size=120%><color=#FFD700>Cost: {GetDynamicCost(rank):F0}</color></size>\n\n" +
                $"<b>Effect (Rank {rank}):</b>\n" +
-               $"• Ammo: <color=#00FF00>{baseAmmoMultiplier + (rank * rankBonusPerLevel):F2}x</color>\n" +
+               $"• Ammo: <color=#00FF00>{rankedAmmoMultiplier:F2}x</color>\n" +
                $"• Regen: <color=#00FF00>{1f + (rank * regenerationBonus):F1}x</color>\n\n" +
                $"<b>Per Rank:</b> +{rankBonusPerLevel:F2}x ammo, +{regenerationBonus:F1}x regen";
     }
+    
     public override void OnActivate(int rank)
     {
         ApplyUpgrade(ProjectileTowerBlueprint, rank);
     }
+    
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
         blueprint.MaxAmmo = Mathf.RoundToInt(blueprint.MaxAmmo * rankedAmmoMultiplier);
         blueprint.AmmoRegeneration *= (1f + rank * regenerationBonus);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
+    }
+
+    public override List<Resource> GetResources()
+    {
+        return new List<Resource>(); 
+    }
+
+    public NodeAmmoUpgrade(AmmoUpgradeConfig config,  int rank) 
+    {
+        baseAmmoMultiplier = config.BaseAmmoMultiplier;
+        rankBonusPerLevel = config.RankBonusPerLevel;
+        regenerationBonus = config.RegenerationBonus;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
+        rankedAmmoMultiplier = baseAmmoMultiplier + (rank * rankBonusPerLevel);
     }
 }

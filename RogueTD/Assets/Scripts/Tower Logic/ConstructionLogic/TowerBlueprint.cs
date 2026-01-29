@@ -37,13 +37,13 @@ public class TowerBlueprint : BuildingBlueprint
     {
         StringBuilder stats = new StringBuilder();
         
-        stats.AppendLine($"▸ Damage: {damage} (x{damageMult:F1})");
-        stats.AppendLine($"▸ Attack Speed: {attackSpeed:F1}/sec");
-        stats.AppendLine($"▸ Range: {targetingRange:F1}");
-        stats.AppendLine($"▸ Rotation Speed: {rotatingSpeed:F0}°/sec");
-        stats.AppendLine($"▸ Ammo: {currentAmmo:F0}/{maxAmmo}");
-        stats.AppendLine($"▸ Regeneration: {ammoRegeneration:F1}/sec");
-        stats.AppendLine($"▸ Status Effects: {statusEffects?.Count ?? 0}");
+        stats.AppendLine($"Damage: {damage} (x{damageMult:F1})");
+        stats.AppendLine($"Attack Speed: {attackSpeed:F1}/sec");
+        stats.AppendLine($"Range: {targetingRange:F1}");
+        stats.AppendLine($"Rotation Speed: {rotatingSpeed:F0}°/sec");
+        stats.AppendLine($"Ammo: {currentAmmo:F0}/{maxAmmo}");
+        stats.AppendLine($"Regeneration: {ammoRegeneration:F1}/sec");
+        stats.AppendLine($"Status Effects: {statusEffects?.Count ?? 0}");
         
         return stats.ToString();
     }

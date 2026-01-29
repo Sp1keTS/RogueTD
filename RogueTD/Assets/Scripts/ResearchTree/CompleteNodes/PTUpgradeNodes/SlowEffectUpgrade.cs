@@ -1,22 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SlowUpgrade", menuName = "Research Tree/Upgrades/Slow Upgrade")]
 public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private float baseSlowPercent = 0.5f;
-    [SerializeField] private float baseDuration = 2f;
+    private float baseSlowPercent;
+    private float baseDuration;
+    private float slowPercentIncreasePerRank;
+    private float durationIncreasePerRank;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float slowPercentIncreasePerRank = 0.1f;
-    [SerializeField] private float durationIncreasePerRank = 0.5f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Slows enemy movement speed.";
-
     private float rankedSlowPercent;
     private float rankedDuration;
+    private SlowStatusEffect newSlowEffect;
     
     public override string TooltipText => description;
     
@@ -36,17 +31,32 @@ public class SlowEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newSlowEffect = CreateInstance<SlowStatusEffect>();
-        newSlowEffect.SlowPercent = rankedSlowPercent;
-        newSlowEffect.Duration = rankedDuration;
         ResourceManager.RegisterStatusEffect(newSlowEffect.SetRankedName(rank), newSlowEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> { newSlowEffect };
+    }
+
+    public SlowEffectUpgrade(SlowEffectConfig config, int rank)
+    {
+        Initialize(rank);
+        baseSlowPercent = config.BaseSlowPercent;
+        baseDuration = config.BaseDuration;
+        slowPercentIncreasePerRank = config.SlowPercentIncreasePerRank;
+        durationIncreasePerRank = config.DurationIncreasePerRank;
+        description = config.Description;
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedSlowPercent = Mathf.Clamp01(baseSlowPercent + (rank * slowPercentIncreasePerRank));
         rankedDuration = baseDuration + (rank * durationIncreasePerRank);
+        newSlowEffect = new SlowStatusEffect();
+        newSlowEffect.SlowPercent = rankedSlowPercent;
+        newSlowEffect.Duration = rankedDuration;
     }
 }

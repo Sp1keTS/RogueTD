@@ -1,22 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "RicochetUpgrade", menuName = "Research Tree/Upgrades/Ricochet Upgrade")]
 public class RicochetEffectUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private int baseRicochets = 1;
-    [SerializeField] private float baseAngle = 15f;
+    private int baseRicochets;
+    private float baseAngle;
+    private float additionalRicochetsPerRank;
+    private float angleIncreasePerRank;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float additionalRicochetsPerRank = 0.34f;
-    [SerializeField] private float angleIncreasePerRank = 5f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Projectiles ricochet on hit.";
-
     private int rankedRicochets;
+    private RicochetEffect newRicochetEffect;
     
     public override string TooltipText => description;
     
@@ -35,15 +30,30 @@ public class RicochetEffectUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newRicochetEffect = CreateInstance<RicochetEffect>();
-        newRicochetEffect.MaxRicochets = rankedRicochets;
         ResourceManager.RegisterProjectileEffect(newRicochetEffect.SetRankedName(rank), newRicochetEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> { newRicochetEffect };
+    }
+
+    public RicochetEffectUpgrade(RicochetConfig config, int rank) 
+    {
+        baseRicochets = config.BaseRicochets;
+        baseAngle = config.BaseAngle;
+        additionalRicochetsPerRank = config.AdditionalRicochetsPerRank;
+        angleIncreasePerRank = config.AngleIncreasePerRank;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedRicochets = baseRicochets + (int)Math.Floor(rank * additionalRicochetsPerRank);
+        newRicochetEffect = new RicochetEffect();
+        newRicochetEffect.MaxRicochets = rankedRicochets;
     }
 }

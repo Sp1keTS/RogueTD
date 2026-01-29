@@ -1,18 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-[CreateAssetMenu(fileName = "RangeUpgrade", menuName = "Research Tree/Upgrades/Range Upgrade")]
 public class NodeRangeUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private float baseRangeMultiplier = 1.2f;
+    private float baseRangeMultiplier;
+    private float rankBonusPerLevel;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float rankBonusPerLevel = 0.05f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Increases tower range.";
-
     private float rankedRangeMultiplier;
     
     public override string TooltipText => description;
@@ -36,9 +30,22 @@ public class NodeRangeUpgrade : ProjectileTowerUpgradeTreeNode
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource>(); // Нет ресурсов для регистрации
+    }
+
+    public NodeRangeUpgrade(RangeConfig config, int rank) 
+    {
+        baseRangeMultiplier = config.BaseRangeMultiplier;
+        rankBonusPerLevel = config.RankBonusPerLevel;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedRangeMultiplier = baseRangeMultiplier + (rank * rankBonusPerLevel);
     }
 }

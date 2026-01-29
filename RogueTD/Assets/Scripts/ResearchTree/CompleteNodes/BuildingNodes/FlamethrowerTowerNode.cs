@@ -3,13 +3,16 @@ using UnityEngine;
 using UnityEngine.Diagnostics;
 
 [CreateAssetMenu(fileName = "NodeFlamethrowerTurret", menuName = "Research Tree/Turrets/Flamethrower Turret Node")]
-public class NodeFlamethrowerTurret : ProjectileTowerNode
+public class NodeFlamethrowerTurret : ProjectileTowerNode<ProjectileTowerBlueprint>
 {
-    public override string TooltipText => "Flamethrower tower.";
+
+    public override string TooltipText => description;
+    private string description;
     
+    private BurnEffect burnEffect;
     public override string GetStats(int rank)
     {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
             return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                    $"<b>Flamethrower (Rank {rank}):</b>\n";
@@ -18,26 +21,32 @@ public class NodeFlamethrowerTurret : ProjectileTowerNode
                "<color=#FF5555>Failed to load stats</color>";
     }
 
+    public override List<Resource> GetResources()
+    {
+        return new List<Resource>{burnEffect};
+    }
+    
+    public NodeFlamethrowerTurret(FlamethrowerTowerConfig towerConfig, int rank) : base(GetRankMultiplier(rank), towerConfig)
+    {
+        description = towerConfig.Description;
+        Initialize(rank);
+
+        burnEffect.Duration = towerConfig.GetRankedDuration(rank);
+        burnEffect.DamagePerTick = (int)towerConfig.GetRankedDamagePerTick(rank);
+    }
 
     public override void OnActivate(int rank)
     {
-        BlueprintManager.InsertProjectileTowerBlueprint(_ProjectileTowerBlueprint);
+        BlueprintManager.InsertProjectileTowerBlueprint(ProjectileTowerBlueprint);
     }
 
-    public override void Initialize(int rank)
+    private void Initialize(int rank)
     {
-        SetupNode(rank);
-    }
-
-    private void SetupNode(int rank)
-    {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
-            _ProjectileTowerBlueprint.BuildingName = buildingName;
-            var burnEffect = new BurnEffect();
-            LoadBasicShot();
-            LoadBasicStats(rank, 1.05f * rank);
-            _ProjectileTowerBlueprint.StatusEffects = new List<StatusEffect>() { burnEffect };
+            burnEffect = new BurnEffect();
+            ProjectileTowerBlueprint.ShotBehavior = LoadShotBehavior(new BasicShotBehavior());
+            ProjectileTowerBlueprint.StatusEffects = new List<StatusEffect>() { burnEffect };
             ResourceManager.RegisterStatusEffect(burnEffect.SetRankedName(rank),burnEffect);
         }
     }

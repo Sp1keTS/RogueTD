@@ -8,7 +8,9 @@ public class BurnEffect : StatusEffect
     private int baseDamagePerTick = 5;
     private float tickInterval = 0.5f;
     private Color burnColor = new Color(1f, 0.5f, 0f, 1f);
-    private float reapplyCooldown = 0.5f; 
+    private float reapplyCooldown = 0.5f;
+
+    public int DamagePerTick {get => baseDamagePerTick; set => baseDamagePerTick = value; }
     
     private class BurnData
     {

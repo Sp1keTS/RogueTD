@@ -19,7 +19,6 @@ public class RicochetEffect : ProjectileEffect
         if (!remainingRicochets.ContainsKey(projectile))
         {
             remainingRicochets[projectile] = maxRicochets;
-            tower.ProjectileFragile = false;
         }
         
         target.TakeDamage(tower.Damage, tower);
@@ -37,7 +36,6 @@ public class RicochetEffect : ProjectileEffect
             
             if (remainingRicochets[projectile] == 0 && becomesFragileAfterRicochet)
             {
-                tower.ProjectileFragile = true;
             }
             
             projectile.EffectsToProcess = new Queue<ProjectileEffect>(

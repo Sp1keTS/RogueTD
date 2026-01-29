@@ -1,42 +1,34 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Reflection;
+using UnityEngine;
 
-public abstract class BuildingNode : TreeNode
+public abstract class BuildingNode<TBlueprint> : TreeNode where TBlueprint : BuildingBlueprint, new()
 {
-    private BuildingBlueprint _buildingBlueprint;
-    [SerializeField] protected Building buildingPrefab;
-    [SerializeField] protected string buildingName;
-    [SerializeField] protected int maxHealthPoints;
-    [SerializeField] protected int buildingCost;
-    [SerializeField] protected Vector2 size;
-    
+    protected BuildingBlueprint _buildingBlueprint;
     public BuildingBlueprint BuildingBlueprint
     {
-        get
-        {
-            if (_buildingBlueprint == null)
-            {
-                _buildingBlueprint = new BuildingBlueprint();
-            }
-            return _buildingBlueprint;
-        }
+        get => _buildingBlueprint;
         set => _buildingBlueprint = value;
     }
 
-    public virtual void CreateBlueprint()
+    public BuildingNode(float rankMultiplier, BuildingNodeConfig towerConfig)
     {
-        BuildingBlueprint = new BuildingBlueprint();
-        BuildingBlueprint.Initialize(buildingName, buildingPrefab, maxHealthPoints, size );
+        if (_buildingBlueprint == null)
+        {
+            _buildingBlueprint = new TBlueprint();
+        }
+        BuildingBlueprint.Cost = towerConfig.BuildingCost;
+        Cost = towerConfig.Cost;
+        BuildingBlueprint.BuildingName = towerConfig.BuildingName;
+        BuildingBlueprint.BuildingPrefab = towerConfig.BuildingPrefab;
+        BuildingBlueprint.MaxHealthPoints = (int)(towerConfig.MaxHealthPoints * rankMultiplier);
+        BuildingBlueprint.Size = towerConfig.Size;
     }
-    public virtual void LoadBasicStats(int rank, float rankMultiplier)
-    {
-        BuildingBlueprint.Cost = buildingCost;
-        BuildingBlueprint.BuildingName = buildingName;
-        BuildingBlueprint.BuildingPrefab = buildingPrefab;
-        BuildingBlueprint.MaxHealthPoints = maxHealthPoints;
-        BuildingBlueprint.Size = size;
-    }
+
+
     public override int GetDynamicCost(int rank)
     {
         return (int)(Cost * Mathf.Pow(rank, 0.25f));
     }
+
 }

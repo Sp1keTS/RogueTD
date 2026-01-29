@@ -1,23 +1,18 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "BurstShotUpgrade", menuName = "Research Tree/Upgrades/Burst Shot Upgrade")]
 public class BurstShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private int baseBurstCount = 2;
-    [SerializeField] private float baseBurstDelay = 0.1f;
+    private int baseBurstCount;
+    private float baseBurstDelay;
+    private float additionalBurstPerRank;
+    private float delayReductionPerRank;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float additionalBurstPerRank = 0.5f;
-    [SerializeField] private float delayReductionPerRank = 0.02f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Fires multiple shots rapidly.";
-
     private int rankedBurstCount;
     private float rankedBurstDelay;
+    private BurstShotBehavior newBurstShotBehavior;
     
     public override string TooltipText => description;
 
@@ -32,23 +27,38 @@ public class BurstShotBehaviorUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void OnActivate(int rank)
     {
-        ApplyUpgrade(ProjectileTowerBlueprint,rank);
+        ApplyUpgrade(ProjectileTowerBlueprint, rank);
     }
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     { 
-        var newBurstShotBehavior = CreateInstance<BurstShotBehavior>();
-        newBurstShotBehavior.BurstCount = baseBurstCount;
-        newBurstShotBehavior.BurstDelay = rankedBurstDelay;
         ResourceManager.RegisterSecondaryBehavior(newBurstShotBehavior.SetRankedName(rank), newBurstShotBehavior);
+        blueprint.SecondaryShots.Add(newBurstShotBehavior);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
-        
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> { newBurstShotBehavior };
+    }
+
+    public BurstShotBehaviorUpgrade(BurstShotConfig config, int rank) 
+    {
+        baseBurstCount = config.BaseBurstCount;
+        baseBurstDelay = config.BaseBurstDelay;
+        additionalBurstPerRank = config.AdditionalBurstPerRank;
+        delayReductionPerRank = config.DelayReductionPerRank;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedBurstCount = (int)Math.Floor(baseBurstCount + (rank * additionalBurstPerRank));
         rankedBurstDelay = Mathf.Max(0.05f, baseBurstDelay - (rank * delayReductionPerRank));
+        newBurstShotBehavior = new BurstShotBehavior();
+        newBurstShotBehavior.BurstCount = rankedBurstCount;
+        newBurstShotBehavior.BurstDelay = rankedBurstDelay;
     }
 }

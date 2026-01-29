@@ -10,9 +10,13 @@ public class ProjectileTower : Tower
     [SerializeField] protected float projectileLifetime = 3f;
     [SerializeField] protected int projectileCount = 1;
     [SerializeField] protected float projectileScale = 1;
-    [SerializeField] protected bool projectileFragile = true;
+    [SerializeField] protected int penetrationCount = 0;
     [SerializeField] protected TowerProjectile projectilePrefab;
     [SerializeField] protected GameObject barrel;
+    
+    protected bool canShoot;
+    protected bool multiply;
+    protected TowerProjectile projectile;
     
     public List<SecondaryProjectileTowerBehavior> secondaryShots = new List<SecondaryProjectileTowerBehavior>();
     public List<ProjectileEffect> effects =  new List<ProjectileEffect>();    
@@ -25,10 +29,11 @@ public class ProjectileTower : Tower
     public int ProjectileDamage => (int)(damage * damageMult);
     public float ProjectileSpeed => projectileSpeed;
     public float ProjectileLifetime => projectileLifetime;
-    public bool ProjectileFragile { get => projectileFragile; set => projectileFragile = value; }
+    public int PenetrationCount { get => penetrationCount; set => penetrationCount = value; }
+    public bool CanShoot { get => canShoot; set => canShoot = value; }
     public int ProjectileCount => projectileCount;
+    public bool Multiply { get => multiply; set => multiply = value; }
     
-    protected TowerProjectile projectile;
     
     public struct ShotData
     {
@@ -61,7 +66,6 @@ public class ProjectileTower : Tower
     public override void InitializeFromBlueprint(TowerBlueprint blueprint)
     {
         base.InitializeFromBlueprint(blueprint);
-        Debug.Log("А тут?? :" + projectileFragile); //true
         if (blueprint is ProjectileTowerBlueprint projectileBlueprint)
         {
             InitializeFromProjectileBlueprint(projectileBlueprint);
@@ -75,27 +79,30 @@ public class ProjectileTower : Tower
         spread = blueprint.Spread;
         projectileLifetime = blueprint.ProjectileLifetime;
         projectileCount = blueprint.ProjectileCount;
-        projectileFragile = blueprint.ProjectileFragile;
+        penetrationCount = blueprint.PenetrationCount;
         projectilePrefab = blueprint.ProjectilePrefab;
         projectileScale = blueprint.ProjectileScale;
         effects = blueprint.ProjectileEffects;
         movements = blueprint.ProjectileBehaviors;
         towerBehavior = blueprint.ShotBehavior;
         secondaryShots = blueprint.SecondaryShots;
-        Debug.Log("Хрупкий ли снаряд?? :" + blueprint.ProjectileFragile + " " + projectileFragile); //true true
         BuildShootChain();
     }
     
     
     private void BuildShootChain()
     {
+        Debug.Log("Цепочка создается");
         Action<ShotData> chain = null;
         
         if (towerBehavior != null)
         {
             chain = (shotData) => towerBehavior.Shoot(this, shotData, null);
         }
-        
+        else
+        {
+            Debug.Log("Нет класса поведения");
+        }
         if (secondaryShots != null && chain != null)
         {
             for (int i = secondaryShots.Count - 1; i >= 0; i--)
@@ -114,7 +121,7 @@ public class ProjectileTower : Tower
     
     public void ExecuteShootChain()
     {
-        if (EnemyInAttackCone())
+        if (CanShoot && EnemyInAttackCone())
         {
             var shotData = GetShotData();
             ShootChain?.Invoke(shotData);
@@ -123,11 +130,12 @@ public class ProjectileTower : Tower
 
     public TowerProjectile CreateProjectile(Vector2 position)
     {
-        if (!projectilePrefab) return null;
-        
+        if (!projectilePrefab)
+        {
+            return null;
+        }
         var newProjectile = Instantiate(projectilePrefab, position, Quaternion.identity);
-        projectile = projectilePrefab;
-        
+        projectile = newProjectile;
         projectile.Initialize(this);
         return projectile;
     }
@@ -137,13 +145,13 @@ public class ProjectileTower : Tower
     
         return $"{baseStats}\n" +
                $"Projectile:\n" +
-               $"▸ Count: {projectileCount}\n" +
-               $"▸ Speed: {projectileSpeed}\n" +
-               $"▸ Spread: {spread}°\n" +
-               $"▸ Lifetime: {projectileLifetime}sec\n" +
-               $"▸ Fragile: {(projectileFragile ? "Yes" : "No")}\n" +
-               $"▸ Projectile Effects: {effects?.Count ?? 0}\n" +
-               $"▸ Projectile Behaviors: {movements?.Count ?? 0}\n" +
-               $"▸ Secondary Shots: {secondaryShots?.Count ?? 0}";
+               $"Count: {projectileCount}\n" +
+               $"Speed: {projectileSpeed}\n" +
+               $"Spread: {spread}°\n" +
+               $"Lifetime: {projectileLifetime}sec\n" +
+               $"PenCount: {penetrationCount}\n" +
+               $"Projectile Effects: {effects?.Count ?? 0}\n" +
+               $"Projectile Behaviors: {movements?.Count ?? 0}\n" +
+               $"Secondary Shots: {secondaryShots?.Count ?? 0}";
     }
 }

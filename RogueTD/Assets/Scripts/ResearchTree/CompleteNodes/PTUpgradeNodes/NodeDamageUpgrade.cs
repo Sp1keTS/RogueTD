@@ -1,18 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-[CreateAssetMenu(fileName = "DamageUpgrade", menuName = "Research Tree/Upgrades/Damage Upgrade")]
 public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private float baseDamageMultiplier = 1.3f;
+    private float baseDamageMultiplier;
+    private float rankBonusPerLevel;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float rankBonusPerLevel = 0.1f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Increases damage output.";
-
     private float rankedDamageMultiplier;
     
     public override string TooltipText => description;
@@ -37,9 +31,22 @@ public class NodeDamageUpgrade : ProjectileTowerUpgradeTreeNode
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource>(); // Нет ресурсов для регистрации
+    }
+
+    public NodeDamageUpgrade(DamageConfig config, int rank) 
+    {
+        baseDamageMultiplier = config.BaseDamageMultiplier;
+        rankBonusPerLevel = config.RankBonusPerLevel;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedDamageMultiplier = baseDamageMultiplier + (rank * rankBonusPerLevel);
     }
 }

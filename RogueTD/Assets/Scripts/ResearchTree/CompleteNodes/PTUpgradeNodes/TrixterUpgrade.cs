@@ -1,23 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "TrixterUpgrade", menuName = "Research Tree/Upgrades/Trixter Upgrade")]
 public class TrixterUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private int baseRicochets = 3;
-    [SerializeField] private float baseRadius = 5f;
+    private int baseRicochets;
+    private float baseRadius;
+    private float additionalRicochetsPerRank;
+    private float radiusIncreasePerRank;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float additionalRicochetsPerRank = 0.34f;
-    [SerializeField] private float radiusIncreasePerRank = 1f;
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Ricochet to nearest enemy.";
-
     private int rankedRicochets;
     private float rankedRadius;
+    private HomingRicochetEffect newHomingRicochetEffect;
     
     public override string TooltipText => description;
     
@@ -37,19 +32,32 @@ public class TrixterUpgrade : ProjectileTowerUpgradeTreeNode
 
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newHomingRicochetEffect = CreateInstance<HomingRicochetEffect>();
-        newHomingRicochetEffect.HomingRadius = rankedRadius;
-        newHomingRicochetEffect.MaxRicochets = rankedRicochets;
         ResourceManager.RegisterProjectileEffect(newHomingRicochetEffect.SetRankedName(rank), newHomingRicochetEffect);
-        
-        blueprint.ProjectileFragile = false;
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> { newHomingRicochetEffect };
+    }
+
+    public TrixterUpgrade(TrixterConfig config, int rank) 
+    {
+        baseRicochets = config.BaseRicochets;
+        baseRadius = config.BaseRadius;
+        additionalRicochetsPerRank = config.AdditionalRicochetsPerRank;
+        radiusIncreasePerRank = config.RadiusIncreasePerRank;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedRicochets = baseRicochets + (int)Math.Floor(rank * additionalRicochetsPerRank);
         rankedRadius = baseRadius + (rank * radiusIncreasePerRank);
+        newHomingRicochetEffect = new HomingRicochetEffect();
+        newHomingRicochetEffect.HomingRadius = rankedRadius;
+        newHomingRicochetEffect.MaxRicochets = rankedRicochets;
     }
 }

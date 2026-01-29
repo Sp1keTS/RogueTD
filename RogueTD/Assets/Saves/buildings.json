@@ -1,0 +1,17 @@
+{
+  "$id": "1",
+  "Buildings": [
+    {
+      "$id": "2",
+      "Position": {
+        "$id": "3",
+        "x": 0,
+        "y": 0,
+        "magnitude": 0.0,
+        "sqrMagnitude": 0
+      },
+      "BlueprintName": "MainBuilding",
+      "CurrentHealth": 500.0
+    }
+  ]
+}

@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "NodeMachineGunTurret", menuName = "Research Tree/Turrets/Machine Gun Turret Node")]
-public class NodeMachineGunTurret : ProjectileTowerNode
+public class NodeMachineGunTurret : ProjectileTowerNode<ProjectileTowerBlueprint>
 {
-    public override string TooltipText => "Machine gun with ramping fire rate.";
+    public override string TooltipText => description;
+    private string description;
+
+    private AmmoBasedShootBehavior ammoBehavior;
+    private RampingFireRateBehavior rampingBehavior;
     
     public override string GetStats(int rank)
     {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
             return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                    $"<b>Machine Gun (Rank {rank}):</b>\n";
@@ -16,29 +19,34 @@ public class NodeMachineGunTurret : ProjectileTowerNode
         return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                "<color=#FF5555>Failed to load stats</color>";
     }
-    
+
+    public override List<Resource> GetResources()
+    {
+        return new List<Resource>{ammoBehavior, rampingBehavior};
+    }
+
     public override void OnActivate(int rank)
     {
-        BlueprintManager.InsertProjectileTowerBlueprint(_ProjectileTowerBlueprint);
+        BlueprintManager.InsertProjectileTowerBlueprint(ProjectileTowerBlueprint);
+    }
+    public NodeMachineGunTurret(MachineGunTowerConfig towerConfig, int rank) : base(GetRankMultiplier(rank), towerConfig)
+    {
+        description = towerConfig.Description;
+        Initialize(rank);
+        
     }
 
-    public override void Initialize(int rank)
+    private void Initialize(int rank)
     {
-        SetupNode(rank);
-    }
-
-    private void SetupNode(int rank)
-    {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
-            _ProjectileTowerBlueprint.BuildingName = buildingName;
-            var ammoBehavior = new AmmoBasedShootBehavior();
-            var rampingBehavior = new AmmoBasedShootBehavior();
-            LoadBasicShot();
-            LoadBasicStats(rank, 1.05f * rank);
-            _ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { ammoBehavior };
+            ammoBehavior = new AmmoBasedShootBehavior();
+            rampingBehavior = new RampingFireRateBehavior();
+            
+            ProjectileTowerBlueprint.ShotBehavior = LoadShotBehavior(new BasicShotBehavior());
+            ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { ammoBehavior };
             ResourceManager.RegisterSecondaryBehavior(ammoBehavior.SetRankedName(rank),ammoBehavior);
-            _ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { rampingBehavior };
+            ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { rampingBehavior };
             ResourceManager.RegisterSecondaryBehavior(rampingBehavior.SetRankedName(rank),rampingBehavior);
         }
     }

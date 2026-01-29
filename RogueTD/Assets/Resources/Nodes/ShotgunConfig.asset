@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35030b0897cc4eddb8c26eef88bbcd9e, type: 3}
+  m_Name: ShotgunConfig
+  m_EditorClassIdentifier: 
+  tags:
+  - Unique
+  - Tower
+  maxRank: 9
+  minRank: 0
+  directUpgradeOf: {fileID: 0}
+  cost: 1
+  icon: {fileID: 8008833675835605673, guid: c730c59a9b52c664680814b355b534f9, type: 3}
+  tooltipText: Description failed to load properly
+  buildingPrefab: {fileID: 1747688676340181099, guid: 18e277a5e113425449ea0f0a4b70a283, type: 3}
+  buildingName: ShotgunTower
+  maxHealthPoints: 50
+  buildingCost: 50
+  size: {x: 1, y: 1}
+  tower: {fileID: 0}
+  targetingRange: 10
+  damageMult: 1.4
+  attackSpeed: 0.8
+  rotatingSpeed: 30
+  damage: 10
+  maxAmmo: 6
+  currentAmmo: 6
+  ammoRegeneration: 10
+  attackAngle: 15
+  projectileTower: {fileID: 6742433356331778559, guid: 9c036e5e526d413499fcca0846d3ccbe, type: 3}
+  projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
+  projectileSpeed: 50
+  spread: 15
+  projectileLifetime: 0.01
+  projectileFragile: 1
+  projectileScale: 1
+  projectileCount: 4
+  projectileCountMultiplier: 0.1
+  description: Close-range turret firing multiple projectiles with high spread.

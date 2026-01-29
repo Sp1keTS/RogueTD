@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class TreeSolver : MonoBehaviour
 {
@@ -8,15 +9,15 @@ public class TreeSolver : MonoBehaviour
     [SerializeField] private int startRadius = 200;
     [SerializeField] private float nodeDistance = 100f;
     [SerializeField] private float branchAngle = 45f;
+    
     private Dictionary<ResearchTree.TreeSaveData.TreeSaveNode, UITreeNode> nodeToUI = 
         new Dictionary<ResearchTree.TreeSaveData.TreeSaveNode, UITreeNode>();
 
-    
     public void LoadAndSolveTree()
     {
         nodeToUI.Clear();
         
-        var roots = GameState.Instance.TreeSaveData.rootSaveNodes;
+        var roots = GameState.Instance.TreeSaveData?.rootSaveNodes;
         
         if (roots == null || roots.Count == 0)
         {
@@ -39,43 +40,36 @@ public class TreeSolver : MonoBehaviour
         foreach (var root in roots)
         {
             if (root == null) continue;
-            ProcessBuildingNode(root);
-            if (root.IsActive && root.currentNode)
+            
+            if (root.currentNode == null && root.currentNodeConfig)
             {
-                root.currentNode.OnActivate(0);
-                Debug.Log($"Загружены зависимости корневой ноды: {root.currentNodeId}");
+                root.currentNode = root.currentNodeConfig.CreateNode(0);
+                root.currentNode.Cost = root.currentNodeConfig.Cost;
+                
             }
+            
             var direction = AngleToDirection(currentAngle);
             var position = centralPoint + (startRadius * direction);
             
             if (float.IsNaN(position.x) || float.IsNaN(position.y))
             {
-                Debug.LogError($"Invalid position calculated for root node: {position}");
                 position = centralPoint;
             }
             
             var rootNode = Instantiate(uiTreeNodePrefab, canvas.transform);
             rootNode.transform.localPosition = position;
             rootNode.TreeSaveNode = root;
-            Debug.Log(rootNode.TreeSaveNode.currentNode);
-            if (rootNode.TreeSaveNode.currentNode != null)
-            {
-                var clonedNode = ScriptableObject.CreateInstance(rootNode.TreeSaveNode.currentNode.GetType()) as TreeNode;
-                clonedNode.name = rootNode.TreeSaveNode.currentNode.name + "_Clone";
-                rootNode.TreeSaveNode.currentNode = clonedNode;
-            }
-            Debug.Log(rootNode.TreeSaveNode.currentNode);
-            rootNode.TreeSaveNode.currentNode.Initialize(0);
             rootNode.Rank = 0; 
             rootNode.SetImage();
-            if (rootNode.TreeSaveNode.IsActive)
+            
+            if (root.IsActive)
             {
                 rootNode.Button.interactable = false;
+                rootNode.TreeSaveNode.currentNode.OnActivate(0);
             }
+            
             nodeToUI[root] = rootNode;
-
             ProcessNodeBranchBFS(root, position, currentAngle, 1); 
-
             currentAngle += angleStep;
         }
     }
@@ -92,27 +86,32 @@ public class TreeSolver : MonoBehaviour
 
         var maxDepth = 10;
         var processedCount = 0;
-        var maxProcessCount = 100;
+        var maxProcessCount = 200;
 
         while (queue.Count > 0 && processedCount < maxProcessCount)
         {
             var current = queue.Dequeue();
             
-            ProcessBuildingNode(current.node);
-            if (current.depth > maxDepth)
+            if (current.node.currentNode == null && current.node.currentNodeConfig)
             {
-                Debug.LogWarning("Max depth reached!");
-                continue;
+                current.node.currentNode = current.node.currentNodeConfig.CreateNode(current.depth);
+                current.node.currentNode.Cost = current.node.currentNodeConfig.Cost;
             }
-
-            if (current.node.nextSaveNodes == null || current.node.nextSaveNodes.Count == 0)
-                continue;
-            if (current.node.IsActive && current.node.currentNode)
+            
+            if (current.node.currentNode is ProjectileTowerUpgradeTreeNode upgradeNode && 
+                current.node.nodeToUpgrade != null)
             {
-                Debug.Log(current.node.currentNode + " " +  current.node.IsActive);
+                SetupUpgradeNode(upgradeNode, current.node);
+            }
+            
+            
+            if (current.depth > maxDepth) continue;
+            if (current.node.nextSaveNodes == null || current.node.nextSaveNodes.Count == 0) continue;
+                
+            if (current.node.IsActive && current.node.currentNode != null)
+            {
                 current.node.currentNode.OnActivate(current.depth);
             }
-
             
             var childCount = current.node.nextSaveNodes.Count;
             var childAngleStep = (childCount > 1) ? branchAngle / (childCount - 1) : 0f;
@@ -122,9 +121,7 @@ public class TreeSolver : MonoBehaviour
             {
                 var nextSaveNode = current.node.nextSaveNodes[i];
                 if (nextSaveNode == null) continue;
-
-                if (nodeToUI.ContainsKey(nextSaveNode))
-                    continue;
+                if (nodeToUI.ContainsKey(nextSaveNode)) continue;
 
                 var childAngle = startChildAngle + (childAngleStep * i);
                 var childDirection = AngleToDirection(childAngle);
@@ -132,32 +129,34 @@ public class TreeSolver : MonoBehaviour
                 
                 if (float.IsNaN(childPosition.x) || float.IsNaN(childPosition.y))
                 {
-                    Debug.LogError($"Invalid child position calculated: {childPosition}");
                     childPosition = current.position + new Vector2(nodeDistance, 0);
                 }
 
                 var uiNode = Instantiate(uiTreeNodePrefab, canvas.transform);
                 uiNode.transform.localPosition = childPosition;
                 uiNode.TreeSaveNode = nextSaveNode;
-                
-                uiNode.TreeSaveNode.currentNode = Instantiate(uiNode.TreeSaveNode.currentNode);
-                uiNode.TreeSaveNode.currentNodeId = uiNode.TreeSaveNode.currentNodeId;
-                uiNode.TreeSaveNode.currentNode.Initialize(current.depth);
                 uiNode.Rank = current.depth; 
-                uiNode.SetImage();
                 
-                var upgradeNode = uiNode.TreeSaveNode.currentNode as ProjectileTowerUpgradeTreeNode;
-                if (nextSaveNode.nodeToUpgrade && upgradeNode)
+                if (nextSaveNode.currentNode == null && nextSaveNode.currentNodeConfig)
                 {
-                    upgradeNode.ProjectileTowerBlueprint = 
-                        nextSaveNode.nodeToUpgrade._ProjectileTowerBlueprint;
+                    nextSaveNode.currentNode = nextSaveNode.currentNodeConfig.CreateNode(current.depth);
+                    nextSaveNode.currentNode.Cost = nextSaveNode.currentNodeConfig.Cost;
                 }
                 
+                if (nextSaveNode.currentNode is ProjectileTowerUpgradeTreeNode childUpgradeNode)
+                {
+                    SetupUpgradeNode(childUpgradeNode, nextSaveNode);
+                }
+                
+                uiNode.SetImage();
+                
                 nodeToUI[nextSaveNode] = uiNode;
+                
                 if (nextSaveNode.IsActive)
                 {
                     uiNode.Button.interactable = false;
                 }
+                
                 queue.Enqueue(new BranchNode 
                 { 
                     node = nextSaveNode, 
@@ -169,10 +168,28 @@ public class TreeSolver : MonoBehaviour
                 processedCount++;
             }
         }
-
-        if (processedCount >= maxProcessCount)
+    }
+    
+    private void SetupUpgradeNode(ProjectileTowerUpgradeTreeNode upgradeNode, ResearchTree.TreeSaveData.TreeSaveNode upgradeSaveNode)
+    {
+        if (upgradeSaveNode.nodeToUpgrade == null) 
         {
-            Debug.LogWarning("Max process count reached in branch processing");
+            Debug.LogWarning($"Upgrade node {upgradeSaveNode.currentNodeConfig?.name} has no nodeToUpgrade!");
+            return;
+        }
+        if (upgradeSaveNode.nodeToUpgrade.currentNode is ProjectileTowerNode<ProjectileTowerBlueprint> towerNode)
+        {
+            upgradeNode.ProjectileTowerBlueprint = towerNode.ProjectileTowerBlueprint;
+            Debug.Log($"Linked upgrade {upgradeSaveNode.currentNodeConfig?.name} to tower {upgradeSaveNode.nodeToUpgrade.currentNodeConfig?.name}");
+        }
+        else if (upgradeSaveNode.nodeToUpgrade.currentNode is ProjectileTowerUpgradeTreeNode parentUpgradeNode)
+        {
+            upgradeNode.ProjectileTowerBlueprint = parentUpgradeNode.ProjectileTowerBlueprint;
+            Debug.Log($"Linked upgrade {upgradeSaveNode.currentNodeConfig?.name} to parent upgrade {upgradeSaveNode.nodeToUpgrade.currentNodeConfig?.name}");
+        }
+        else
+        {
+            Debug.LogWarning($"Cannot link upgrade {upgradeSaveNode.currentNodeConfig?.name} - nodeToUpgrade is not a tower or upgrade");
         }
     }
     
@@ -188,19 +205,6 @@ public class TreeSolver : MonoBehaviour
         );
     }
 
-    private void ProcessBuildingNode(ResearchTree.TreeSaveData.TreeSaveNode node)
-    {
-        if (node?.currentNode is ProjectileTowerNode towerNode)
-        {
-            if (node.IsActive)
-            {
-                if (!BlueprintManager.HasBlueprint(towerNode.TowerBlueprint.BuildingName))
-                {
-                    BlueprintManager.InsertProjectileTowerBlueprint(towerNode._ProjectileTowerBlueprint);
-                }
-            }
-        }
-    }
     
     private struct BranchNode
     {

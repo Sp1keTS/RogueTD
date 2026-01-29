@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a10afd19eface43b724bac7a88d1d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingName: 
+  buildingName: TurretBase
   healthComponent: {fileID: -8970231158791612102}
   size: {x: 0, y: 0}
   buildingCollider: {fileID: 6082800028625744019}

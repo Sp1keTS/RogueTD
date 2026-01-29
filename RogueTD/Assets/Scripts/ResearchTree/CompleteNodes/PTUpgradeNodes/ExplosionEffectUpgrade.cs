@@ -1,22 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ExplosionUpgrade", menuName = "Research Tree/Upgrades/Explosion Upgrade")]
 public class ExplosionEffectUpgrade : ProjectileTowerUpgradeTreeNode
 {
-    [Header("Base Settings")]
-    [SerializeField] private float baseRadius = 3f;
-    [SerializeField] private float baseDamagePercentage = 30f; 
+    private float baseRadius;
+    private float baseDamagePercentage;
+    private float radiusIncreasePerRank;
+    private float damageIncreasePerRank;
+    private string description;
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float radiusIncreasePerRank = 0.5f;
-    [SerializeField] private float damageIncreasePerRank = 10f; 
-    
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
-        "Projectiles explode on impact.";
-
     private float rankedRadius;
     private int rankedDamagePercentage;
+    private ExplosionEffect newExplosionEffect;
     
     public override string TooltipText => description;
     
@@ -36,17 +31,32 @@ public class ExplosionEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newExplosionEffect = CreateInstance<ExplosionEffect>();
-        newExplosionEffect.DamagePercentage = rankedDamagePercentage;
-        newExplosionEffect.ExplosionRadius = rankedRadius;
         ResourceManager.RegisterProjectileEffect(newExplosionEffect.SetRankedName(rank), newExplosionEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> { newExplosionEffect };
+    }
+
+    public ExplosionEffectUpgrade(ExplosionConfig config, int rank) 
+    {
+        baseRadius = config.BaseRadius;
+        baseDamagePercentage = config.BaseDamagePercentage;
+        radiusIncreasePerRank = config.RadiusIncreasePerRank;
+        damageIncreasePerRank = config.DamageIncreasePerRank;
+        description = config.Description;
+        Initialize(rank);
+    }
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedRadius = baseRadius + (rank * radiusIncreasePerRank);
         rankedDamagePercentage = Mathf.RoundToInt(baseDamagePercentage + (rank * damageIncreasePerRank));
+        newExplosionEffect = new ExplosionEffect();
+        newExplosionEffect.DamagePercentage = rankedDamagePercentage;
+        newExplosionEffect.ExplosionRadius = rankedRadius;
     }
 }

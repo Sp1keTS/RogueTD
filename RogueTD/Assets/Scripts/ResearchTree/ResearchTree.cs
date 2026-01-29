@@ -9,10 +9,10 @@ public class ResearchTree : MonoBehaviour
     [SerializeField] public int _maxRank = 7;
     [SerializeField] private int rootCount = 4;
     
-    static List<TreeNode> allAvailableNodes = new List<TreeNode>();
-    private Dictionary<TreeNode, float> _weightedNodes = new Dictionary<TreeNode, float>();
-    private HashSet<TreeNode> _usedUniqueNodes = new HashSet<TreeNode>();
-
+    static List<TreeNodeConfig> allAvailableConfigs = new List<TreeNodeConfig>();
+    private Dictionary<TreeNodeConfig, float> _weightedNodes = new Dictionary<TreeNodeConfig, float>();
+    private HashSet<TreeNodeConfig> _usedUniqueConfigs = new HashSet<TreeNodeConfig>();
+    private HashSet<Enums.GroupTags> OpenedGroups  = new HashSet<Enums.GroupTags>();
     [System.Serializable]
     public class TreeSaveData
     {
@@ -25,9 +25,9 @@ public class ResearchTree : MonoBehaviour
             public List<TreeSaveNode> nextSaveNodes;
             public List<TreeSaveNode> visitedNodes;
         
-            public TreeSaveNode(TreeNode node, List<TreeSaveNode> nextNodes, List<TreeSaveNode> visited)
+            public TreeSaveNode(TreeNodeConfig config, List<TreeSaveNode> nextNodes, List<TreeSaveNode> visited)
             {
-                currentNodeId = node?.name ?? string.Empty;
+                currentNodeId = config?.name ?? string.Empty;
                 nodeToUpgradeId = string.Empty;
                 IsActive = false;
                 nextSaveNodes = nextNodes ?? new List<TreeSaveNode>();
@@ -41,14 +41,14 @@ public class ResearchTree : MonoBehaviour
             }
         
             [JsonIgnore]
-            public TreeNode currentNode
+            public TreeNodeConfig currentNodeConfig
             {
                 get
                 {
                     if (string.IsNullOrEmpty(currentNodeId))
                         return null;
                     
-                    return ResourceManager.GetTreeNode(currentNodeId);
+                    return ResourceManager.GetTreeNodeConfig(currentNodeId);
                 }
                 set
                 {
@@ -57,20 +57,13 @@ public class ResearchTree : MonoBehaviour
             }
         
             [JsonIgnore]
-            public ProjectileTowerNode nodeToUpgrade
-            {
-                get
-                {
-                    if (string.IsNullOrEmpty(nodeToUpgradeId))
-                        return null;
-                    
-                    return ResourceManager.GetTreeNode(nodeToUpgradeId) as ProjectileTowerNode;
-                }
-                set
-                {
-                    nodeToUpgradeId = value?.name ?? string.Empty;
-                }
-            }
+            public TreeNode currentNode { get; set; }
+            
+            [JsonIgnore]
+            public TreeSaveNode nodeToUpgrade { get; set; }
+            
+            [JsonIgnore]
+            public TreeNodeConfig nodeToUpgradeConfig => nodeToUpgrade?.currentNodeConfig;
         }
 
         public List<TreeSaveNode> rootSaveNodes;
@@ -80,16 +73,20 @@ public class ResearchTree : MonoBehaviour
     {
         try
         {
+            allAvailableConfigs.Clear();
+            _usedUniqueConfigs.Clear();
+            OpenedGroups.Clear();
+            _weightedNodes.Clear();
             GameState.Instance.TreeSaveData = new TreeSaveData
             {
                 rootSaveNodes = new List<TreeSaveData.TreeSaveNode>()
             };
             
-            LoadAllNodes();
+            LoadAllConfigs();
             
-            if (allAvailableNodes.Count == 0)
+            if (allAvailableConfigs.Count == 0)
             {
-                Debug.LogError("No nodes loaded from Resources!");
+                Debug.LogError("No configs loaded from Resources!");
                 return;
             }
             
@@ -118,33 +115,33 @@ public class ResearchTree : MonoBehaviour
         GameState.Instance.TreeSaveData.rootSaveNodes.Clear();
         _weightedNodes.Clear();
         
-        foreach (TreeNode node in allAvailableNodes)
+        foreach (TreeNodeConfig config in allAvailableConfigs)
         {
-            if (node.Tags?.Contains("Tower") == true && 
-                node.MinRank == 0 &&
-                !IsUniqueNodeUsed(node))
+            if (config.UtillityTags?.Contains(Enums.UtillityTags.Tower) == true && 
+                config.MinRank == 0 &&
+                !IsUniqueConfigUsed(config))
             {
-                _weightedNodes[node] = 1;
+                _weightedNodes[config] = 1;
             }
         }
         
-        Debug.Log($"Found {_weightedNodes.Count} potential root nodes");
+        Debug.Log($"Found {_weightedNodes.Count} potential root configs");
         
         for (var i = 0; i < rootCount && _weightedNodes.Count > 0; i++)
         {
-            var rootNode = GetRandomNode(_weightedNodes);
-            if (rootNode)
+            var rootConfig = GetRandomConfig(_weightedNodes);
+            if (rootConfig != null)
             {
                 var rootSaveNode = new TreeSaveData.TreeSaveNode(
-                    rootNode, 
+                    rootConfig, 
                     new List<TreeSaveData.TreeSaveNode>(), 
                     new List<TreeSaveData.TreeSaveNode>()
                 );
                 
                 GameState.Instance.TreeSaveData.rootSaveNodes.Add(rootSaveNode);
-                _weightedNodes.Remove(rootNode);
+                _weightedNodes.Remove(rootConfig);
                 
-                Debug.Log($"Added root node: {rootNode.name}");
+                Debug.Log($"Added root node: {rootConfig.name}");
             }
         }
     }
@@ -178,66 +175,117 @@ public class ResearchTree : MonoBehaviour
     {
         var visited = new List<TreeSaveData.TreeSaveNode>(parentNode.visitedNodes ?? new List<TreeSaveData.TreeSaveNode>());
         visited.Add(parentNode);
-    
+
         var nextNode = new TreeSaveData.TreeSaveNode(null, new List<TreeSaveData.TreeSaveNode>(), visited);
-    
+
         parentNode.nextSaveNodes = parentNode.nextSaveNodes ?? new List<TreeSaveData.TreeSaveNode>();
         parentNode.nextSaveNodes.Add(nextNode);
         nextRank.Add(nextNode);
-    
+
         _weightedNodes.Clear();
-        foreach (var treeNode in allAvailableNodes)
+        
+        // Однопроходный поиск подходящих конфигов
+        foreach (var config in allAvailableConfigs)
         {
-            if (!IsUniqueNodeUsed(treeNode))
+            if (parentNode.currentNodeConfig?.GroupTags != null && config?.IncompatabillityTags != null)
             {
-                var tempNode = new TreeSaveData.TreeSaveNode(treeNode, new List<TreeSaveData.TreeSaveNode>(), visited);
-                var weight = CalculateRandomBranchWeight(tempNode, parentNode, allAvailableNodes);
-                _weightedNodes[treeNode] = weight;
+                if (parentNode.currentNodeConfig.GroupTags.Intersect(config.IncompatabillityTags).Any())
+                {
+                    continue; 
+                }
+            }
+
+            if (config.GroupTags != null && OpenedGroups.Intersect(config.GroupTags).Any())
+            {
+                var skip = true;
+                foreach (var tag in OpenedGroups.Intersect(config.GroupTags))
+                {
+                    foreach (var node in visited)
+                    {
+                        if (node.currentNodeConfig?.GroupTags?.Contains(tag) == true)
+                        {
+                            skip = false;
+                            break;        
+                        }
+                    }
+                    if (!skip) break;
+                }
+                if (skip) { continue; }
+            }
+
+            if (!IsUniqueConfigUsed(config))
+            {
+                float weight = CalculateBaseWeight(config, parentNode.currentNodeConfig);
+                if (config is UpgradeTreeNodeConfig upgradeConfig)
+                {
+                    TreeSaveData.TreeSaveNode bestTowerNode = null;
+                    float bestTowerWeight = 0f;
+                    
+                    // Проверяем все посещенные ноды включая родительскую
+                    foreach (var visitedNode in visited)
+                    {
+                        if (upgradeConfig.CheckCompatability(visitedNode.currentNodeConfig))
+                        {
+                                // Вес башни: ближе к текущей ноде = больше вес
+                            float towerWeight = 1f;
+                            if (visitedNode == parentNode) towerWeight = 3f; // Родительская башня
+                            else if (visitedNode == visited?.LastOrDefault())  towerWeight = 2f; // Последняя посещенная
+                                
+                            if (towerWeight > bestTowerWeight)
+                            { 
+                                bestTowerWeight = towerWeight;
+                                bestTowerNode = visitedNode;
+                            }
+                        }
+                        
+                    }
+                    
+                    if (bestTowerNode != null)
+                    {
+                        weight += bestTowerWeight * 2f; // Бонус за наличие подходящей башни
+                        nextNode.nodeToUpgrade = bestTowerNode;
+                    }
+                    else
+                    {
+                        continue; // Пропускаем апгрейд без подходящей башни
+                    }
+                }
+                
+                _weightedNodes[config] = weight;
             }
         }
-    
-        var selectedNode = GetRandomNode(_weightedNodes);
-        if (selectedNode)
+
+        if (_weightedNodes.Count > 0)
         {
-            nextNode.currentNode = selectedNode;
-            if (selectedNode is ProjectileTowerUpgradeTreeNode projectileNode)
+            var selectedConfig = GetRandomConfig(_weightedNodes);
+            if (selectedConfig)
             {
-                var towerToUpgrade = GetTowerToUpgradeForNode(parentNode, visited);
-                nextNode.nodeToUpgrade = towerToUpgrade;
-            
+                nextNode.currentNodeConfig = selectedConfig;
+                
+                // Если это апгрейд-нода, nodeToUpgrade уже должен быть установлен выше
+                Debug.Log($"Created branch node: {selectedConfig.name} {(nextNode.nodeToUpgrade != null ? $"-> Upgrading: {nextNode.nodeToUpgrade.currentNodeConfig?.name}" : "")}");
             }
         }
     }
-
-    private ProjectileTowerNode GetTowerToUpgradeForNode(TreeSaveData.TreeSaveNode parentNode, List<TreeSaveData.TreeSaveNode> visited)
+    
+    private float CalculateBaseWeight(TreeNodeConfig config, TreeNodeConfig parentConfig)
     {
-        var towerCandidates = new Dictionary<ProjectileTowerNode, float>();
-    
-        foreach (var saveNode in visited)
+        if (!parentConfig || !config) return 1f;
+        
+        float weight = 1f;
+        
+        if (parentConfig.DirectUpgradeOf == config)
         {
-            if (saveNode?.currentNode is ProjectileTowerNode towerNode)
-            {
-                if (!towerCandidates.ContainsKey(towerNode))
-                {
-                    towerCandidates[towerNode] = 1f; 
-                }
-            }
+            weight += allAvailableConfigs.Count * 0.25f;
         }
-    
-        if (parentNode?.currentNode is ProjectileTowerNode parentTower)
+        
+        if (parentConfig.GroupTags != null && config.GroupTags != null)
         {
-            if (!towerCandidates.ContainsKey(parentTower))
-            {
-                towerCandidates[parentTower] = 1f;
-            }
+            int commonTags = parentConfig.GroupTags.Intersect(config.GroupTags).Count();
+            weight += commonTags * 3f;
         }
-    
-        if (towerCandidates.Count > 0)
-        {
-            return GetRandomTowerNode(towerCandidates);
-        }
-    
-        return null;
+        
+        return weight;
     }
 
     private float GetSideBranchProbability(int rank)
@@ -253,123 +301,71 @@ public class ResearchTree : MonoBehaviour
             default: return 0.05f;
         }
     }
-
-    private ProjectileTowerNode GetRandomTowerNode(Dictionary<ProjectileTowerNode, float> weightedNodes)
-    {
-        if (weightedNodes == null || weightedNodes.Count == 0)
-            return null;
-
-        var totalWeight = weightedNodes.Values.Sum();
-        
-        if (totalWeight <= 0)
-            return null;
-
-        var randomValue = UnityEngine.Random.Range(0f, totalWeight);
-        var accumulatedWeight = 0f;
-
-        foreach (var kvp in weightedNodes)
-        {
-            accumulatedWeight += kvp.Value;
-            if (randomValue < accumulatedWeight)
-            {
-                return kvp.Key;
-            }
-        }
-
-        return weightedNodes.Keys.Last();
-    }
-
-    private float CalculateRandomBranchWeight(TreeSaveData.TreeSaveNode currentNode, TreeSaveData.TreeSaveNode prevNode, List<TreeNode> availableNodes)
-    {
-        if (!prevNode?.currentNode || !currentNode?.currentNode)
-            return 1f;
-
-        var node = prevNode.currentNode;
-        var cNode = currentNode.currentNode;
-        float weight = 1;
-        
-        if (node.DirectUpgradeOf == cNode) 
-        { 
-            weight += (float)availableNodes.Count / 2; 
-        }
-
-        if (node.Tags != null && cNode.Tags != null)
-        {
-            foreach (var tag in node.Tags)
-            {
-                if (cNode.Tags.Contains(tag)) 
-                    weight += 2;
-            }
-        }
-
-        if (currentNode.visitedNodes != null && currentNode.visitedNodes.Count > 0)
-        {
-            var lastPreviousNode = currentNode.visitedNodes[0];
-            if (lastPreviousNode?.currentNode?.DirectUpgradeOf == node)
-            {
-                weight += (float)availableNodes.Count / 4;
-            }
-        }
-
-        return weight;
-    }
     
-    private void LoadAllNodes()
+    private void LoadAllConfigs()
     {
-        var nodes = Resources.LoadAll<TreeNode>("Nodes");
-        allAvailableNodes.AddRange(nodes);
-        allAvailableNodes.RemoveAll(node => IsUniqueNodeUsed(node));
-        Debug.Log($"Loaded {allAvailableNodes.Count} nodes from Resources");
+        allAvailableConfigs.Clear();
+        _usedUniqueConfigs.Clear();
+        OpenedGroups.Clear();
+        var configs = Resources.LoadAll<TreeNodeConfig>("Nodes");
+        allAvailableConfigs.AddRange(configs);
+        allAvailableConfigs.RemoveAll(config => IsUniqueConfigUsed(config));
+        Debug.Log($"Loaded {allAvailableConfigs.Count} configs from Resources");
     }
 
-    
-    private bool IsUniqueNodeUsed(TreeNode node)
+    private bool IsUniqueConfigUsed(TreeNodeConfig config)
     {
-        return node.Tags?.Contains("Unique") == true && _usedUniqueNodes.Contains(node);
+        return config.UtillityTags?.Contains(Enums.UtillityTags.Unique) == true && _usedUniqueConfigs.Contains(config);
     }
      
-    public TreeNode GetRandomNode(Dictionary<TreeNode, float> weightedNodes)
+    private TreeNodeConfig GetRandomConfig(Dictionary<TreeNodeConfig, float> weightedConfigs)
     {
-        if (weightedNodes == null || weightedNodes.Count == 0)
+        if (weightedConfigs == null || weightedConfigs.Count == 0)
             return null;
 
-        var totalWeight = weightedNodes.Values.Sum();
-    
+        var totalWeight = weightedConfigs.Values.Sum();
+        
         if (totalWeight <= 0)
             return null;
 
         var randomValue = UnityEngine.Random.Range(0f, totalWeight);
         var accumulatedWeight = 0f;
 
-        foreach (var kvp in weightedNodes)
+        foreach (var kvp in weightedConfigs)
         {
             accumulatedWeight += kvp.Value;
             if (randomValue < accumulatedWeight)
             {
-                var selectedNode = kvp.Key;
-                if (selectedNode.Tags?.Contains("Unique") == true)
+                var selectedConfig = kvp.Key;
+                if (selectedConfig.UtillityTags?.Contains(Enums.UtillityTags.Unique) == true)
                 {
-                    _usedUniqueNodes.Add(selectedNode);
-                    allAvailableNodes.Remove(selectedNode);
-                    Debug.Log($"Unique node marked as used: {selectedNode.name}");
+                    _usedUniqueConfigs.Add(selectedConfig);
+                    allAvailableConfigs.Remove(selectedConfig);
                 }
-                return selectedNode;
+                if (selectedConfig.GroupTags != null)
+                {
+                    foreach (var tag in selectedConfig.GroupTags)
+                    { 
+                        OpenedGroups.Add(tag);
+                    }
+                }
+                return selectedConfig;
             }
         }
 
-        var nodeToReturn = weightedNodes.Keys.Last();
-        if (nodeToReturn.Tags?.Contains("Unique") == true)
+        var configToReturn = weightedConfigs.Keys.Last();
+        if (configToReturn.UtillityTags?.Contains(Enums.UtillityTags.Unique) == true)
         {
-            _usedUniqueNodes.Add(nodeToReturn);
-            allAvailableNodes.Remove(nodeToReturn);
-            Debug.Log($"Unique node marked as used: {nodeToReturn.name}");
+            _usedUniqueConfigs.Add(configToReturn);
+            allAvailableConfigs.Remove(configToReturn);
         }
-        return nodeToReturn;
-    }
-     
-    private void UnloadAllNodes()
-    {
-        allAvailableNodes.Clear();
-        _usedUniqueNodes.Clear(); 
+        if (configToReturn.GroupTags != null)
+        {
+            foreach (var tag in configToReturn.GroupTags)
+            { 
+                OpenedGroups.Add(tag);
+            }
+        }
+        return configToReturn;
     }
 }

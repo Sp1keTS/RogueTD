@@ -7,10 +7,6 @@ public class BleedEffect : StatusEffect
     [SerializeField] private Color bleedColor = Color.red;
     public int Damage { get; set; }
 
-    public BleedEffect(int Damage, float duration)
-    {
-        duration = duration;
-    }
     
     public override IEnumerator ApplyEffect(Enemy enemy)
     {

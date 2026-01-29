@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NodeRapidFireTurret", menuName = "Research Tree/Upgrades/Rapid Fire Turret Node")]
-public class NodeRapidFireTurret : ProjectileTowerNode
+public class NodeRapidFireTurret : ProjectileTowerNode<ProjectileTowerBlueprint>
 {
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
@@ -14,13 +14,14 @@ public class NodeRapidFireTurret : ProjectileTowerNode
     
     public override string TooltipText => description;
     
+    private AmmoBasedShootBehavior newAmmoBehavior;
     public override string GetStats(int rank)
     {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
             return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                    $"<b>Stats (Rank {rank}):</b>\n" +
-                   $"{_ProjectileTowerBlueprint.GetTowerStats()}\n\n" +
+                   $"{ProjectileTowerBlueprint.GetTowerStats()}\n\n" +
                    $"<b>Special:</b>\n" +
                    $"• Magazine system\n" +
                    $"• Fires until empty\n" +
@@ -32,24 +33,28 @@ public class NodeRapidFireTurret : ProjectileTowerNode
     
     public override void OnActivate(int rank)
     {
-        BlueprintManager.InsertProjectileTowerBlueprint(_ProjectileTowerBlueprint);
+        BlueprintManager.InsertProjectileTowerBlueprint(ProjectileTowerBlueprint);
     }
-
-    public override void Initialize(int rank)
+    public NodeRapidFireTurret(RapidFireTowerConfig towerConfig, int rank) : base(GetRankMultiplier(rank), towerConfig)
     {
-        SetupNode(rank);
+        description = towerConfig.Description;
+        magazineSizeMultiplier = towerConfig.MagazineSizeMultiplier;
+        reloadSpeedMultiplier = towerConfig.ReloadSpeedMultiplier;
+        Initialize(rank);
     }
-
-    private void SetupNode(int rank)
+    public override List<Resource> GetResources()
     {
-        if (_ProjectileTowerBlueprint != null)
+        return new List<Resource>{newAmmoBehavior};
+    }
+    
+    private void Initialize(int rank)
+    {
+        if (ProjectileTowerBlueprint != null)
         {
-            _ProjectileTowerBlueprint.BuildingName = buildingName;
-            var ammoBehavior = new AmmoBasedShootBehavior();
-            LoadBasicShot();
-            LoadBasicStats(rank, 1.05f * rank);
-            _ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { ammoBehavior };
-            ResourceManager.RegisterSecondaryBehavior(ammoBehavior.SetRankedName(rank),ammoBehavior);
+            newAmmoBehavior = new AmmoBasedShootBehavior();
+            ProjectileTowerBlueprint.ShotBehavior = LoadShotBehavior(new BasicShotBehavior());
+            ProjectileTowerBlueprint.SecondaryShots = new List<SecondaryProjectileTowerBehavior>() { newAmmoBehavior };
+            ResourceManager.RegisterSecondaryBehavior(newAmmoBehavior.SetRankedName(rank),newAmmoBehavior);
         }
     }
 }

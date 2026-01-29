@@ -1,16 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "BleedUpgrade", menuName = "Research Tree/Upgrades/Bleed Upgrade")]
 public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
 {
     
-    [Header("Upgrade Settings")]
-    [SerializeField] private float damageIncreasePerRank = 5f;
-    [SerializeField] private float durationIncreasePerRank = 0.5f;
-    [SerializeField] private float baseDuration;
+    private float damageIncreasePerRank = 5f;
+    private float durationIncreasePerRank = 0.5f;
+    private float baseDuration;
     
-    [Header("Description")]
-    [SerializeField, TextArea(3, 5)] private string description = 
+    private BleedEffect newBleedEffect;
+    
+    private string description = 
         "Damage over time. Based on Turret damage";
 
     private int rankedDamage;
@@ -34,17 +35,32 @@ public class BleedEffectUpgrade : ProjectileTowerUpgradeTreeNode
     
     public override void ApplyUpgrade(ProjectileTowerBlueprint blueprint, int rank)
     {
-        var newBleedEffect = CreateInstance<BleedEffect>();
-        newBleedEffect.Damage = rankedDamage;
-        newBleedEffect.Duration = rankedDuration;
         ResourceManager.RegisterStatusEffect(newBleedEffect.SetRankedName(rank), newBleedEffect);
+        blueprint.StatusEffects.Add(newBleedEffect);
         BlueprintManager.InsertProjectileTowerBlueprint(blueprint);
     }
 
-    public override void Initialize(int rank)
+    public override List<Resource> GetResources()
     {
-        base.Initialize(rank);
+        return new List<Resource> {newBleedEffect};
+    }
+
+    public BleedEffectUpgrade( BleedEffectConfig config, int rank) 
+    {
+        damageIncreasePerRank = config.DamageIncreasePerRank;
+        durationIncreasePerRank = config.DurationIncreasePerRank;
+        baseDuration =  config.BaseDuration;
+        Initialize(rank);
+    }
+
+
+    public void Initialize(int rank)
+    {
+        CurrentRank = rank;
         rankedDamage = (int)(ProjectileTowerBlueprint.Damage * (rank * 0.17));
         rankedDuration = baseDuration + (rank * durationIncreasePerRank);
+        newBleedEffect = new BleedEffect();
+        newBleedEffect.Damage = rankedDamage;
+        newBleedEffect.Duration = rankedDuration;
     }
 }

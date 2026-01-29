@@ -1,44 +1,49 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "NodeShotgunTurret", menuName = "Research Tree/Turrets/Shotgun Turret Node")]
-public class NodeShotgunTurret : ProjectileTowerNode
+public class NodeShotgunTurret : ProjectileTowerNode<ProjectileTowerBlueprint>
 {
     [Header("Description")]
     [SerializeField, TextArea(3, 5)] private string description = 
         "<b>SHOTGUN TURRET</b>\n" +
         "Close-range multi-projectile.";
+
     
+
     public override string TooltipText => description;
     
     public override string GetStats(int rank)
     {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
             return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                    $"<b>Stats (Rank {rank}):</b>\n" +
-                   $"{_ProjectileTowerBlueprint.GetTowerStats()}\n\n";
+                   $"{ProjectileTowerBlueprint.GetTowerStats()}\n\n";
         }
         return $"<size=120%><color=#FFD700>Cost: {Cost:F0}</color></size>\n\n" +
                "<color=#FF5555>Failed to load stats</color>";
     }
-    
+    public override List<Resource> GetResources()
+    {
+        return new List<Resource>();
+    }
     public override void OnActivate(int rank)
     {
-        BlueprintManager.InsertProjectileTowerBlueprint(_ProjectileTowerBlueprint);
+        BlueprintManager.InsertProjectileTowerBlueprint(ProjectileTowerBlueprint);
     }
-
-    public override void Initialize(int rank)
+    
+    public NodeShotgunTurret(ShotgunTowerConfig towerConfig, int rank) : base(GetRankMultiplier(rank), towerConfig)
     {
-        SetupNode(rank);
+        
+        description = towerConfig.Description;
+        Initialize(rank);
     }
-
-    private void SetupNode(int rank)
+    private void Initialize(int rank)
     {
-        if (_ProjectileTowerBlueprint != null)
+        if (ProjectileTowerBlueprint != null)
         {
-            _ProjectileTowerBlueprint.BuildingName = buildingName;
-            LoadBasicShot();
-            LoadBasicStats(rank, 1.05f * rank);
+            ProjectileTowerBlueprint.ShotBehavior = LoadShotBehavior(new BasicShotBehavior());
         }
     }
 }

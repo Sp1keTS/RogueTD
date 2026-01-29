@@ -2,58 +2,32 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ProjectileTowerNode : TowerNode
+public abstract class ProjectileTowerNode<TBlueprint> : TowerNode<TBlueprint> where TBlueprint : ProjectileTowerBlueprint, new()
 {
-    [SerializeField] private BasicShotBehavior basicShotBehavior;
-    private ProjectileTowerBlueprint _projectileTowerBlueprint;
-    [SerializeField] private ProjectileTower projectileTower;
-    [SerializeField] protected TowerProjectile projectilePrefab;
-    [SerializeField] protected float projectileSpeed;
-    [SerializeField] protected float spread ;
-    [SerializeField] protected float projectileLifetime;
-    [SerializeField] protected bool projectileFragile = true;
-    [SerializeField] protected float projectileScale;
-    [SerializeField] protected int projectileCount;
-
-    
-    public ProjectileTower ProjectileTower => projectileTower;
-    public ProjectileTowerBlueprint _ProjectileTowerBlueprint
+    public ProjectileTowerBlueprint ProjectileTowerBlueprint
     {
-        get
-        {
-            if (_projectileTowerBlueprint == null)
-            {
-                _projectileTowerBlueprint = new ProjectileTowerBlueprint();
-            }
-            return _projectileTowerBlueprint;
-        }
-        set => _projectileTowerBlueprint = value;
+        get => (ProjectileTowerBlueprint) _buildingBlueprint;
+        set => _buildingBlueprint = value;
     }
 
-
-    protected void LoadBasicShot()
+    public ProjectileTowerBehavior LoadShotBehavior(ProjectileTowerBehavior behavior )
     {
-        if (basicShotBehavior)
-        {
-            _ProjectileTowerBlueprint.ShotBehavior = basicShotBehavior;
-            ResourceManager.RegisterTowerBehavior(basicShotBehavior.name, basicShotBehavior);
-        }
+        ResourceManager.RegisterTowerBehavior(behavior.name, behavior);
+        return ResourceManager.GetResource<ProjectileTowerBehavior>(behavior.name);
     }
     
-    public override void LoadBasicStats(int rank, float rankMultiplier)
+    public ProjectileTowerNode(float rankMultiplier, ProjectileTowerNodeConfig TowerConfig) : base(rankMultiplier, TowerConfig)
     {
-        base.LoadBasicStats(rank, rankMultiplier);
         
-        _ProjectileTowerBlueprint.ProjectilePrefab = projectilePrefab;
-        _ProjectileTowerBlueprint.TowerPrefab = projectileTower;
-        _ProjectileTowerBlueprint.BuildingPrefab = buildingPrefab;
+        ProjectileTowerBlueprint.ProjectilePrefab = TowerConfig.ProjectilePrefab;
+        ProjectileTowerBlueprint.TowerPrefab = TowerConfig.Tower;
         
-        _ProjectileTowerBlueprint.ProjectileSpeed = projectileSpeed * rankMultiplier;
-        _ProjectileTowerBlueprint.ProjectileLifetime = projectileLifetime * rankMultiplier;
-        _ProjectileTowerBlueprint.Spread = spread / rankMultiplier;
-        _ProjectileTowerBlueprint.ProjectileFragile = projectileFragile;
+        ProjectileTowerBlueprint.ProjectileSpeed = TowerConfig.ProjectileSpeed * rankMultiplier;
+        ProjectileTowerBlueprint.ProjectileLifetime = TowerConfig.ProjectileLifetime * rankMultiplier;
+        ProjectileTowerBlueprint.Spread = TowerConfig.Spread / rankMultiplier;
+        ProjectileTowerBlueprint.PenetrationCount = TowerConfig.PenetrationCount;
         
-        _ProjectileTowerBlueprint.ProjectileCount = projectileCount;
-        _ProjectileTowerBlueprint.ProjectileScale = projectileScale;
+        ProjectileTowerBlueprint.ProjectileCount = TowerConfig.ProjectileCount;
+        ProjectileTowerBlueprint.ProjectileScale = TowerConfig.ProjectileScale;
     }
 }

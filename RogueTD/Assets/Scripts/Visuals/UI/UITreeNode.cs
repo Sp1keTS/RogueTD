@@ -21,7 +21,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     public void SetImage()
     {
-        image.sprite = treeSaveNode.currentNode.Icon;
+        image.sprite = treeSaveNode.currentNodeConfig.Icon;
     }
 
     private void OnButtonClick()
@@ -69,7 +69,7 @@ public class UITreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     
     public void OnPointerEnter(PointerEventData eventData)
     {
-        UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNode.name, TreeSaveNode.currentNode.TooltipText +"/n" + treeSaveNode.currentNode.GetStats(Rank), 
+        UIToolTipManager.Instance.ShowTooltip(TreeSaveNode.currentNodeConfig.name, TreeSaveNode.currentNodeConfig.TooltipText +"/n" + treeSaveNode.currentNode.GetStats(Rank), 
             new Vector2(transform.position.x, transform.position.y) );
     }
     public void OnPointerExit(PointerEventData eventData)

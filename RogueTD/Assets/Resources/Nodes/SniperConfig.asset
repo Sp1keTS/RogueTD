@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca5cedc90b6249b4a4531c132f1a6fb1, type: 3}
+  m_Name: SniperConfig
+  m_EditorClassIdentifier: 
+  tags:
+  - Unique
+  - Tower
+  maxRank: 9
+  minRank: 0
+  directUpgradeOf: {fileID: 0}
+  cost: 1
+  icon: {fileID: -7489981741982029489, guid: d476000db87e73f4aaffe734c0368387, type: 3}
+  tooltipText: 
+  buildingPrefab: {fileID: 1747688676340181099, guid: 18e277a5e113425449ea0f0a4b70a283, type: 3}
+  buildingName: SniperTurret
+  maxHealthPoints: 150
+  buildingCost: 50
+  size: {x: 1, y: 1}
+  tower: {fileID: 0}
+  targetingRange: 50
+  damageMult: 2.5
+  attackSpeed: 0.4
+  rotatingSpeed: 30
+  damage: 50
+  maxAmmo: 5
+  currentAmmo: 5
+  ammoRegeneration: 20
+  attackAngle: 1
+  projectileTower: {fileID: 429808651208165796, guid: e72c28af9cd5746429f54113901ad22c, type: 3}
+  projectilePrefab: {fileID: 4533395616768101319, guid: 6c5a68aa937abfd4997003fa67640a56, type: 3}
+  projectileSpeed: 50
+  spread: 0
+  projectileLifetime: 1
+  projectileFragile: 0
+  projectileScale: 1
+  projectileCount: 1
+  description: Long-range turret with high damage but slow fire rate.
